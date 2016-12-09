@@ -1,0 +1,14 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <size android:width="2dp" />
+    <solid android:color="@color/white"  />
+=======
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <size android:width="2dp" />
+    <solid android:color="@color/white"  />
+>>>>>>> TMSC QA 3.4V
+</shape>

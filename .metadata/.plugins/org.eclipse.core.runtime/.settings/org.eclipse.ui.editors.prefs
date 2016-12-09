@@ -1,0 +1,10 @@
+<<<<<<< HEAD
+eclipse.preferences.version=1
+overviewRuler_migration=migrated_3.1
+=======
+eclipse.preferences.version=1
+lineNumberRuler=true
+overviewRuler_migration=migrated_3.1
+quickdiff.quickDiff=false
+spellingEngine=org.eclipse.jdt.internal.ui.text.spelling.DefaultSpellingEngine
+>>>>>>> TMSC QA 3.4V

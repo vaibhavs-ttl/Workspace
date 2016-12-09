@@ -1,0 +1,17 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="freemarker.core.CommandLine"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="QCM Client"/>
+</launchConfiguration>
+=======
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="freemarker.core.CommandLine"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="QCM Client"/>
+</launchConfiguration>
+>>>>>>> TMSC QA 3.4V

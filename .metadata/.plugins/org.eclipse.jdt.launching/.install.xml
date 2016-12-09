@@ -1,0 +1,18 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dirs>
+<entry loc="C:\Program Files\Java\jre7" stamp="1456311540588"/>
+<entry loc="C:\Program Files\Java\jdk1.7.0_45" stamp="1387263938906"/>
+<entry loc="C:\Program Files\Java\jre1.8.0_51" stamp="1455775886660"/>
+</dirs>
+=======
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dirs>
+<entry loc="C:\Program Files\Java\jre7" stamp="1452833102487"/>
+<entry loc="C:\Program Files (x86)\Java\jre1.8.0_74" stamp="1467267025348"/>
+<entry loc="C:\Program Files\Java\jre1.8.0_101" stamp="1469006384447"/>
+<entry loc="C:\Program Files\Java\jdk1.7.0_45" stamp="1387263938906"/>
+<entry loc="C:\Program Files\Java\jre1.8.0_51" stamp="1455775886660"/>
+<entry loc="C:\Program Files\Java\jre1.8.0_92" stamp="1478079140801"/>
+</dirs>
+>>>>>>> TMSC QA 3.4V

@@ -1,0 +1,941 @@
+<<<<<<< HEAD
+package com.ttl.webservice;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.Window;
+import android.widget.Toast;
+
+import com.ttl.adapter.AwsResponseCallback;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.customersocialapp.HomeActivity;
+import com.ttl.customersocialapp.LoginActivity;
+import com.ttl.customersocialapp.R;
+import com.ttl.model.ServiceHandler;
+import com.ttl.model.UserDetails;
+
+public class AWS_WebServiceCall  extends AsyncTask<Void, Void, Void> {
+
+		String user_id , password;
+		String req , error;
+	    List<NameValuePair> nameValuePairs ;
+	    Dialog dialog;
+	    boolean dataReceived=false;
+	    Context context;
+	    AwsResponseCallback rc;
+		String webservice;
+		int servicetype;
+		List<String> listvalues = new ArrayList<String>();	
+		ArrayList<HashMap<String, String>> hashmaplist  = new ArrayList<HashMap<String, String>>();
+		public static ArrayList<String> typelist = new ArrayList<>();
+		Bitmap bitmap = null;
+
+		public AWS_WebServiceCall (Context  context , String req ,int servicetype , String webservice , List<NameValuePair> nameValuePairs,AwsResponseCallback responseCallback)
+		{
+			this.context = context;
+			this.req = req;
+		//	Log.d("Actual",user_id+" "+password);
+			this.nameValuePairs = new ArrayList<NameValuePair>(nameValuePairs.size());
+			this.nameValuePairs = nameValuePairs;
+			this.rc = responseCallback;
+			this.webservice = webservice;
+			this.servicetype = servicetype;
+			/*this.user_id = user_id;
+			this.password = password;
+			*/
+			//Log.d("Encrypted",user_id+" "+password);
+		}
+		public AWS_WebServiceCall (Context  context , String req ,int servicetype , String webservice,AwsResponseCallback responseCallback)
+		{
+			this.context = context;
+			this.req = req;
+		//	Log.d("Actual",user_id+" "+password);
+			this.nameValuePairs =new ArrayList<NameValuePair>(0);
+			this.rc = responseCallback;
+			this.webservice = webservice;
+			this.servicetype = servicetype;
+			/*this.user_id = user_id;
+			this.password = password;
+			*/
+			//Log.d("Encrypted",user_id+" "+password);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			dialog = new Dialog(context);
+	        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	        dialog.setContentView(R.layout.progress_bar);
+	        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+	        dialog.setCancelable(false);
+	        dialog.show();
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			ServiceHandler sh = new ServiceHandler();
+        	String jsonStr = "";
+        	/*nameValuePairs.add(new BasicNameValuePair("user_id",user_id));
+			nameValuePairs.add(new BasicNameValuePair("password",password));*/
+        	if(nameValuePairs.size() == 0)
+        		jsonStr = sh.makeServiceCall(req, servicetype);
+        	else
+        		jsonStr = sh.makeServiceCall(req, servicetype,nameValuePairs);
+   		// Log.d("Response: ", "> " + jsonStr);
+   		 if (jsonStr != null) {
+          try {
+            
+        	  if(webservice.equals(Constants.user))
+        	  {     
+        		  if(jsonStr.contains("Forbidden Content"))
+        		  {
+                      dataReceived=false;
+
+        		  }else
+        		  { 
+                  JSONObject user = new JSONObject(jsonStr);
+                  JSONObject result = user.getJSONObject("result");
+                  JSONObject c = result.getJSONObject("user");
+                  UserDetails.setFirst_name(c.getString("first_name"));
+                  UserDetails.setLast_name(c.getString("last_name"));
+                  UserDetails.setGender(c.getString("gender"));
+                  UserDetails.setEmail_id(c.getString("email_id"));
+                  UserDetails.setContact_number(c.getString("contact_number"));
+                  UserDetails.setAlt_contact_number(c.getString("alt_contact_number"));
+                  UserDetails.setAddress(c.getString("address"));
+                  UserDetails.setCity(c.getString("city"));
+                  UserDetails.setPincode(c.getString("pincode"));
+                  UserDetails.setDistrict(c.getString("district"));
+                  UserDetails.setState(c.getString("state"));
+                  UserDetails.setUser_id(c.getString("user_id"));
+                  UserDetails.setPassword(c.getString("password"));
+                  dataReceived=true;
+        		  }
+        	  }
+        	  else if(webservice.equals(Constants.registeruser))
+        	  {
+        		  if(jsonStr.contains("Record Inserted"))
+        		  {
+                      dataReceived=true;
+
+        		  }else
+        		  {
+        			  dataReceived = false;
+        			  error=jsonStr;
+        		  }
+        	  }  else if(webservice.equals(Constants.updateUserDetails))
+        	  {
+        		  if(jsonStr.contains("Record Updated"))
+        		  {
+                      dataReceived=true;
+
+        		  }else
+        			  dataReceived = false;
+        	  } else if(webservice.equals(Constants.getServiceTypes))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String service = type.getString("serviceType");
+                      listvalues.add(service);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }else if(webservice.equals(Constants.getKms))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String service = type.getString("kms_period");
+                      listvalues.add(service);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  } else if(webservice.equals(Constants.getState))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String service = type.getString("state");
+                      listvalues.add(service);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }
+        	  else if(webservice.equals(Constants.getCityFromState))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String service = type.getString("city");
+                      listvalues.add(service);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }else if(webservice.equals(Constants.getCityFromStateMaster))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String service = type.getString("city");
+                      listvalues.add(service);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }else if(webservice.equals(Constants.getFreeServiceCostEstimate))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String cost = type.getString("cost");
+                      String ctype = type.getString("costType");
+                      
+                      HashMap<String, String> costdetails = new HashMap<String, String>();
+                      costdetails.put("cost" , cost);
+                      costdetails.put("costType" , ctype);
+                      hashmaplist.add(costdetails);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }else if(webservice.equals(Constants.getPaidServiceCostEstimate))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+                  
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String cost = type.getString("cost");
+                      String ctype = type.getString("costType");
+                      
+                      HashMap<String, String> costdetails = new HashMap<String, String>();
+                      costdetails.put("cost" , cost);
+                      costdetails.put("costType" , ctype);
+                      hashmaplist.add(costdetails);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }
+        	  
+        	  else if(webservice.equals(Constants.insertVehicleDetails))
+        	  {
+        		  if(jsonStr.contains("Record Inserted"))
+        		  {
+                      dataReceived=true;
+
+        		  }else
+        			  dataReceived = false;
+        	  }else if(webservice.equals(Constants.getVehicleDetailsByUserId))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+                  
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String cost = type.getString("chassis_num");
+                      String ctype = type.getString("registration_num");
+                      
+                      HashMap<String, String> details = new HashMap<String, String>();
+                      details.put("chassis_num" , cost);
+                      details.put("registration_num" , ctype);
+                      hashmaplist.add(details);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  } 
+        	  
+        	  else if (webservice.equals(Constants.notification)) {
+					String notification_type, id, notification_typerecord, notification_title, notification_desc, notification_startDate, notification_endDate, city, PPL, PL, kms_run, read_flag, ready_to_publish, all_cities_flag;
+					JSONArray notification = new JSONArray(jsonStr);
+					Log.d(notification.length() + "", "notificaion length");
+					if (notification.length() != 0) {
+						for (int i = 0; i < notification.length(); i++) {
+							JSONObject ntf = notification.getJSONObject(i);
+							if (ntf != null) {
+								notification_type = ntf
+										.getString("notification_type");
+								Log.d(notification_type, "ntf type");
+								typelist.add(notification_type);
+								Log.d(typelist.toString(), "list");
+							
+								JSONArray record = ntf
+										.getJSONArray("notification_record");
+								if (record != null) {
+									for (int j = 0; j < record.length(); j++) {
+										JSONObject reobj = record
+												.getJSONObject(j);
+										if (reobj != null) {
+											id = reobj.getString("id");
+											notification_typerecord = reobj
+													.getString("notification_type");
+											notification_title = reobj
+													.getString("notification_title");
+											notification_desc = reobj
+													.getString("notification_desc");
+											notification_startDate = reobj
+													.getString("notification_startDate");
+											notification_endDate = reobj
+													.getString("notification_endDate");
+											city = reobj.getString("city");
+											PPL = reobj.getString("PPL");
+											PL = reobj.getString("PL");
+											kms_run = reobj
+													.getString("kms_run");
+											read_flag = reobj
+													.getString("read_flag");
+											ready_to_publish = reobj
+													.getString("ready_to_publish");
+											all_cities_flag = reobj
+													.getString("all_cities_flag");
+
+											HashMap<String, String> notify = new HashMap<String, String>();
+
+											notify.put("notification_type",
+													notification_type);
+											notify.put("id", id);
+											notify.put("notification_type",
+													notification_typerecord);
+											notify.put("notification_title",
+													notification_title);
+											notify.put("notification_desc",
+													notification_desc);
+											notify.put(
+													"notification_startDate",
+													notification_startDate);
+											notify.put("notification_endDate",
+													notification_endDate);
+											notify.put("city", city);
+											notify.put("PL", PL);
+											notify.put("kms_run", kms_run);
+											notify.put("read_flag", read_flag);
+											notify.put("ready_to_publish",
+													ready_to_publish);
+											notify.put("all_cities_flag",
+													all_cities_flag);
+											hashmaplist.add(notify);
+										}
+									}
+								}
+							}
+						}
+					}
+					dataReceived = true;
+
+				}
+        	  
+        	  else if(webservice.equals(Constants.getVehicleImageByPPL)){
+        		  JSONArray img  = new JSONArray(jsonStr);
+  				for (int i=0; i<img.length(); i++) {
+  					 dataReceived=true;
+  				    JSONObject vehicle_image_url = img.getJSONObject(i);
+  				    String IMAGEURL = vehicle_image_url.getString("vehicle_image_url");
+  				    Log.i("IMAGEURL", IMAGEURL);
+  				  InputStream input = new java.net.URL(IMAGEURL).openStream();
+  				//	 Decode Bitmap
+  					bitmap = BitmapFactory.decodeStream(input);
+  				}
+        	  }
+        	  else if(webservice.equals(Constants.uploadProfileImage)){
+        		  
+        		  if(jsonStr.equals("Image Successfully Stored"))
+        		  {
+        			  dataReceived = true;
+        		  }else
+        			  dataReceived = false;
+        		 /* JSONArray img  = new JSONArray(jsonStr);
+  				for (int i=0; i<img.length(); i++) {
+  					 dataReceived=true;
+  				    JSONObject vehicle_image_url = img.getJSONObject(i);
+  				    String IMAGEURL = vehicle_image_url.getString("vehicle_image_url");
+  				    Log.i("IMAGEURL", IMAGEURL);
+  				  InputStream input = new java.net.URL(IMAGEURL).openStream();
+  				//	 Decode Bitmap
+  					bitmap = BitmapFactory.decodeStream(input);
+  				}*/
+        	  }
+      //  	  01-12 16:21:43.362: D/response(25062): Forbidden Content
+
+          } catch (JSONException  | IOException e) {
+              e.printStackTrace();
+              error = "Invalid credentials, please check username passsword you entered.";
+              dataReceived=false;
+          }
+      } else {
+          Log.e("ServiceHandler", "Couldn't get any data from the url");
+          error = "No internet connection.";
+          dataReceived = false;
+      }
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			dialog.dismiss();
+			if(dataReceived)
+			{
+				if(webservice.equals(Constants.user))
+				{
+					rc.onResponseReceive(dataReceived);
+				}else if (webservice.equals(Constants.registeruser))
+				{
+					rc.onResponseReceive(dataReceived);
+				}else if (webservice.equals(Constants.updateUserDetails))
+				{
+					rc.onResponseReceive(dataReceived);
+				}else if (webservice.equals(Constants.getServiceTypes))
+				{
+					rc.onResponseReceive(listvalues);
+				}else if (webservice.equals(Constants.getKms))
+				{
+					rc.onResponseReceive(listvalues);
+				}else if (webservice.equals(Constants.getState))
+				{
+					rc.onResponseReceive(listvalues);
+				}else if (webservice.equals(Constants.getCityFromState))
+				{
+					rc.onResponseReceive(listvalues);
+				}
+				else if (webservice.equals(Constants.getCityFromStateMaster))
+				{
+					rc.onResponseReceive(listvalues);
+				}
+				else if (webservice.equals(Constants.getFreeServiceCostEstimate))
+				{
+					rc.onResponseReceive(hashmaplist);
+				}else if (webservice.equals(Constants.getPaidServiceCostEstimate))
+				{
+					rc.onResponseReceive(hashmaplist);
+				} else if (webservice.equals(Constants.notification)) {
+					rc.onResponseReceive(hashmaplist);
+				}else if (webservice.equals(Constants.insertVehicleDetails))
+				{
+					rc.onResponseReceive(dataReceived);
+				}else if (webservice.equals(Constants.getVehicleDetailsByUserId))
+				{
+					rc.onResponseReceive(hashmaplist);
+				}else if(webservice.equals(Constants.getVehicleImageByPPL))
+					{
+					rc.onResponseReceive(bitmap);
+					}
+				else if(webservice.equals(Constants.uploadProfileImage))
+					rc.onResponseReceive(dataReceived);
+		//	rc.onResponseReceive("true");
+			}else
+			{
+				rc.onErrorReceive(error);
+				//Toast.makeText(context, "", Toast.LENGTH_LONG).show();
+			}
+		}
+	
+}
+=======
+package com.ttl.webservice;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.Window;
+import android.widget.Toast;
+
+import com.ttl.adapter.AwsResponseCallback;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.customersocialapp.HomeActivity;
+import com.ttl.customersocialapp.LoginActivity;
+import com.ttl.customersocialapp.R;
+import com.ttl.model.ServiceHandler;
+import com.ttl.model.UserDetails;
+
+public class AWS_WebServiceCall  extends AsyncTask<Void, Void, Void> {
+
+		String user_id , password;
+		String req , error;
+	    List<NameValuePair> nameValuePairs ;
+	    Dialog dialog;
+	    boolean dataReceived=false;
+	    Context context;
+	    AwsResponseCallback rc;
+		String webservice;
+		int servicetype;
+		List<String> listvalues = new ArrayList<String>();	
+		ArrayList<HashMap<String, String>> hashmaplist  = new ArrayList<HashMap<String, String>>();
+		public static ArrayList<String> typelist = new ArrayList<>();
+		Bitmap bitmap = null;
+
+		public AWS_WebServiceCall (Context  context , String req ,int servicetype , String webservice , List<NameValuePair> nameValuePairs,AwsResponseCallback responseCallback)
+		{
+			this.context = context;
+			this.req = req;
+		//	Log.d("Actual",user_id+" "+password);
+			this.nameValuePairs = new ArrayList<NameValuePair>(nameValuePairs.size());
+			this.nameValuePairs = nameValuePairs;
+			this.rc = responseCallback;
+			this.webservice = webservice;
+			this.servicetype = servicetype;
+			/*this.user_id = user_id;
+			this.password = password;
+			*/
+			//Log.d("Encrypted",user_id+" "+password);
+		}
+		public AWS_WebServiceCall (Context  context , String req ,int servicetype , String webservice,AwsResponseCallback responseCallback)
+		{
+			this.context = context;
+			this.req = req;
+		//	Log.d("Actual",user_id+" "+password);
+			this.nameValuePairs =new ArrayList<NameValuePair>(0);
+			this.rc = responseCallback;
+			this.webservice = webservice;
+			this.servicetype = servicetype;
+			/*this.user_id = user_id;
+			this.password = password;
+			*/
+			//Log.d("Encrypted",user_id+" "+password);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			dialog = new Dialog(context);
+	        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	        dialog.setContentView(R.layout.progress_bar);
+	        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+	        dialog.setCancelable(false);
+	        dialog.show();
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			ServiceHandler sh = new ServiceHandler();
+        	String jsonStr = "";
+        	/*nameValuePairs.add(new BasicNameValuePair("user_id",user_id));
+			nameValuePairs.add(new BasicNameValuePair("password",password));*/
+        	if(nameValuePairs.size() == 0)
+        		jsonStr = sh.makeServiceCall(req, servicetype);
+        	else
+        		jsonStr = sh.makeServiceCall(req, servicetype,nameValuePairs);
+   		// Log.d("Response: ", "> " + jsonStr);
+   		 if (jsonStr != null) {
+          try {
+            
+        	  if(webservice.equals(Constants.user))
+        	  {     
+        		  if(jsonStr.contains("Forbidden Content"))
+        		  {
+                      dataReceived=false;
+
+        		  }else
+        		  { 
+                  JSONObject user = new JSONObject(jsonStr);
+                  JSONObject result = user.getJSONObject("result");
+                  JSONObject c = result.getJSONObject("user");
+                  UserDetails.setFirst_name(c.getString("first_name"));
+                  UserDetails.setLast_name(c.getString("last_name"));
+                  UserDetails.setGender(c.getString("gender"));
+                  UserDetails.setEmail_id(c.getString("email_id"));
+                  UserDetails.setContact_number(c.getString("contact_number"));
+                  UserDetails.setAlt_contact_number(c.getString("alt_contact_number"));
+                  UserDetails.setAddress(c.getString("address"));
+                  UserDetails.setCity(c.getString("city"));
+                  UserDetails.setPincode(c.getString("pincode"));
+                  UserDetails.setDistrict(c.getString("district"));
+                  UserDetails.setState(c.getString("state"));
+                  UserDetails.setUser_id(c.getString("user_id"));
+                  UserDetails.setPassword(c.getString("password"));
+                  dataReceived=true;
+        		  }
+        	  }
+        	  else if(webservice.equals(Constants.registeruser))
+        	  {
+        		  if(jsonStr.contains("Record Inserted"))
+        		  {
+                      dataReceived=true;
+
+        		  }else
+        		  {
+        			  dataReceived = false;
+        			  error=jsonStr;
+        		  }
+        	  }  else if(webservice.equals(Constants.updateUserDetails))
+        	  {
+        		  if(jsonStr.contains("Record Updated"))
+        		  {
+                      dataReceived=true;
+
+        		  }else
+        			  dataReceived = false;
+        	  } else if(webservice.equals(Constants.getServiceTypes))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String service = type.getString("serviceType");
+                      listvalues.add(service);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }else if(webservice.equals(Constants.getKms))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String service = type.getString("kms_period");
+                      listvalues.add(service);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  } else if(webservice.equals(Constants.getState))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String service = type.getString("state");
+                      listvalues.add(service);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }
+        	  else if(webservice.equals(Constants.getCityFromState))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String service = type.getString("city");
+                      listvalues.add(service);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }else if(webservice.equals(Constants.getCityFromStateMaster))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String service = type.getString("city");
+                      listvalues.add(service);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }else if(webservice.equals(Constants.getFreeServiceCostEstimate))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String cost = type.getString("cost");
+                      String ctype = type.getString("costType");
+                      
+                      HashMap<String, String> costdetails = new HashMap<String, String>();
+                      costdetails.put("cost" , cost);
+                      costdetails.put("costType" , ctype);
+                      hashmaplist.add(costdetails);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }else if(webservice.equals(Constants.getPaidServiceCostEstimate))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+                  
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String cost = type.getString("cost");
+                      String ctype = type.getString("costType");
+                      
+                      HashMap<String, String> costdetails = new HashMap<String, String>();
+                      costdetails.put("cost" , cost);
+                      costdetails.put("costType" , ctype);
+                      hashmaplist.add(costdetails);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  }
+        	  
+        	  else if(webservice.equals(Constants.insertVehicleDetails))
+        	  {
+        		  if(jsonStr.contains("Record Inserted"))
+        		  {
+                      dataReceived=true;
+
+        		  }else
+        			  dataReceived = false;
+        	  }else if(webservice.equals(Constants.getVehicleDetailsByUserId))
+        	  {
+                  JSONArray types = new JSONArray(jsonStr);
+                  
+                  for(int i = 0 ; i<types.length(); i++)
+                  {
+                      JSONObject type = types.getJSONObject(i);
+                      String cost = type.getString("chassis_num");
+                      String ctype = type.getString("registration_num");
+                      
+                      HashMap<String, String> details = new HashMap<String, String>();
+                      details.put("chassis_num" , cost);
+                      details.put("registration_num" , ctype);
+                      hashmaplist.add(details);
+                      dataReceived=true;
+
+                  }
+        		  
+        	  } 
+        	  
+        	  else if (webservice.equals(Constants.notification)) {
+					String notification_type, id, notification_typerecord, notification_title, notification_desc, notification_startDate, notification_endDate, city, PPL, PL, kms_run, read_flag, ready_to_publish, all_cities_flag;
+					JSONArray notification = new JSONArray(jsonStr);
+					Log.d(notification.length() + "", "notificaion length");
+					if (notification.length() != 0) {
+						for (int i = 0; i < notification.length(); i++) {
+							JSONObject ntf = notification.getJSONObject(i);
+							if (ntf != null) {
+								notification_type = ntf
+										.getString("notification_type");
+								Log.d(notification_type, "ntf type");
+								typelist.add(notification_type);
+								Log.d(typelist.toString(), "list");
+							
+								JSONArray record = ntf
+										.getJSONArray("notification_record");
+								if (record != null) {
+									for (int j = 0; j < record.length(); j++) {
+										JSONObject reobj = record
+												.getJSONObject(j);
+										if (reobj != null) {
+											id = reobj.getString("id");
+											notification_typerecord = reobj
+													.getString("notification_type");
+											notification_title = reobj
+													.getString("notification_title");
+											notification_desc = reobj
+													.getString("notification_desc");
+											notification_startDate = reobj
+													.getString("notification_startDate");
+											notification_endDate = reobj
+													.getString("notification_endDate");
+											city = reobj.getString("city");
+											PPL = reobj.getString("PPL");
+											PL = reobj.getString("PL");
+											kms_run = reobj
+													.getString("kms_run");
+											read_flag = reobj
+													.getString("read_flag");
+											ready_to_publish = reobj
+													.getString("ready_to_publish");
+											all_cities_flag = reobj
+													.getString("all_cities_flag");
+
+											HashMap<String, String> notify = new HashMap<String, String>();
+
+											notify.put("notification_type",
+													notification_type);
+											notify.put("id", id);
+											notify.put("notification_type",
+													notification_typerecord);
+											notify.put("notification_title",
+													notification_title);
+											notify.put("notification_desc",
+													notification_desc);
+											notify.put(
+													"notification_startDate",
+													notification_startDate);
+											notify.put("notification_endDate",
+													notification_endDate);
+											notify.put("city", city);
+											notify.put("PL", PL);
+											notify.put("kms_run", kms_run);
+											notify.put("read_flag", read_flag);
+											notify.put("ready_to_publish",
+													ready_to_publish);
+											notify.put("all_cities_flag",
+													all_cities_flag);
+											hashmaplist.add(notify);
+										}
+									}
+								}
+							}
+						}
+					}
+					dataReceived = true;
+
+				}
+        	  
+        	  else if(webservice.equals(Constants.getVehicleImageByPPL)){
+        		  JSONArray img  = new JSONArray(jsonStr);
+  				for (int i=0; i<img.length(); i++) {
+  					 dataReceived=true;
+  				    JSONObject vehicle_image_url = img.getJSONObject(i);
+  				    String IMAGEURL = vehicle_image_url.getString("vehicle_image_url");
+  				    Log.i("IMAGEURL", IMAGEURL);
+  				  InputStream input = new java.net.URL(IMAGEURL).openStream();
+  				//	 Decode Bitmap
+  					bitmap = BitmapFactory.decodeStream(input);
+  				}
+        	  }
+        	  else if(webservice.equals(Constants.uploadProfileImage)){
+        		  
+        		  if(jsonStr.equals("Image Successfully Stored"))
+        		  {
+        			  dataReceived = true;
+        		  }else
+        			  dataReceived = false;
+        		 /* JSONArray img  = new JSONArray(jsonStr);
+  				for (int i=0; i<img.length(); i++) {
+  					 dataReceived=true;
+  				    JSONObject vehicle_image_url = img.getJSONObject(i);
+  				    String IMAGEURL = vehicle_image_url.getString("vehicle_image_url");
+  				    Log.i("IMAGEURL", IMAGEURL);
+  				  InputStream input = new java.net.URL(IMAGEURL).openStream();
+  				//	 Decode Bitmap
+  					bitmap = BitmapFactory.decodeStream(input);
+  				}*/
+        	  }
+      //  	  01-12 16:21:43.362: D/response(25062): Forbidden Content
+
+          } catch (JSONException  | IOException e) {
+              e.printStackTrace();
+              error = "Invalid credentials, please check username passsword you entered.";
+              dataReceived=false;
+          }
+      } else {
+          Log.e("ServiceHandler", "Couldn't get any data from the url");
+          error = "No internet connection.";
+          dataReceived = false;
+      }
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			dialog.dismiss();
+			if(dataReceived)
+			{
+				if(webservice.equals(Constants.user))
+				{
+					rc.onResponseReceive(dataReceived);
+				}else if (webservice.equals(Constants.registeruser))
+				{
+					rc.onResponseReceive(dataReceived);
+				}else if (webservice.equals(Constants.updateUserDetails))
+				{
+					rc.onResponseReceive(dataReceived);
+				}else if (webservice.equals(Constants.getServiceTypes))
+				{
+					rc.onResponseReceive(listvalues);
+				}else if (webservice.equals(Constants.getKms))
+				{
+					rc.onResponseReceive(listvalues);
+				}else if (webservice.equals(Constants.getState))
+				{
+					rc.onResponseReceive(listvalues);
+				}else if (webservice.equals(Constants.getCityFromState))
+				{
+					rc.onResponseReceive(listvalues);
+				}
+				else if (webservice.equals(Constants.getCityFromStateMaster))
+				{
+					rc.onResponseReceive(listvalues);
+				}
+				else if (webservice.equals(Constants.getFreeServiceCostEstimate))
+				{
+					rc.onResponseReceive(hashmaplist);
+				}else if (webservice.equals(Constants.getPaidServiceCostEstimate))
+				{
+					rc.onResponseReceive(hashmaplist);
+				} else if (webservice.equals(Constants.notification)) {
+					rc.onResponseReceive(hashmaplist);
+				}else if (webservice.equals(Constants.insertVehicleDetails))
+				{
+					rc.onResponseReceive(dataReceived);
+				}else if (webservice.equals(Constants.getVehicleDetailsByUserId))
+				{
+					rc.onResponseReceive(hashmaplist);
+				}else if(webservice.equals(Constants.getVehicleImageByPPL))
+					{
+					rc.onResponseReceive(bitmap);
+					}
+				else if(webservice.equals(Constants.uploadProfileImage))
+					rc.onResponseReceive(dataReceived);
+		//	rc.onResponseReceive("true");
+			}else
+			{
+				rc.onErrorReceive(error);
+				//Toast.makeText(context, "", Toast.LENGTH_LONG).show();
+			}
+		}
+	
+}
+>>>>>>> TMSC QA 3.4V

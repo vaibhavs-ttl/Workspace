@@ -1,0 +1,44 @@
+package com.ttl.webservice;
+
+public class Constants {
+
+	public static final String GetCustomerVehicleDetailsCSB = "GetCustomerVehicleDetailsCSB";
+	public static final String GetDSSDealerCitiesCSB = "GetDSSDealerCitiesCSB";
+	public static final String GetDlrsByCityAndTypeCSB = "GetDlrsByCityAndTypeCSB";
+	public static final String GetComplaintAreaCSB = "GetComplaintAreaCSB";
+	public static final String GetComplaintDesc  = "GetComplaintDesc";
+	public static final String  GetdivphonebydivCSB = "GetdivphonebydivCSB";
+	public static final String GetCompTypeByBUCSB = "GetCompTypeByBUCSB";
+	public static final String GetCompSubTypeByParRowIDCSB = "GetCompSubTypeByParRowIDCSB";
+	public static final String GetCompCitiesByType = "GetCompCitiesByType";
+	public static final String ServiceRequest = "ServiceRequest";
+	public static final String GetServiceHistoryByChassis_CSB = "GetServiceHistoryByChassis_CSB";
+	public static final String GetCompPrblmAreabySubAreaCSB ="GetCompPrblmAreabySubAreaCSB";
+	public static final String TMPCComplaintsInsertOrUpdate_Input = "TMPCComplaintsInsertOrUpdate_Input";
+	public static final String GetCitiesforServiceOrderCSB ="GetCitiesforServiceOrderCSB";
+	public static final String GetDlrLocDtlsCSB ="GetDlrLocDtlsCSB";
+	public static final String TMSiebelServiceInsertOrUpdate_Input = "TMSiebelServiceInsertOrUpdate_Input";
+	public static final String GetComplaintAndJCDescripti_CSB = "GetComplaintAndJCDescripti_CSB";
+	public static final String GetVechcontactScheduler_CSB = "GetVechcontactScheduler_CSB";
+	public static final String GetPositionbyPositionAndOUID_CSB = "GetPositionbyPositionAndOUID_CSB";
+	public static final String GetAllIndianStates = "GetAllIndianStates";
+	public static final String GetAllIndianDistricts = "GetAllIndianDistricts";
+	public static final String GetAllIndianCity = "GetAllIndianCity";
+	public static final String bpmSendSMS = "bpmSendSMS";
+	public static final String GetAMCDetailsScheduler_CSB = "GetAMCDetailsScheduler_CSB";
+	public static final String GetAgreementScheduler_CSB = "GetAgreementScheduler_CSB";
+	
+	public static final String user = "user";
+	public static final String registeruser = "registeruser";
+	public static final String getServiceTypes = "getServiceTypes";
+	public static final String getCityFromState = "getCityFromState";
+	public static final String getFreeServiceCostEstimate = "getFreeServiceCostEstimate";
+	public static final String getKms = "getKms";
+	public static final String getPaidServiceCostEstimate = "getPaidServiceCostEstimate";
+	public static final String getState = "getState";
+	public static final String notification = "notification";
+	public static final String insertVehicleDetails = "insertVehicleDetails";
+	public static final String getVehicleDetailsByUserId = "getVehicleDetailsByUserId";
+	public static final String updateUserDetails = "updateUserDetails";
+	public static final String getCityFromStateMaster = "getCityFromStateMaster";
+}

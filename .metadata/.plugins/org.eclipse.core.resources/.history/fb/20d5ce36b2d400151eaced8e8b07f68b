@@ -1,0 +1,659 @@
+<<<<<<< HEAD
+package com.ttl.customersocialapp;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.helper.VehicleRegister;
+import com.ttl.model.User;
+import com.ttl.model.UserDetails;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+public class TakeRCbookImage extends Fragment{
+
+	View rootview;
+	final int CAMERA_CAPTURE = 1 , EMAIL = 2;
+	ImageView rcImage;
+	Bitmap bitmap;
+	String encodedString;
+	String imgPath, fileName;
+	Button sendmail;
+	File destination;
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
+			Bundle savedInstanceState) {
+		rootview = inflater.inflate(R.layout.dialog_contacttocustcare, viewGroup,
+				false);
+	/*	takephotodialog = new Dialog(context);
+		takephotodialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		takephotodialog
+				.setContentView(R.layout.dialog_contacttocustcare);
+		takephotodialog.setCancelable(true);
+		takephotodialog.show();*/
+		ImageView close = (ImageView) rootview
+				.findViewById(R.id.imgclose);
+		close.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			//	takephotodialog.dismiss();
+				HomeFragment.regvehicle = false;
+				FragmentManager fm = getFragmentManager();
+				FragmentTransaction tx = fm.beginTransaction();
+				tx.replace(R.id.frame_container, new VehicleDetails_Fragment())
+						.commit();
+				// checkvehiclereg(HomeFragment.regvehicle);
+			}
+		});
+		rcImage = (ImageView) rootview
+				.findViewById(R.id.capturedimage);
+		Button takephoto = (Button) rootview
+				.findViewById(R.id.btntakephoto);
+		 sendmail = (Button) rootview
+				.findViewById(R.id.btnsendmail);
+		takephoto.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				selectProfileImage();
+			}
+		});
+		sendmail.setVisibility(View.GONE);
+		sendmail.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				String body ="Dear Team,\n"
+						+"I need assistance to update my details in your CRM system so that I can register my vehicle using your customer App. Attached is the scanned copy of my RC/Insurance document. Please update the records & confirm"
+						+"\n\nRegards, \n"
+						+"Name: "+UserDetails.getFirst_name()+" "+UserDetails.getLast_name()
+						+"\nGender: "+UserDetails.getGender()
+						+"\nMobile No: "+UserDetails.getContact_number()
+						+"\nEmail: "+UserDetails.getEmail_id()
+						+"\nAddress: "+UserDetails.getAddress()
+						+"\nState: "+UserDetails.getState()	
+						+"\nCity: "+UserDetails.getCity()	
+						+"\nPin: "+UserDetails.getPincode()
+						+"\nRegistration No: "+VehicleRegister.regnumber1
+						+"\nChassis No: "+VehicleRegister.chassis1;
+				
+				/*File F = new File(RetriveCapturedImagePath());
+				Uri U = Uri.fromFile(F);
+				Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("image/png");
+				i.putExtra(Intent.EXTRA_STREAM, U);
+				startActivity(Intent.createChooser(i,"Email:"));*/
+				File F = new File(RetriveCapturedImagePath());
+				Uri U = Uri.fromFile(destination);
+				Intent emailIntent = new Intent(Intent.ACTION_SEND);
+				emailIntent.setType("plain/text");
+				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+				          new String[] { "customerregistration@tatamotors.com" });
+
+				  emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+						  VehicleRegister.regnumber1+"- Requires contact updation");
+
+				  emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+						  body);
+				  emailIntent.putExtra(Intent.EXTRA_STREAM, U);
+				startActivityForResult(Intent.createChooser(emailIntent,"Email:"),EMAIL);
+				
+				
+				/*String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+						+"<SOAP:Body>"
+						+"<SendMail xmlns=\"http://schemas.cordys.com/1.0/email\">"
+						+"<to>"
+						+"<address>"
+						+"<emailAddress>customerregistration@tatamotors.com</emailAddress>"
+						+"<displayName>sam</displayName>"
+						+"</address>"
+						+"</to>"
+						+"<subject>"+VehicleRegister.regnumber1+"-Requires contact updation</subject>"
+						+"<body type=\"normal\">Dear Team,\n"
+						+"I need assistance to update my details in your CRM system so that I can register my vehicle using your customer App. Attached is the scanned copy of my RC/Insurance document. Please update the records & confirm"
+						+"Regards, \n"
+						+"Name: "+UserDetails.getFirst_name()+" "+UserDetails.getLast_name()
+						+"\nGender: "+UserDetails.getGender()
+						+"\nMobile No: "+UserDetails.getContact_number()
+						+"\nEmail: "+UserDetails.getEmail_id()
+						+"\nAddress: "+UserDetails.getAddress()
+						+"\nState: "+UserDetails.getState()	
+						+"\nCity: "+UserDetails.getCity()	
+						+"\nPin: "+UserDetails.getPincode()
+						+"\nRegistration No: "+VehicleRegister.regnumber1
+						+"\nChassis No: "+VehicleRegister.chassis1
+						+"</body>"
+						+"<from>"
+						+"<displayName>"+UserDetails.getFirst_name()+"</displayName>"
+						+"<emailAddress>"+UserDetails.getEmail_id()+"</emailAddress>" //"+UserDetails.getEmail_id()+"
+						+"</from>"
+						+"</SendMail>"
+						+"</SOAP:Body>"
+						+"</SOAP:Envelope>";
+				new WebServiceCall(getActivity(), req, Constants.SendMail, new ResponseCallback() {
+					
+					@Override
+					public void onResponseReceive(Object object) {
+						// TODO Auto-generated method stub
+						HomeFragment.regvehicle = false;
+						FragmentManager fm = getFragmentManager();
+						FragmentTransaction tx = fm.beginTransaction();
+						tx.replace(R.id.frame_container, new VehicleDetails_Fragment())
+								.commit();
+					}
+					
+					@Override
+					public void onErrorReceive(String string) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getActivity(), "Mail Send Failed . Please try again.", Toast.LENGTH_SHORT).show();
+					}
+				}, "").execute();*/
+			}
+		});
+		File licensedir = new File(Environment
+				.getExternalStorageDirectory().getAbsolutePath()
+				+ "/CustomerSocialAppDocument");
+		licensedir.mkdirs();
+		rootview.getRootView().setFocusableInTouchMode(true);
+		rootview.getRootView().requestFocus();
+		rootview.getRootView().setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					if (keyCode == KeyEvent.KEYCODE_BACK) {
+						/*if(UserDetails.getUser_id().equals(""))
+						{
+							Toast.makeText(getActivity(), "Please update Profile first.", Toast.LENGTH_SHORT).show();
+						}else
+						{*/
+						FragmentManager fm = getFragmentManager();
+						FragmentTransaction tx = fm.beginTransaction();
+						tx.replace(R.id.frame_container, new VehicleDetails_Fragment())
+								.commit();
+						//}
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		return rootview;
+	}
+	public void selectProfileImage() {
+		final CharSequence[] items = { "Take Photo", "Choose from Gallery",
+				"Cancel" };
+
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(intent, CAMERA_CAPTURE);
+		
+	
+	
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		int RESULT_OK = -1;
+		try {
+			if(requestCode == CAMERA_CAPTURE )
+			{
+				if( resultCode == RESULT_OK && null != data)
+				{
+				
+		        sendmail.setVisibility(View.VISIBLE);
+		     	        
+		        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+		        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		        thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+		        destination = new File(Environment.getExternalStorageDirectory(),
+		        System.currentTimeMillis() + ".jpg");
+		        FileOutputStream fo;
+		        try {
+		        destination.createNewFile();
+		        fo = new FileOutputStream(destination);
+		        fo.write(bytes.toByteArray());
+		        fo.close();
+		        } catch (FileNotFoundException e) {
+		        e.printStackTrace();
+		        } catch (IOException e) {
+		        e.printStackTrace();
+		        }
+		        rcImage.setImageBitmap(thumbnail);
+		        
+				}else {
+			        sendmail.setVisibility(View.GONE);
+	
+					Toast.makeText(rootview.getContext(), "You haven't clicked Image",
+							Toast.LENGTH_LONG).show();
+				}
+			}else if(requestCode == EMAIL )
+			{
+					if( resultCode == RESULT_OK && null != data)
+				{
+					HomeFragment.regvehicle = false;
+					FragmentManager fm = getFragmentManager();
+					FragmentTransaction tx = fm.beginTransaction();
+					tx.replace(R.id.frame_container, new VehicleDetails_Fragment())
+							.commit();
+				}else
+				{
+					HomeFragment.regvehicle = false;
+					FragmentManager fm = getFragmentManager();
+					FragmentTransaction tx = fm.beginTransaction();
+					tx.replace(R.id.frame_container, new VehicleDetails_Fragment())
+							.commit();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+	        sendmail.setVisibility(View.GONE);
+
+			Toast.makeText(rootview.getContext(), "Something went wrong ", Toast.LENGTH_LONG)
+					.show();
+		}
+
+	}
+	
+	public Uri getImageUri(Context inContext, Bitmap inImage) {
+	    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	    inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+	    String path = Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+	    return Uri.parse(path);
+	}
+
+	public String getRealPathFromURI(Uri contentUri)
+    {
+        try
+        {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            Cursor cursor = rootview.getContext().getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        catch (Exception e)
+        {
+            return contentUri.getPath();
+        }
+    }
+	
+	public String RetriveCapturedImagePath()
+	{
+		String Path = "";
+		File f = new File(Environment
+				.getExternalStorageDirectory().getAbsolutePath()
+				+ "/CustomerSocialAppDocument");
+		if (f.exists()) {
+			
+				 Path= f.getPath();
+			}
+		
+		return Path;
+	}
+}
+=======
+package com.ttl.customersocialapp;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.helper.VehicleRegister;
+import com.ttl.model.User;
+import com.ttl.model.UserDetails;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+public class TakeRCbookImage extends Fragment{
+
+	View rootview;
+	final int CAMERA_CAPTURE = 1 , EMAIL = 2;
+	ImageView rcImage;
+	Bitmap bitmap;
+	String encodedString;
+	String imgPath, fileName;
+	Button sendmail;
+	File destination;
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
+			Bundle savedInstanceState) {
+		rootview = inflater.inflate(R.layout.dialog_contacttocustcare, viewGroup,
+				false);
+	/*	takephotodialog = new Dialog(context);
+		takephotodialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		takephotodialog
+				.setContentView(R.layout.dialog_contacttocustcare);
+		takephotodialog.setCancelable(true);
+		takephotodialog.show();*/
+		ImageView close = (ImageView) rootview
+				.findViewById(R.id.imgclose);
+		close.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			//	takephotodialog.dismiss();
+				HomeFragment.regvehicle = false;
+				FragmentManager fm = getFragmentManager();
+				FragmentTransaction tx = fm.beginTransaction();
+				tx.replace(R.id.frame_container, new VehicleDetails_Fragment())
+						.commit();
+				// checkvehiclereg(HomeFragment.regvehicle);
+			}
+		});
+		rcImage = (ImageView) rootview
+				.findViewById(R.id.capturedimage);
+		Button takephoto = (Button) rootview
+				.findViewById(R.id.btntakephoto);
+		 sendmail = (Button) rootview
+				.findViewById(R.id.btnsendmail);
+		takephoto.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				selectProfileImage();
+			}
+		});
+		sendmail.setVisibility(View.GONE);
+		sendmail.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				String body ="Dear Team,\n"
+						+"I need assistance to update my details in your CRM system so that I can register my vehicle using your customer App. Attached is the scanned copy of my RC/Insurance document. Please update the records & confirm"
+						+"\n\nRegards, \n"
+						+"Name: "+UserDetails.getFirst_name()+" "+UserDetails.getLast_name()
+						+"\nGender: "+UserDetails.getGender()
+						+"\nMobile No: "+UserDetails.getContact_number()
+						+"\nEmail: "+UserDetails.getEmail_id()
+						+"\nAddress: "+UserDetails.getAddress()
+						+"\nState: "+UserDetails.getState()	
+						+"\nCity: "+UserDetails.getCity()	
+						+"\nPin: "+UserDetails.getPincode()
+						+"\nRegistration No: "+VehicleRegister.regnumber1
+						+"\nChassis No: "+VehicleRegister.chassis1;
+				
+				/*File F = new File(RetriveCapturedImagePath());
+				Uri U = Uri.fromFile(F);
+				Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("image/png");
+				i.putExtra(Intent.EXTRA_STREAM, U);
+				startActivity(Intent.createChooser(i,"Email:"));*/
+				File F = new File(RetriveCapturedImagePath());
+				Uri U = Uri.fromFile(destination);
+				Intent emailIntent = new Intent(Intent.ACTION_SEND);
+				emailIntent.setType("plain/text");
+				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+				          new String[] { "customerregistration@tatamotors.com" });
+
+				  emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+						  VehicleRegister.regnumber1+"- Requires contact updation");
+
+				  emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+						  body);
+				  emailIntent.putExtra(Intent.EXTRA_STREAM, U);
+				startActivityForResult(Intent.createChooser(emailIntent,"Email:"),EMAIL);
+				
+				
+				/*String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+						+"<SOAP:Body>"
+						+"<SendMail xmlns=\"http://schemas.cordys.com/1.0/email\">"
+						+"<to>"
+						+"<address>"
+						+"<emailAddress>customerregistration@tatamotors.com</emailAddress>"
+						+"<displayName>sam</displayName>"
+						+"</address>"
+						+"</to>"
+						+"<subject>"+VehicleRegister.regnumber1+"-Requires contact updation</subject>"
+						+"<body type=\"normal\">Dear Team,\n"
+						+"I need assistance to update my details in your CRM system so that I can register my vehicle using your customer App. Attached is the scanned copy of my RC/Insurance document. Please update the records & confirm"
+						+"Regards, \n"
+						+"Name: "+UserDetails.getFirst_name()+" "+UserDetails.getLast_name()
+						+"\nGender: "+UserDetails.getGender()
+						+"\nMobile No: "+UserDetails.getContact_number()
+						+"\nEmail: "+UserDetails.getEmail_id()
+						+"\nAddress: "+UserDetails.getAddress()
+						+"\nState: "+UserDetails.getState()	
+						+"\nCity: "+UserDetails.getCity()	
+						+"\nPin: "+UserDetails.getPincode()
+						+"\nRegistration No: "+VehicleRegister.regnumber1
+						+"\nChassis No: "+VehicleRegister.chassis1
+						+"</body>"
+						+"<from>"
+						+"<displayName>"+UserDetails.getFirst_name()+"</displayName>"
+						+"<emailAddress>"+UserDetails.getEmail_id()+"</emailAddress>" //"+UserDetails.getEmail_id()+"
+						+"</from>"
+						+"</SendMail>"
+						+"</SOAP:Body>"
+						+"</SOAP:Envelope>";
+				new WebServiceCall(getActivity(), req, Constants.SendMail, new ResponseCallback() {
+					
+					@Override
+					public void onResponseReceive(Object object) {
+						// TODO Auto-generated method stub
+						HomeFragment.regvehicle = false;
+						FragmentManager fm = getFragmentManager();
+						FragmentTransaction tx = fm.beginTransaction();
+						tx.replace(R.id.frame_container, new VehicleDetails_Fragment())
+								.commit();
+					}
+					
+					@Override
+					public void onErrorReceive(String string) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getActivity(), "Mail Send Failed . Please try again.", Toast.LENGTH_SHORT).show();
+					}
+				}, "").execute();*/
+			}
+		});
+		File licensedir = new File(Environment
+				.getExternalStorageDirectory().getAbsolutePath()
+				+ "/CustomerSocialAppDocument");
+		licensedir.mkdirs();
+		rootview.getRootView().setFocusableInTouchMode(true);
+		rootview.getRootView().requestFocus();
+		rootview.getRootView().setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					if (keyCode == KeyEvent.KEYCODE_BACK) {
+						/*if(UserDetails.getUser_id().equals(""))
+						{
+							Toast.makeText(getActivity(), "Please update Profile first.", Toast.LENGTH_SHORT).show();
+						}else
+						{*/
+						FragmentManager fm = getFragmentManager();
+						FragmentTransaction tx = fm.beginTransaction();
+						tx.replace(R.id.frame_container, new VehicleDetails_Fragment())
+								.commit();
+						//}
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		return rootview;
+	}
+	public void selectProfileImage() {
+		final CharSequence[] items = { "Take Photo", "Choose from Gallery",
+				"Cancel" };
+
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(intent, CAMERA_CAPTURE);
+		
+	
+	
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		int RESULT_OK = -1;
+		try {
+			if(requestCode == CAMERA_CAPTURE )
+			{
+				if( resultCode == RESULT_OK && null != data)
+				{
+				
+		        sendmail.setVisibility(View.VISIBLE);
+		     	        
+		        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+		        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		        thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+		        destination = new File(Environment.getExternalStorageDirectory(),
+		        System.currentTimeMillis() + ".jpg");
+		        FileOutputStream fo;
+		        try {
+		        destination.createNewFile();
+		        fo = new FileOutputStream(destination);
+		        fo.write(bytes.toByteArray());
+		        fo.close();
+		        } catch (FileNotFoundException e) {
+		        e.printStackTrace();
+		        } catch (IOException e) {
+		        e.printStackTrace();
+		        }
+		        rcImage.setImageBitmap(thumbnail);
+		        
+				}else {
+			        sendmail.setVisibility(View.GONE);
+	
+					Toast.makeText(rootview.getContext(), "You haven't clicked Image",
+							Toast.LENGTH_LONG).show();
+				}
+			}else if(requestCode == EMAIL )
+			{
+					if( resultCode == RESULT_OK && null != data)
+				{
+					HomeFragment.regvehicle = false;
+					FragmentManager fm = getFragmentManager();
+					FragmentTransaction tx = fm.beginTransaction();
+					tx.replace(R.id.frame_container, new VehicleDetails_Fragment())
+							.commit();
+				}else
+				{
+					HomeFragment.regvehicle = false;
+					FragmentManager fm = getFragmentManager();
+					FragmentTransaction tx = fm.beginTransaction();
+					tx.replace(R.id.frame_container, new VehicleDetails_Fragment())
+							.commit();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+	        sendmail.setVisibility(View.GONE);
+
+			Toast.makeText(rootview.getContext(), "Something went wrong ", Toast.LENGTH_LONG)
+					.show();
+		}
+
+	}
+	
+	public Uri getImageUri(Context inContext, Bitmap inImage) {
+	    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	    inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+	    String path = Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+	    return Uri.parse(path);
+	}
+
+	public String getRealPathFromURI(Uri contentUri)
+    {
+        try
+        {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            Cursor cursor = rootview.getContext().getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        catch (Exception e)
+        {
+            return contentUri.getPath();
+        }
+    }
+	
+	public String RetriveCapturedImagePath()
+	{
+		String Path = "";
+		File f = new File(Environment
+				.getExternalStorageDirectory().getAbsolutePath()
+				+ "/CustomerSocialAppDocument");
+		if (f.exists()) {
+			
+				 Path= f.getPath();
+			}
+		
+		return Path;
+	}
+}
+>>>>>>> TMSC QA 3.4V

@@ -1,0 +1,87 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="248" key="DIALOG_Y_ORIGIN"/>
+		<item value="452" key="DIALOG_X_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="checkPlayServices" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="false" key="wrap"/>
+		<item value="true" key="wholeword"/>
+		<list key="findhistory">
+			<item value="checkPlayServices"/>
+			<item value="9561816990"/>
+			<item value="getvehical"/>
+			<item value="ew_policy_num"/>
+			<item value="Extended"/>
+			<item value="Registration"/>
+			<item value="notifications"/>
+			<item value="Regs"/>
+		</list>
+		<list key="replacehistory">
+			<item value="updatelater"/>
+			<item value="version"/>
+			<item value="Select Vehicle"/>
+			<item value="Config.awsserverurl+&quot;"/>
+			<item value="ten"/>
+			<item value="ResponseCallback"/>
+			<item value="btnno"/>
+			<item value="btnyes"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="257" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="379" key="DIALOG_HEIGHT"/>
+		<item value="173" key="DIALOG_Y_ORIGIN"/>
+		<item value="38" key="DIALOG_X_ORIGIN"/>
+	</section>
+</section>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="248" key="DIALOG_Y_ORIGIN"/>
+		<item value="452" key="DIALOG_X_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="Please select Labour and Spare items to generate estimate" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="false" key="wrap"/>
+		<item value="true" key="wholeword"/>
+		<list key="findhistory">
+			<item value="Please select Labour and Spare items to generate estimate"/>
+			<item value="Please"/>
+			<item value="ratePerHour"/>
+			<item value="double"/>
+			<item value="Toast"/>
+			<item value="no data found"/>
+			<item value="getLabourRateByCity"/>
+			<item value="registeruser"/>
+		</list>
+		<list key="replacehistory">
+			<item value=""/>
+			<item value="updatelater"/>
+			<item value="version"/>
+			<item value="Select Vehicle"/>
+			<item value="Config.awsserverurl+&quot;"/>
+			<item value="ten"/>
+			<item value="ResponseCallback"/>
+			<item value="btnno"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="257" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="417" key="DIALOG_HEIGHT"/>
+		<item value="202" key="DIALOG_Y_ORIGIN"/>
+		<item value="157" key="DIALOG_X_ORIGIN"/>
+	</section>
+</section>
+>>>>>>> TMSC QA 3.4V

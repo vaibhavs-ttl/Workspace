@@ -1,0 +1,307 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PaidServiceFragment" >
+    
+ 		<ScrollView
+          	android:layout_width="match_parent"
+       	  	android:layout_height="fill_parent"  
+       	  	android:background="@color/blue_medium_transparent" >
+
+         <RelativeLayout  
+             android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:gravity="center">
+       
+        <LinearLayout
+           android:id="@+id/ll1"
+           android:paddingLeft="20dp"
+           android:paddingRight="20dp"
+           android:layout_width="match_parent"
+           android:layout_height="fill_parent"          
+           android:gravity="top|center"
+           android:orientation="vertical" >
+
+           <Spinner
+               android:id="@+id/spinregno"
+               android:layout_width="match_parent"
+               android:layout_height="40dp"
+               android:layout_marginTop="15dp"
+               android:background="@drawable/spinnerback"
+               android:paddingLeft="5dp" />
+            
+            <Spinner
+               android:id="@+id/spinkmtype"
+               android:layout_width="match_parent"
+               android:layout_height="40dp"
+               android:layout_marginTop="10dp"
+               android:background="@drawable/spinnerback"
+               android:paddingLeft="5dp" />
+              
+            <com.ttl.customersocialapp.InstantAutoComplete 
+				    android:id="@+id/spinstate"
+				       android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                     android:padding="10dp"
+                    android:background="@drawable/spinnerback"
+                    android:textColorHint="@color/hintcolor"
+                    android:inputType="text"
+                    android:textSize="15sp"
+                    android:paddingLeft="5dp"
+                    android:hint="Select State"
+				    />	
+           <com.ttl.customersocialapp.InstantAutoComplete 
+				    android:id="@+id/spincity"
+				       android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                     android:padding="10dp"
+                    android:background="@drawable/spinnerback"
+                    android:textColorHint="@color/hintcolor"
+                    android:inputType="text"
+                    android:textSize="15sp"
+                    android:paddingLeft="5dp"
+                    android:hint="Select City"
+				    />
+         <EditText
+               android:id="@+id/txtlabourcost"
+               android:layout_width="match_parent"
+               android:layout_height="40dp"
+               android:layout_marginTop="10dp"
+               android:background="@drawable/blue_border_rectangle"
+               android:hint="Cost of Labour"
+               android:textColorHint="@color/hintcolor"
+               android:textColor="@color/black"
+               android:paddingLeft="10dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false" />
+             
+           <EditText
+               android:id="@+id/txtsparecost"
+               android:layout_width="match_parent"
+               android:layout_height="40dp"
+               android:layout_marginTop="10dp"
+               android:background="@drawable/blue_border_rectangle"
+               android:hint="Cost of Spears"
+               android:textColorHint="@color/hintcolor"
+               android:textColor="@color/black"
+               android:paddingLeft="10dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false" />
+               
+           <EditText
+               android:id="@+id/txtconsumcost"
+               android:layout_width="match_parent"
+               android:layout_height="40dp"
+               android:layout_marginTop="10dp"
+               android:background="@drawable/blue_border_rectangle"
+               android:hint="Cost of Consumables"
+               android:textColorHint="@color/hintcolor"
+               android:textColor="@color/black"
+               android:paddingLeft="10dp" 
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"/>
+                 
+            <TextView
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Total Estimated Cost"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold"/>    
+		   
+		   <TextView 
+		       android:layout_width="match_parent"
+		       android:layout_height="2dp"
+		       android:background="@color/yellow"/>
+           
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="50dp"
+               android:background="@color/alfa" 
+               android:gravity="center">
+              
+           <ImageView 
+              android:layout_marginTop="1dp"
+              android:layout_width="20dp"
+              android:layout_height="20dp"
+              android:background="@drawable/rupee"
+              android:layout_marginRight="5dp"/>
+           
+           <TextView 
+                android:id="@+id/txttotalcost"
+               android:layout_width="wrap_content"
+               android:layout_height="30dp"
+               android:text="-"
+               android:textStyle="bold"
+               android:textSize="24sp"
+               android:textColor="@color/white"/>
+          </LinearLayout>       
+           
+       </LinearLayout>
+     </RelativeLayout>
+   </ScrollView>
+</RelativeLayout>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PaidServiceFragment" >
+    
+ 		<ScrollView
+          	android:layout_width="match_parent"
+       	  	android:layout_height="fill_parent"  
+       	  	android:background="@color/blue_medium_transparent" >
+
+         <RelativeLayout  
+             android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:gravity="center">
+       
+        <LinearLayout
+           android:id="@+id/ll1"
+           android:paddingLeft="20dp"
+           android:paddingRight="20dp"
+           android:layout_width="match_parent"
+           android:layout_height="fill_parent"          
+           android:gravity="top|center"
+           android:orientation="vertical" >
+
+           <Spinner
+               android:id="@+id/spinregno"
+               android:layout_width="match_parent"
+               android:layout_height="40dp"
+               android:layout_marginTop="15dp"
+               android:background="@drawable/spinnerback"
+               android:paddingLeft="5dp" />
+            
+            <Spinner
+               android:id="@+id/spinkmtype"
+               android:layout_width="match_parent"
+               android:layout_height="40dp"
+               android:layout_marginTop="10dp"
+               android:background="@drawable/spinnerback"
+               android:paddingLeft="5dp" />
+              
+            <com.ttl.customersocialapp.InstantAutoComplete 
+				    android:id="@+id/spinstate"
+				       android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                     android:padding="10dp"
+                    android:background="@drawable/spinnerback"
+                    android:textColorHint="@color/hintcolor"
+                    android:inputType="text"
+                    android:textSize="15sp"
+                    android:paddingLeft="5dp"
+                    android:hint="Select State"
+				    />	
+           <com.ttl.customersocialapp.InstantAutoComplete 
+				    android:id="@+id/spincity"
+				       android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                     android:padding="10dp"
+                    android:background="@drawable/spinnerback"
+                    android:textColorHint="@color/hintcolor"
+                    android:inputType="text"
+                    android:textSize="15sp"
+                    android:paddingLeft="5dp"
+                    android:hint="Select City"
+				    />
+         <EditText
+               android:id="@+id/txtlabourcost"
+               android:layout_width="match_parent"
+               android:layout_height="40dp"
+               android:layout_marginTop="10dp"
+               android:background="@drawable/blue_border_rectangle"
+               android:hint="Cost of Labour"
+               android:textColorHint="@color/hintcolor"
+               android:textColor="@color/black"
+               android:paddingLeft="10dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false" />
+             
+           <EditText
+               android:id="@+id/txtsparecost"
+               android:layout_width="match_parent"
+               android:layout_height="40dp"
+               android:layout_marginTop="10dp"
+               android:background="@drawable/blue_border_rectangle"
+               android:hint="Cost of Spears"
+               android:textColorHint="@color/hintcolor"
+               android:textColor="@color/black"
+               android:paddingLeft="10dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false" />
+               
+           <EditText
+               android:id="@+id/txtconsumcost"
+               android:layout_width="match_parent"
+               android:layout_height="40dp"
+               android:layout_marginTop="10dp"
+               android:background="@drawable/blue_border_rectangle"
+               android:hint="Cost of Consumables"
+               android:textColorHint="@color/hintcolor"
+               android:textColor="@color/black"
+               android:paddingLeft="10dp" 
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"/>
+                 
+            <TextView
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Total Estimated Cost"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold"/>    
+		   
+		   <TextView 
+		       android:layout_width="match_parent"
+		       android:layout_height="2dp"
+		       android:background="@color/yellow"/>
+           
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="50dp"
+               android:background="@color/alfa" 
+               android:gravity="center">
+              
+           <ImageView 
+              android:layout_marginTop="1dp"
+              android:layout_width="20dp"
+              android:layout_height="20dp"
+              android:background="@drawable/rupee"
+              android:layout_marginRight="5dp"/>
+           
+           <TextView 
+                android:id="@+id/txttotalcost"
+               android:layout_width="wrap_content"
+               android:layout_height="30dp"
+               android:text="-"
+               android:textStyle="bold"
+               android:textSize="24sp"
+               android:textColor="@color/white"/>
+          </LinearLayout>       
+           
+       </LinearLayout>
+     </RelativeLayout>
+   </ScrollView>
+</RelativeLayout>
+>>>>>>> TMSC QA 3.4V

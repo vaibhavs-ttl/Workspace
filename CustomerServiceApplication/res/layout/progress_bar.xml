@@ -1,0 +1,18 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="utf-8"?>
+<ProgressBar
+     xmlns:android="http://schemas.android.com/apk/res/android"     
+       style="?android:attr/progressBarStyle"
+       android:layout_gravity="center"
+       android:id="@+id/progressbar_downloading"
+       android:layout_width="wrap_content"
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<ProgressBar
+     xmlns:android="http://schemas.android.com/apk/res/android"     
+       style="?android:attr/progressBarStyle"
+       android:layout_gravity="center"
+       android:id="@+id/progressbar_downloading"
+       android:layout_width="wrap_content"
+>>>>>>> TMSC QA 3.4V
+       android:layout_height="wrap_content" />

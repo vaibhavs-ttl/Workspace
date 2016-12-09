@@ -1,0 +1,763 @@
+<<<<<<< HEAD
+package com.ttl.customersocialapp;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+public class DocumentUploadFragment extends Fragment implements
+		OnItemSelectedListener {
+	public DocumentUploadFragment() {
+	}
+
+	View rootView;
+	final int CAMERA_CAPTURE = 1, SELECT_FILE = 2;
+	Button license, insurance, puc, passport, pancard, voterid, aadhar,
+			vehicalpicture, others;
+	public static final String GridViewDemo_ImagePath = Environment
+			.getExternalStorageDirectory().getAbsolutePath() + "/GridViewDemo/";
+	File[] files;
+	Spinner regno;
+	private String[] regstationno = { "MH14 EY2690" };
+	LinearLayout lindocs;
+	ImageView imgdoc, imgcancle, imgdelete, imgadd;
+	String picturePath;
+	SharedPreferences prefs;
+	boolean chklicense=false,chkinsurance=false;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		rootView = inflater.inflate(R.layout.fragment_documentupload,
+				container, false);
+		File imageDirectory = new File(GridViewDemo_ImagePath);
+		imageDirectory.mkdirs();
+		regno = (Spinner) rootView.findViewById(R.id.spnregno);
+		lindocs = (LinearLayout) rootView.findViewById(R.id.lindocs);
+		imgdoc = (ImageView) rootView.findViewById(R.id.imgdoc);
+
+		ArrayAdapter<String> sp_adapter = new ArrayAdapter<String>(
+				getActivity(), R.layout.spinnertext, regstationno);
+		sp_adapter.setDropDownViewResource(R.layout.spinner_selector);
+		regno.setAdapter(sp_adapter);
+		regno.setOnItemSelectedListener(this);
+		license = (Button) rootView.findViewById(R.id.btnlicense);
+		license.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				prefs = PreferenceManager
+						.getDefaultSharedPreferences(getActivity());
+				picturePath = prefs.getString("profilePic", "");
+
+				if (picturePath == null || picturePath.length() == 0
+						|| picturePath.equalsIgnoreCase("")) {
+					imgadd.setVisibility(View.GONE);
+					selectImage();
+
+				} else {
+
+					lindocs.setVisibility(View.GONE);
+					imgdoc.setImageBitmap(getScaledBitmap(picturePath, 0, 0));
+				}
+
+			}
+		});
+
+		insurance = (Button) rootView.findViewById(R.id.btninsurance);
+		insurance.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		imgcancle = (ImageView) rootView.findViewById(R.id.imgcancle);
+		imgcancle.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				lindocs.setVisibility(View.VISIBLE);
+			}
+		});
+		imgdelete = (ImageView) rootView.findViewById(R.id.imgdelete);
+		imgdelete.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						getActivity());
+				alertDialogBuilder
+						.setMessage("Are you sure,You Want Delete Document");
+
+				alertDialogBuilder.setPositiveButton("yes",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								imgadd.setVisibility(View.VISIBLE);
+								prefs.edit().clear().commit();
+								imgdoc.setImageBitmap(getScaledBitmap(null, 0,
+										0));
+							}
+						});
+
+				alertDialogBuilder.setNegativeButton("No",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								getActivity().finish();
+							}
+						});
+
+				AlertDialog alertDialog = alertDialogBuilder.create();
+				alertDialog.show();
+
+			}
+		});
+		imgadd = (ImageView) rootView.findViewById(R.id.imgadd);
+		imgadd.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				selectImage();
+			}
+		});
+		imgadd.setVisibility(View.GONE);
+		return rootView;
+	}
+
+	protected Bitmap getScaledBitmap(String picturePath, int width, int height) {
+		// TODO Auto-generated method stub
+		BitmapFactory.Options sizeOptions = null;
+		try {
+			sizeOptions = new BitmapFactory.Options();
+			sizeOptions.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(picturePath, sizeOptions);
+
+			int inSampleSize = calculateInSampleSize(sizeOptions, width, height);
+
+			sizeOptions.inJustDecodeBounds = false;
+			sizeOptions.inSampleSize = inSampleSize;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return BitmapFactory.decodeFile(picturePath, sizeOptions);
+	}
+
+	private int calculateInSampleSize(Options sizeOptions, int width, int height) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private List<String> RetriveCapturedImagePath() {
+		// TODO Auto-generated method stub
+		List<String> tFileList = new ArrayList<String>();
+		File f = new File(GridViewDemo_ImagePath);
+		if (f.exists()) {
+			files = f.listFiles();
+			Arrays.sort(files);
+
+			for (int i = 0; i < files.length; i++) {
+				File file = files[i];
+				if (file.isDirectory())
+					continue;
+				tFileList.add(file.getPath());
+			}
+		}
+		return tFileList;
+	}
+
+	protected void selectImage() {
+		// TODO Auto-generated method stub
+		final CharSequence[] items = { "Take Photo", "Choose from Gallery",
+				"Cancel" };
+		imgadd.setVisibility(View.GONE);
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				rootView.getContext());
+		builder.setTitle("Add Photo!");
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int item) {
+				if (items[item].equals("Take Photo")) {
+					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					startActivityForResult(intent, CAMERA_CAPTURE);
+				} else if (items[item].equals("Choose from Gallery")) {
+					Intent intent = new Intent(
+							Intent.ACTION_PICK,
+							android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+					intent.setType("image/*");
+					startActivityForResult(
+							Intent.createChooser(intent, "Select File"),
+							SELECT_FILE);
+				} else if (items[item].equals("Cancel")) {
+					dialog.dismiss();
+				}
+			}
+		});
+		builder.show();
+
+	}
+
+	@SuppressLint("NewApi")
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		int RESULT_OK = -1;
+		if (resultCode == RESULT_OK) {
+			// user is returning from capturing an image using the camera
+			if (requestCode == CAMERA_CAPTURE) {
+				Bundle extras = data.getExtras();
+				Bitmap thePic = extras.getParcelable("data");
+				// String imgcurTime = dateFormat.format(new java.util.Date());
+
+				String _path = GridViewDemo_ImagePath
+						+ System.currentTimeMillis() + ".jpg";
+
+				try {
+					FileOutputStream out = new FileOutputStream(_path);
+					thePic.compress(Bitmap.CompressFormat.JPEG, 90, out);
+					out.close();
+				} catch (FileNotFoundException e) {
+					e.getMessage();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				SharedPreferences shre = PreferenceManager
+						.getDefaultSharedPreferences(getActivity());
+				Editor edit = shre.edit();
+				edit.putString("profilePic", _path);
+				edit.commit();
+				lindocs.setVisibility(View.GONE);
+				imgdoc.setImageBitmap(thePic);
+			} else if (requestCode == SELECT_FILE) {
+				onSelectFromGalleryResult(data);
+
+			}
+		}
+	}
+
+	@SuppressLint("NewApi")
+	private void onSelectFromGalleryResult(Intent data) {
+		// TODO Auto-generated method stub
+		Uri selectedImageUri = data.getData();
+		String[] projection = { MediaColumns.DATA };
+		/*
+		 * Cursor cursor = managedQuery(selectedImageUri, projection, null,
+		 * null, null);
+		 */
+		Cursor cursor = getActivity().getContentResolver().query(
+				selectedImageUri, projection, null, null, null);
+		int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
+		cursor.moveToFirst();
+		lindocs.setVisibility(View.GONE);
+		String selectedImagePath = cursor.getString(column_index);
+		SharedPreferences shre = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+		Editor edit = shre.edit();
+		edit.putString("profilePic", selectedImagePath);
+		edit.commit();
+		Bitmap bm;
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(selectedImagePath, options);
+		final int REQUIRED_SIZE = 200;
+		int scale = 1;
+		while (options.outWidth / scale / 2 >= REQUIRED_SIZE
+				&& options.outHeight / scale / 2 >= REQUIRED_SIZE)
+			scale *= 2;
+		options.inSampleSize = scale;
+		options.inJustDecodeBounds = false;
+		bm = BitmapFactory.decodeFile(selectedImagePath, options);
+
+		imgdoc.setImageBitmap(bm);
+
+		/*
+		 * try{
+		 * 
+		 * File afile =new File(selectedImagePath);
+		 * 
+		 * if(afile.renameTo(new File(f, "img" + afile.getName()))){
+		 * System.out.println("File is moved successful!"); }else{
+		 * System.out.println("File is failed to move!"); }
+		 * 
+		 * }catch(Exception e){ e.printStackTrace(); }
+		 */
+
+		InputStream inStream = null;
+		OutputStream outStream = null;
+
+		try {
+
+			File afile = new File(selectedImagePath);
+			File bfile = new File(GridViewDemo_ImagePath, "img"
+					+ afile.getName());
+
+			inStream = new FileInputStream(afile);
+			outStream = new FileOutputStream(bfile);
+
+			byte[] buffer = new byte[1024];
+
+			int length;
+			// copy the file content in bytes
+			while ((length = inStream.read(buffer)) > 0) {
+
+				outStream.write(buffer, 0, length);
+
+			}
+
+			inStream.close();
+			outStream.close();
+
+			System.out.println("File is copied successful!");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int position,
+			long arg3) {
+		// TODO Auto-generated method stub
+		regno.setSelection(position);
+		String selregno = (String) regno.getSelectedItem();
+		Toast.makeText(getActivity(), selregno, Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+
+	}
+}
+=======
+package com.ttl.customersocialapp;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+public class DocumentUploadFragment extends Fragment implements
+		OnItemSelectedListener {
+	public DocumentUploadFragment() {
+	}
+
+	View rootView;
+	final int CAMERA_CAPTURE = 1, SELECT_FILE = 2;
+	Button license, insurance, puc, passport, pancard, voterid, aadhar,
+			vehicalpicture, others;
+	public static final String GridViewDemo_ImagePath = Environment
+			.getExternalStorageDirectory().getAbsolutePath() + "/GridViewDemo/";
+	File[] files;
+	Spinner regno;
+	private String[] regstationno = { "MH14 EY2690" };
+	LinearLayout lindocs;
+	ImageView imgdoc, imgcancle, imgdelete, imgadd;
+	String picturePath;
+	SharedPreferences prefs;
+	boolean chklicense=false,chkinsurance=false;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		rootView = inflater.inflate(R.layout.fragment_documentupload,
+				container, false);
+		File imageDirectory = new File(GridViewDemo_ImagePath);
+		imageDirectory.mkdirs();
+		regno = (Spinner) rootView.findViewById(R.id.spnregno);
+		lindocs = (LinearLayout) rootView.findViewById(R.id.lindocs);
+		imgdoc = (ImageView) rootView.findViewById(R.id.imgdoc);
+
+		ArrayAdapter<String> sp_adapter = new ArrayAdapter<String>(
+				getActivity(), R.layout.spinnertext, regstationno);
+		sp_adapter.setDropDownViewResource(R.layout.spinner_selector);
+		regno.setAdapter(sp_adapter);
+		regno.setOnItemSelectedListener(this);
+		license = (Button) rootView.findViewById(R.id.btnlicense);
+		license.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				prefs = PreferenceManager
+						.getDefaultSharedPreferences(getActivity());
+				picturePath = prefs.getString("profilePic", "");
+
+				if (picturePath == null || picturePath.length() == 0
+						|| picturePath.equalsIgnoreCase("")) {
+					imgadd.setVisibility(View.GONE);
+					selectImage();
+
+				} else {
+
+					lindocs.setVisibility(View.GONE);
+					imgdoc.setImageBitmap(getScaledBitmap(picturePath, 0, 0));
+				}
+
+			}
+		});
+
+		insurance = (Button) rootView.findViewById(R.id.btninsurance);
+		insurance.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		imgcancle = (ImageView) rootView.findViewById(R.id.imgcancle);
+		imgcancle.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				lindocs.setVisibility(View.VISIBLE);
+			}
+		});
+		imgdelete = (ImageView) rootView.findViewById(R.id.imgdelete);
+		imgdelete.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						getActivity());
+				alertDialogBuilder
+						.setMessage("Are you sure,You Want Delete Document");
+
+				alertDialogBuilder.setPositiveButton("yes",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								imgadd.setVisibility(View.VISIBLE);
+								prefs.edit().clear().commit();
+								imgdoc.setImageBitmap(getScaledBitmap(null, 0,
+										0));
+							}
+						});
+
+				alertDialogBuilder.setNegativeButton("No",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								getActivity().finish();
+							}
+						});
+
+				AlertDialog alertDialog = alertDialogBuilder.create();
+				alertDialog.show();
+
+			}
+		});
+		imgadd = (ImageView) rootView.findViewById(R.id.imgadd);
+		imgadd.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				selectImage();
+			}
+		});
+		imgadd.setVisibility(View.GONE);
+		return rootView;
+	}
+
+	protected Bitmap getScaledBitmap(String picturePath, int width, int height) {
+		// TODO Auto-generated method stub
+		BitmapFactory.Options sizeOptions = null;
+		try {
+			sizeOptions = new BitmapFactory.Options();
+			sizeOptions.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(picturePath, sizeOptions);
+
+			int inSampleSize = calculateInSampleSize(sizeOptions, width, height);
+
+			sizeOptions.inJustDecodeBounds = false;
+			sizeOptions.inSampleSize = inSampleSize;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return BitmapFactory.decodeFile(picturePath, sizeOptions);
+	}
+
+	private int calculateInSampleSize(Options sizeOptions, int width, int height) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private List<String> RetriveCapturedImagePath() {
+		// TODO Auto-generated method stub
+		List<String> tFileList = new ArrayList<String>();
+		File f = new File(GridViewDemo_ImagePath);
+		if (f.exists()) {
+			files = f.listFiles();
+			Arrays.sort(files);
+
+			for (int i = 0; i < files.length; i++) {
+				File file = files[i];
+				if (file.isDirectory())
+					continue;
+				tFileList.add(file.getPath());
+			}
+		}
+		return tFileList;
+	}
+
+	protected void selectImage() {
+		// TODO Auto-generated method stub
+		final CharSequence[] items = { "Take Photo", "Choose from Gallery",
+				"Cancel" };
+		imgadd.setVisibility(View.GONE);
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				rootView.getContext());
+		builder.setTitle("Add Photo!");
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int item) {
+				if (items[item].equals("Take Photo")) {
+					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					startActivityForResult(intent, CAMERA_CAPTURE);
+				} else if (items[item].equals("Choose from Gallery")) {
+					Intent intent = new Intent(
+							Intent.ACTION_PICK,
+							android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+					intent.setType("image/*");
+					startActivityForResult(
+							Intent.createChooser(intent, "Select File"),
+							SELECT_FILE);
+				} else if (items[item].equals("Cancel")) {
+					dialog.dismiss();
+				}
+			}
+		});
+		builder.show();
+
+	}
+
+	@SuppressLint("NewApi")
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		int RESULT_OK = -1;
+		if (resultCode == RESULT_OK) {
+			// user is returning from capturing an image using the camera
+			if (requestCode == CAMERA_CAPTURE) {
+				Bundle extras = data.getExtras();
+				Bitmap thePic = extras.getParcelable("data");
+				// String imgcurTime = dateFormat.format(new java.util.Date());
+
+				String _path = GridViewDemo_ImagePath
+						+ System.currentTimeMillis() + ".jpg";
+
+				try {
+					FileOutputStream out = new FileOutputStream(_path);
+					thePic.compress(Bitmap.CompressFormat.JPEG, 90, out);
+					out.close();
+				} catch (FileNotFoundException e) {
+					e.getMessage();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				SharedPreferences shre = PreferenceManager
+						.getDefaultSharedPreferences(getActivity());
+				Editor edit = shre.edit();
+				edit.putString("profilePic", _path);
+				edit.commit();
+				lindocs.setVisibility(View.GONE);
+				imgdoc.setImageBitmap(thePic);
+			} else if (requestCode == SELECT_FILE) {
+				onSelectFromGalleryResult(data);
+
+			}
+		}
+	}
+
+	@SuppressLint("NewApi")
+	private void onSelectFromGalleryResult(Intent data) {
+		// TODO Auto-generated method stub
+		Uri selectedImageUri = data.getData();
+		String[] projection = { MediaColumns.DATA };
+		/*
+		 * Cursor cursor = managedQuery(selectedImageUri, projection, null,
+		 * null, null);
+		 */
+		Cursor cursor = getActivity().getContentResolver().query(
+				selectedImageUri, projection, null, null, null);
+		int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
+		cursor.moveToFirst();
+		lindocs.setVisibility(View.GONE);
+		String selectedImagePath = cursor.getString(column_index);
+		SharedPreferences shre = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+		Editor edit = shre.edit();
+		edit.putString("profilePic", selectedImagePath);
+		edit.commit();
+		Bitmap bm;
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(selectedImagePath, options);
+		final int REQUIRED_SIZE = 200;
+		int scale = 1;
+		while (options.outWidth / scale / 2 >= REQUIRED_SIZE
+				&& options.outHeight / scale / 2 >= REQUIRED_SIZE)
+			scale *= 2;
+		options.inSampleSize = scale;
+		options.inJustDecodeBounds = false;
+		bm = BitmapFactory.decodeFile(selectedImagePath, options);
+
+		imgdoc.setImageBitmap(bm);
+
+		/*
+		 * try{
+		 * 
+		 * File afile =new File(selectedImagePath);
+		 * 
+		 * if(afile.renameTo(new File(f, "img" + afile.getName()))){
+		 * System.out.println("File is moved successful!"); }else{
+		 * System.out.println("File is failed to move!"); }
+		 * 
+		 * }catch(Exception e){ e.printStackTrace(); }
+		 */
+
+		InputStream inStream = null;
+		OutputStream outStream = null;
+
+		try {
+
+			File afile = new File(selectedImagePath);
+			File bfile = new File(GridViewDemo_ImagePath, "img"
+					+ afile.getName());
+
+			inStream = new FileInputStream(afile);
+			outStream = new FileOutputStream(bfile);
+
+			byte[] buffer = new byte[1024];
+
+			int length;
+			// copy the file content in bytes
+			while ((length = inStream.read(buffer)) > 0) {
+
+				outStream.write(buffer, 0, length);
+
+			}
+
+			inStream.close();
+			outStream.close();
+
+			System.out.println("File is copied successful!");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int position,
+			long arg3) {
+		// TODO Auto-generated method stub
+		regno.setSelection(position);
+		String selregno = (String) regno.getSelectedItem();
+		Toast.makeText(getActivity(), selregno, Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+
+	}
+}
+>>>>>>> TMSC QA 3.4V

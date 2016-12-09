@@ -1,0 +1,169 @@
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnKeyListener;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.ttl.adapter.ProductBrochureAdapter;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.communication.CheckConnectivity;
+import com.ttl.helper.AnalyticsApplication;
+import com.ttl.model.ProductBroucher;
+import com.ttl.model.ServiceHandler;
+import com.ttl.model.UserDetails;
+import com.ttl.webservice.AWS_WebServiceCall;
+import com.ttl.webservice.Config;
+import com.ttl.webservice.Constants;
+
+public class ProductBrochureFragment extends Fragment {
+
+	private Tracker mTracker;
+	private ListView products_list;
+	
+	View container_layout;
+
+	@Override
+	public void onStart() {
+
+		super.onStart();
+		mTracker.setScreenName("ProductBrochureFragmentScreen");
+		mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		View v = inflater.inflate(R.layout.product_brochure_information_layout,
+				container, false);
+
+		
+		setupAppTracker();
+		
+		
+		products_list = (ListView) v.findViewById(R.id.productListView);
+		
+		
+		v.setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					if (keyCode == KeyEvent.KEYCODE_BACK) {						
+						FragmentManager fm = getFragmentManager();
+						FragmentTransaction tx = fm.beginTransaction();
+						tx.replace(R.id.frame_container, new HomeFragment())
+								.commit();
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		
+	
+		
+		
+		CheckConnectivity check=new CheckConnectivity();
+		if (check.checkNow(getActivity())) {
+			getBrochures();	
+		}
+		else
+		{
+			Toast.makeText(getActivity(), getString(R.string.no_network_msg), Toast.LENGTH_LONG).show();
+			
+		}
+		
+		
+
+		return v;
+
+	}
+
+	
+
+	
+	private View getBrochures() {
+
+		CheckConnectivity checknow = new CheckConnectivity();
+		boolean connect = checknow.checkNow(getActivity());
+		if (connect) {
+			String req = Config.awsserverurl
+					+ "tmsc_nw/customerapp/brochureServices/getAllBrochures";
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+
+			nameValuePairs.add(new BasicNameValuePair("sessionId", UserDetails
+					.getSeeionId()));
+			nameValuePairs.add(new BasicNameValuePair("user_id", UserDetails
+					.getUser_id()));
+			new AWS_WebServiceCall(getActivity(), req, ServiceHandler.POST,
+					Constants.brochures, nameValuePairs,
+					new ResponseCallback() {
+
+						@Override
+						public void onResponseReceive(Object object) {
+
+							ArrayList<ProductBroucher> brochure_list = (ArrayList<ProductBroucher>) object;
+							products_list
+									.setAdapter(new ProductBrochureAdapter(
+											getActivity(),
+											getFragmentManager(), brochure_list,R.id.product_brochure_container_layout));
+
+						}
+
+						@Override
+						public void onErrorReceive(String response) {
+
+							Toast.makeText(getActivity(), response,
+									Toast.LENGTH_SHORT).show();
+
+						}
+					}).execute();
+		} else {
+			Toast toast = Toast.makeText(getActivity(),
+					getString(R.string.no_network_msg), Toast.LENGTH_SHORT);
+			toast.show();
+		}
+
+		return null;
+
+	}
+
+
+
+
+
+	private void setupAppTracker()
+	{
+		AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
+		mTracker = application.getDefaultTracker();
+		  mTracker.send(new HitBuilders.EventBuilder()
+		 .setCategory("ui_action")
+		 .setAction("button_press")
+		 .setLabel("ProductBrochureFragment")
+		 .build());
+		
+	}
+
+
+
+
+	
+	
+
+}

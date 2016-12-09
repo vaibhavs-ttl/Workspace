@@ -1,0 +1,360 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Customer Service</string>
+    <string name= "blank"></string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="maintenancetips">Maintenance Tips</string>
+	<string name="forget"><u>FORGOTTEN YOUR MOBILE NO?</u></string>
+	<string name="terms"><u>I agree with terms and Services</u></string>
+	<string name="forgotpass"><u>Forgot Password?</u></string>
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item>Home</item>
+        <item>Service Booking</item>
+        <item >Service Booking History</item>
+        <item>Maintenance Cost</item>
+        <item>Complaint Registration</item>
+        <item >Complaint Registered</item>
+        <item>Cost Calculator</item>
+        <item>Feedback</item>
+        <item>Service History</item>
+        <item>Vehicle Details</item>
+        <item>My Documents</item>
+        <item>Notifications</item>
+        <item>Dealer Locator</item>
+        <item>GPS Trip Meter</item>
+        <item>Vehical Finder</item>
+        <item>Traffic and Weather</item>
+        <item>Customer Details</item>
+        <item>Maintenance Tips</item>
+        <item>Info and Terms</item>
+        <item>News and updates</item>
+    </string-array>
+
+    <string name="desc_list_item_icon">Item Icon</string>
+
+    <array name="nav_drawer_icons">
+        <item>@drawable/home</item>
+        <item>@drawable/service_booking</item>
+        <item>@drawable/service_history</item>
+        <item>@drawable/maintenance_cost</item>
+        <item>@drawable/complaint_registration</item>
+        <item>@drawable/complaintdetails</item>
+        <item>@drawable/cost_calculator</item>
+        <item>@drawable/feedback_m</item>
+        <item>@drawable/service_history</item>
+        <item>@drawable/vehicle_details</item>
+        <item>@drawable/my_documents</item>
+        <item>@drawable/notifications</item>
+        <item>@drawable/dealer_locator</item>
+        <item>@drawable/gps_trip_meter</item>
+        <item>@drawable/vehicle_finder</item>
+        <item>@drawable/traffic_and_weather</item>
+        <item>@drawable/customer_details</item>
+        <item>@drawable/maintenance_tips</item>
+        <item>@drawable/info_and_terms</item>
+        <item>@drawable/news_and_updates</item>
+    </array>
+
+    <string-array name="city">
+        <item>Residing City</item>
+    </string-array>
+    <string-array name="dealer">
+        <item>Preferred Dealer</item>
+    </string-array>
+    <string-array name="servicetype">
+        <item>ServiceType</item>
+        <item>First Free Service</item>
+        <item>Second Free Service</item>
+        <item>Third Free Service</item>
+        <item>Forth Free Service</item>
+        <item>Fifth Free Service</item>
+        <item>Paid Service</item>
+        <item>Running Repairs</item>
+    </string-array>
+    <string-array name="complaindesc">
+        <item>Complaint Description</item>
+    </string-array>
+    <string-array name="complainarea">
+        <item>Complaint Area</item>
+    </string-array>
+    <string-array name="complainsubarea">
+        <item>Complaint Sub Area</item>
+    </string-array>
+    <string-array name="problemarea">
+        <item>Problem Area</item>
+    </string-array>
+    <string-array name="regno">
+        <item>Registration Number</item>
+        <item>MH14EY2690</item>
+     <!--    <item>MH04CG2996</item>
+        <item>MH04CG2997</item>
+        <item >MH14BR5258</item> -->
+    </string-array>
+    <string-array name="chassis">
+        <item>Chassis Number</item>
+        <item>MAT623251FLA05109</item>
+     <!--    <item>426021AUZ702705</item>
+        <item>426021AUZ702706</item>
+        <item>MAT6122219YP16175</item> -->
+    </string-array>
+    
+     <string-array name="chassis_vehdet">
+        <item>Chassis Number</item>
+        <item>MAT623251FLA05109</item>
+     <!--    <item>357151BVZ804302</item> -->
+       
+    </string-array>
+    <string-array name="gender">
+        <item >Male</item>
+        <item >Female</item>
+    </string-array>
+    
+    <string-array name="reg_chassis">
+        <item>Registration Number - Chassis Number</item>
+        <item>MH14EY2690 - MAT623251FLA05109</item>
+
+    </string-array>
+	 <!--     QA -->    
+   <!--  <string name="URL">http://tmcrmappsqa.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
+    <string name="URL1">http://tmcrmappsqa.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
+ 	 --> 
+ 	 <!--     PROD -->    
+    <string name="URL">https://tmcrmapps.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
+    <string name="URL1">http://tmcrmapps.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
+    
+    
+    <string name="keypwd">asdfghjkl1234567890</string>
+    <string name="key">MDED994oUET6wtZRHro5/Mum0OVmpR+l</string>
+    <string name="iv">64CDB4ASso2eMKDy</string>
+
+    <!-- Weather Report -->
+    <string name="label_city">City</string>
+    <string name="label_date">Date</string>
+    <string name="label_temperature">Temperature</string>
+    <string name="label_wind">Wind</string>
+    <string name="label_wind_value">0.0km/h</string>
+    <string name="label_humidity">Humidity</string>
+    <string name="label_humidity_value">0%</string>
+    <string name="image_weather_description">Weather image</string>
+    <string name="fetching_data">Fetching weather data</string>
+    <string name="network_error">Network error</string>
+    <string name="alert_search_title">Search</string>
+    <string name="alert_search_message">Write a town to display his weather</string>
+    <string name="alert_search_validate">OK</string>
+    <string name="alert_search_cancel">Cancel</string>
+    <!-- Weather Report -->
+    <string name="title_activity_dealor_locator">DealorLocator</string>
+    <string name="title_activity_dealer_google_map">DealerGoogleMap</string>
+    <string name="title_activity_register_user">RegisterUserActivity</string>
+	<string name="title_activity_generic">Generic</string>
+    <string name="feedback">Feedback</string>
+    <string name="title_activity_post_services">PostServices</string>
+    <string name="que1">Please rate the ability of Dealership to schedule service visit as per your request</string>
+    <string name="que2">Please rate the time taken since you arrived till handed over the car to Service Advisor</string>
+    <string name="que3">Please rate the Courtesy / Friendliness extended by workshop during your visit</string>
+    <string name="que4">Please rate the Thoroughness of Explanations by Service Advisor</string>
+    <string name="que5">Please rate the ease of driving in/Driving Out at the Dealership</string>
+    <string name="que6">Please rate the comfort of waiting area at the Dealership</string>
+    <string name="que7">Please rate the Dealership in terms of Convenience of location</string>
+    <string name="que8">Please rate the Dealership in terms of fairness of Charges</string>
+    <string name="que9">Please rate the Timeliness of the pick-up process</string>
+    <string name="que10">Please rate the total time taken by Dealership to service your vehicle</string>
+    <string name="que11">Please rate the cleanliness of Vehicle on return (Interior and Exterior)</string>
+    <string name="que12">“In the scale of 1 to 10, please rate your overall service experience”</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
+    <string name="feedback_dialog">I am here to give Feedback on</string>
+    <string name="title_activity_cost__estimationn">Cost Estimationn</string>
+    
+    <string name="p1">Make sure vehicle is on a flat leveled surface</string>
+    <string name="p2">Start the engine and allow it to reach the normal operating temperature</string>
+    <string name="p3">Pull the dipstick out, wipe it clean and re-insert it fully</string>
+    <string name="p4">The level should be between the 2 dots( high and low)</string>
+
+    <string name="title_activity_main_list">MainList</string>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Customer Service</string>
+    <string name= "blank"></string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="maintenancetips">Maintenance Tips</string>
+	<string name="forget"><u>FORGOTTEN YOUR MOBILE NO?</u></string>
+	<string name="terms"><u>I agree with terms and Services</u></string>
+	<string name="forgotpass"><u>Forgot Password?</u></string>
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item>Home</item>
+        <item>Service Booking</item>
+        <item >Service Booking History</item>
+        <item>Maintenance Cost</item>
+        <item>Complaint Registration</item>
+        <item >Complaint Registered</item>
+        <item>Cost Calculator</item>
+        <item>Feedback</item>
+        <item>Service History</item>
+        <item>Vehicle Details</item>
+        <item>My Documents</item>
+        <item>Notifications</item>
+        <item>Dealer Locator</item>
+        <item>GPS Trip Meter</item>
+        <item>Vehical Finder</item>
+        <item>Traffic and Weather</item>
+        <item>Customer Details</item>
+        <item>Maintenance Tips</item>
+        <item>Info and Terms</item>
+        <item>News and updates</item>
+    </string-array>
+
+    <string name="desc_list_item_icon">Item Icon</string>
+
+    <array name="nav_drawer_icons">
+        <item>@drawable/home</item>
+        <item>@drawable/service_booking</item>
+        <item>@drawable/service_history</item>
+        <item>@drawable/maintenance_cost</item>
+        <item>@drawable/complaint_registration</item>
+        <item>@drawable/complaintdetails</item>
+        <item>@drawable/cost_calculator</item>
+        <item>@drawable/feedback_m</item>
+        <item>@drawable/service_history</item>
+        <item>@drawable/vehicle_details</item>
+        <item>@drawable/my_documents</item>
+        <item>@drawable/notifications</item>
+        <item>@drawable/dealer_locator</item>
+        <item>@drawable/gps_trip_meter</item>
+        <item>@drawable/vehicle_finder</item>
+        <item>@drawable/traffic_and_weather</item>
+        <item>@drawable/customer_details</item>
+        <item>@drawable/maintenance_tips</item>
+        <item>@drawable/info_and_terms</item>
+        <item>@drawable/news_and_updates</item>
+    </array>
+
+    <string-array name="city">
+        <item>Residing City</item>
+    </string-array>
+    <string-array name="dealer">
+        <item>Preferred Dealer</item>
+    </string-array>
+    <string-array name="servicetype">
+        <item>ServiceType</item>
+        <item>First Free Service</item>
+        <item>Second Free Service</item>
+        <item>Third Free Service</item>
+        <item>Forth Free Service</item>
+        <item>Fifth Free Service</item>
+        <item>Paid Service</item>
+        <item>Running Repairs</item>
+    </string-array>
+    <string-array name="complaindesc">
+        <item>Complaint Description</item>
+    </string-array>
+    <string-array name="complainarea">
+        <item>Complaint Area</item>
+    </string-array>
+    <string-array name="complainsubarea">
+        <item>Complaint Sub Area</item>
+    </string-array>
+    <string-array name="problemarea">
+        <item>Problem Area</item>
+    </string-array>
+    <string-array name="regno">
+        <item>Registration Number</item>
+        <item>MH14EY2690</item>
+     <!--    <item>MH04CG2996</item>
+        <item>MH04CG2997</item>
+        <item >MH14BR5258</item> -->
+    </string-array>
+    <string-array name="chassis">
+        <item>Chassis Number</item>
+        <item>MAT623251FLA05109</item>
+     <!--    <item>426021AUZ702705</item>
+        <item>426021AUZ702706</item>
+        <item>MAT6122219YP16175</item> -->
+    </string-array>
+    
+     <string-array name="chassis_vehdet">
+        <item>Chassis Number</item>
+        <item>MAT623251FLA05109</item>
+     <!--    <item>357151BVZ804302</item> -->
+       
+    </string-array>
+    <string-array name="gender">
+        <item >Male</item>
+        <item >Female</item>
+    </string-array>
+    
+    <string-array name="reg_chassis">
+        <item>Registration Number - Chassis Number</item>
+        <item>MH14EY2690 - MAT623251FLA05109</item>
+
+    </string-array>
+	 <!--     QA -->    
+   <!--  <string name="URL">http://tmcrmappsqa.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
+    <string name="URL1">http://tmcrmappsqa.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
+ 	 --> 
+ 	 <!--     PROD -->    
+    <string name="URL">https://tmcrmapps.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
+    <string name="URL1">http://tmcrmapps.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
+    
+    
+    <string name="keypwd">asdfghjkl1234567890</string>
+    <string name="key">MDED994oUET6wtZRHro5/Mum0OVmpR+l</string>
+    <string name="iv">64CDB4ASso2eMKDy</string>
+
+    <!-- Weather Report -->
+    <string name="label_city">City</string>
+    <string name="label_date">Date</string>
+    <string name="label_temperature">Temperature</string>
+    <string name="label_wind">Wind</string>
+    <string name="label_wind_value">0.0km/h</string>
+    <string name="label_humidity">Humidity</string>
+    <string name="label_humidity_value">0%</string>
+    <string name="image_weather_description">Weather image</string>
+    <string name="fetching_data">Fetching weather data</string>
+    <string name="network_error">Network error</string>
+    <string name="alert_search_title">Search</string>
+    <string name="alert_search_message">Write a town to display his weather</string>
+    <string name="alert_search_validate">OK</string>
+    <string name="alert_search_cancel">Cancel</string>
+    <!-- Weather Report -->
+    <string name="title_activity_dealor_locator">DealorLocator</string>
+    <string name="title_activity_dealer_google_map">DealerGoogleMap</string>
+    <string name="title_activity_register_user">RegisterUserActivity</string>
+	<string name="title_activity_generic">Generic</string>
+    <string name="feedback">Feedback</string>
+    <string name="title_activity_post_services">PostServices</string>
+    <string name="que1">Please rate the ability of Dealership to schedule service visit as per your request</string>
+    <string name="que2">Please rate the time taken since you arrived till handed over the car to Service Advisor</string>
+    <string name="que3">Please rate the Courtesy / Friendliness extended by workshop during your visit</string>
+    <string name="que4">Please rate the Thoroughness of Explanations by Service Advisor</string>
+    <string name="que5">Please rate the ease of driving in/Driving Out at the Dealership</string>
+    <string name="que6">Please rate the comfort of waiting area at the Dealership</string>
+    <string name="que7">Please rate the Dealership in terms of Convenience of location</string>
+    <string name="que8">Please rate the Dealership in terms of fairness of Charges</string>
+    <string name="que9">Please rate the Timeliness of the pick-up process</string>
+    <string name="que10">Please rate the total time taken by Dealership to service your vehicle</string>
+    <string name="que11">Please rate the cleanliness of Vehicle on return (Interior and Exterior)</string>
+    <string name="que12">“In the scale of 1 to 10, please rate your overall service experience”</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
+    <string name="feedback_dialog">I am here to give Feedback on</string>
+    <string name="title_activity_cost__estimationn">Cost Estimationn</string>
+    
+    <string name="p1">Make sure vehicle is on a flat leveled surface</string>
+    <string name="p2">Start the engine and allow it to reach the normal operating temperature</string>
+    <string name="p3">Pull the dipstick out, wipe it clean and re-insert it fully</string>
+    <string name="p4">The level should be between the 2 dots( high and low)</string>
+
+    <string name="title_activity_main_list">MainList</string>
+>>>>>>> TMSC QA 3.4V
+</resources>

@@ -1,0 +1,285 @@
+<<<<<<< HEAD
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    	android:background="@drawable/background"
+   
+    tools:context="com.ttl.customersocialapp.LoginActivity" >
+
+  <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/tata_logo" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="220dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:src="@drawable/tata_service_logo" />
+
+    
+    <EditText
+        android:id="@+id/txtpassword"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/txtuser_id"
+        android:layout_below="@+id/txtuser_id"
+        android:background="@drawable/password"
+        android:ems="10"
+        android:layout_marginTop="7dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:paddingLeft="45dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/hintcolor"
+        android:textSize="15sp" >
+
+      
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/txtpassword"
+        android:layout_below="@+id/txtpassword"
+        android:layout_marginTop="15dp"
+        android:text="@string/forgotpass"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/login_line" />
+
+    <ImageView
+        android:id="@+id/imggoogle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/imgfacebook"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/google" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sign_up"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="Login With"
+        android:textColor="@color/white"
+        android:textSize="22sp" />
+
+    
+    <EditText
+        android:id="@+id/txtuser_id"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/username"
+        android:ems="10"
+        android:hint="Username"
+        android:paddingLeft="45dp"
+        android:textColor="@color/navyblue"
+        android:textColorHint="@color/hintcolor"
+        android:layout_centerHorizontal="true"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        android:textSize="15sp" />
+
+    <ImageView
+        android:id="@+id/twitter"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/imggoogle"
+        android:layout_toRightOf="@+id/textView2"
+        android:src="@drawable/twitter23" />
+
+    <ImageView
+        android:id="@+id/sign_in"
+        android:layout_width="140dp"
+        android:layout_height="35dp"
+        android:layout_alignLeft="@+id/txtpassword"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/sign_in"
+        />
+
+    <ImageView
+        android:id="@+id/sign_up"
+        android:layout_width="115dp"
+        android:layout_height="35dp"
+        android:layout_alignBaseline="@+id/sign_in"
+        android:layout_alignBottom="@+id/sign_in"
+        android:layout_toRightOf="@+id/imggoogle"
+        android:background="@drawable/sign_up"
+        />
+
+    <ImageView
+        android:id="@+id/imgfacebook"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_toLeftOf="@+id/textView2"
+        android:layout_below="@+id/imageView5"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/facebook" />
+
+</RelativeLayout>
+=======
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    	android:background="@drawable/background"
+   
+    tools:context="com.ttl.customersocialapp.LoginActivity" >
+
+  <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/tata_logo" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="220dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:src="@drawable/tata_service_logo" />
+
+    
+    <EditText
+        android:id="@+id/txtpassword"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/txtuser_id"
+        android:layout_below="@+id/txtuser_id"
+        android:background="@drawable/password"
+        android:ems="10"
+        android:layout_marginTop="7dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:paddingLeft="45dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/hintcolor"
+        android:textSize="15sp" >
+
+      
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/txtpassword"
+        android:layout_below="@+id/txtpassword"
+        android:layout_marginTop="15dp"
+        android:text="@string/forgotpass"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/login_line" />
+
+    <ImageView
+        android:id="@+id/imggoogle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/imgfacebook"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/google" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sign_up"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="Login With"
+        android:textColor="@color/white"
+        android:textSize="22sp" />
+
+    
+    <EditText
+        android:id="@+id/txtuser_id"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/username"
+        android:ems="10"
+        android:hint="Username"
+        android:paddingLeft="45dp"
+        android:textColor="@color/navyblue"
+        android:textColorHint="@color/hintcolor"
+        android:layout_centerHorizontal="true"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        android:textSize="15sp" />
+
+    <ImageView
+        android:id="@+id/twitter"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/imggoogle"
+        android:layout_toRightOf="@+id/textView2"
+        android:src="@drawable/twitter23" />
+
+    <ImageView
+        android:id="@+id/sign_in"
+        android:layout_width="140dp"
+        android:layout_height="35dp"
+        android:layout_alignLeft="@+id/txtpassword"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/sign_in"
+        />
+
+    <ImageView
+        android:id="@+id/sign_up"
+        android:layout_width="115dp"
+        android:layout_height="35dp"
+        android:layout_alignBaseline="@+id/sign_in"
+        android:layout_alignBottom="@+id/sign_in"
+        android:layout_toRightOf="@+id/imggoogle"
+        android:background="@drawable/sign_up"
+        />
+
+    <ImageView
+        android:id="@+id/imgfacebook"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_toLeftOf="@+id/textView2"
+        android:layout_below="@+id/imageView5"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/facebook" />
+
+</RelativeLayout>
+>>>>>>> TMSC QA 3.4V

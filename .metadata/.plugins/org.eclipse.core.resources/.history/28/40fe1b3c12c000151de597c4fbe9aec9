@@ -1,0 +1,1229 @@
+package com.ttl.customersocialapp;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.communication.SamlArtifact;
+import com.ttl.helper.DatabaseHandler;
+import com.ttl.model.Dealer;
+import com.ttl.model.ServiceBookingUser;
+import com.ttl.model.ServiceComplaintDesc;
+import com.ttl.model.Service_Booking_History_Child;
+import com.ttl.model.Service_Booking_History_Parent;
+import com.ttl.model.UserDetails;
+import com.ttl.webservice.Config;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+public class BookServiceFragment extends Fragment {
+
+	private Spinner spinner_regNo;
+	private Spinner spinner_city, spinner_dealer,spinner_servicetype;
+	private EditText edit_model, edit_varient,edit_email,edit_mobile,edit_fname,edit_lname,edit_servicetime;
+	private EditText edit_servicedate,edit_dealerNo;
+	private CheckBox checkbox_van,check_agree;
+	private ArrayList<Dealer> dealers  = new ArrayList<Dealer>();
+	//private Button btn_reminder;
+	private int year,month,day,hour,minute;
+	private ArrayAdapter<String> adaptercities;
+	private ServiceBookingUser user = new ServiceBookingUser();
+	
+	private LinearLayout ll1,ll2,ll3,ll4,ll5,ll6,ll7,ll8;
+	TableLayout table_layout;
+	boolean firstclick = true;
+	Spinner spinner_complainarea,spinner_complaindescr;
+	EditText edit_voice,edit_currentkm;
+	Button btn_addComplain,btn_bookService;
+	String regNo ;
+	private ArrayAdapter<String> adapteraea;
+	private ArrayList<ServiceComplaintDesc> lst_c_desc = new ArrayList<ServiceComplaintDesc>();
+	int tag = 0;
+	ImageView del;
+	String DIVISIONID , orgname;
+	private ImageView img_arrow,img_arrow1,img_arrow2,img_arrow3;
+	private ImageView left,right;
+	private HorizontalScrollView scrollView;
+	ArrayList<String[]> serv_compl = new ArrayList<>() ;
+	static boolean chekboxcheck = false;
+	private String TITLE = "ServiceBooking";
+	List<String> dealerorgname = new ArrayList<>();
+	String PRI_EMP_ID = null;
+	String BOOKINGDATE,BOOKINGTIME , historyDate ;
+	DatabaseHandler db;
+	Service_Booking_History_Parent s_parent = new Service_Booking_History_Parent();
+	Service_Booking_History_Child s_child = new Service_Booking_History_Child();
+	String tick;
+	List<String> regnovalues = new ArrayList<String>();
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
+		View v = inflater.inflate(R.layout.fragment_servcebooking, container, false);
+		spinner_regNo = (Spinner) v.findViewById(R.id.spinner_regNo);
+		regnovalues.add("Registration Number");
+		int size = new UserDetails().getRegNumberList().size();
+		for (int i = 0; i < size; i++) {
+			regnovalues.add(new UserDetails().getRegNumberList().get(i)
+					.get("registration_num"));
+		}
+		ArrayAdapter<String> regno = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_spinner_item, regnovalues);
+		regno.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner_regNo.setAdapter(regno);
+		spinner_city = (Spinner) v.findViewById(R.id.spinner_city);
+		spinner_dealer = (Spinner) v.findViewById(R.id.spinner_dealer);
+		edit_model = (EditText) v.findViewById(R.id.edit_model);
+		edit_varient = (EditText) v.findViewById(R.id.edit_varient);
+		edit_email = (EditText) v.findViewById(R.id.edit_email);
+		edit_mobile = (EditText) v.findViewById(R.id.edit_mobile);
+		edit_fname = (EditText) v.findViewById(R.id.edit_fname);
+		edit_lname = (EditText) v.findViewById(R.id.edit_lname);
+		edit_currentkm = (EditText) v.findViewById(R.id.edit_currentkm);
+		img_arrow  = (ImageView) v.findViewById(R.id.img_arrow);
+		img_arrow1  = (ImageView) v.findViewById(R.id.img_arrow1);
+		img_arrow2  = (ImageView) v.findViewById(R.id.img_arrow2);
+		img_arrow3  = (ImageView) v.findViewById(R.id.img_arrow3);
+		left = (ImageView) v.findViewById(R.id.left);
+		right = (ImageView) v.findViewById(R.id.right);
+		scrollView = (HorizontalScrollView) v.findViewById(R.id.horizontalScroll);
+		spinner_servicetype =(Spinner) v.findViewById(R.id.spinner_servicetype);
+		checkbox_van = (CheckBox) v.findViewById(R.id.checkbox_van);
+		edit_servicedate = (EditText) v.findViewById(R.id.edit_servicedate);
+		edit_servicetime = (EditText) v.findViewById(R.id.edit_servicetime);
+		//btn_reminder = (Button) v.findViewById(R.id.btn_reminder);
+		edit_dealerNo = (EditText) v.findViewById(R.id.edit_dealerNo);
+		//check_agree = (CheckBox) v.findViewById(R.id.check_agree);
+		//check_agree.setPaintFlags(check_agree.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+		//COMPLAINT
+		ll1 = (LinearLayout) v.findViewById(R.id.ll1);
+		ll2 = (LinearLayout) v.findViewById(R.id.ll2);
+		ll3 = (LinearLayout) v.findViewById(R.id.ll3);
+		ll4 = (LinearLayout) v.findViewById(R.id.ll4);
+		ll5 = (LinearLayout) v.findViewById(R.id.ll5);
+		ll6 = (LinearLayout) v.findViewById(R.id.ll6);
+		ll7 = (LinearLayout) v.findViewById(R.id.ll7);
+		ll8 = (LinearLayout) v.findViewById(R.id.ll8);
+		//float i = getResources().getDisplayMetrics().density;
+		//Toast.makeText(getActivity(), i+"", Toast.LENGTH_SHORT).show();
+		ll2.setVisibility(View.GONE);
+		ll4.setVisibility(View.GONE);
+		ll6.setVisibility(View.GONE);
+		ll8.setVisibility(View.GONE);
+		
+		 db = new DatabaseHandler(getActivity());
+		 if(Config.getSAMLARTIFACT().equals(""))
+			{
+				new SamlArtifact(getActivity()).execute();
+			}
+//SERVICE		
+		
+		String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">" + "<SOAP:Body>"
+				+ "<GetCitiesforServiceOrderCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\" />"
+				+ "</SOAP:Body>" + "</SOAP:Envelope>";
+	
+	    
+	    new WebServiceCall(getActivity(), req, Constants.GetDSSDealerCitiesCSB, new ResponseCallback() {
+
+			@Override
+			public void onResponseReceive(Object object) {
+				
+				@SuppressWarnings("unchecked")
+				ArrayList <String> list = (ArrayList<String>) object;
+				adaptercities = new ArrayAdapter<String>(getActivity(),R.layout.spinner_text, list);
+				adaptercities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				spinner_city.setAdapter(adaptercities);
+			}
+
+			@Override
+			public void onErrorReceive(String string) {
+				
+				Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+			}
+			
+		},"Populating Cities..").execute();       
+		
+		
+	    //COMPLAINTS
+		table_layout = (TableLayout) v.findViewById(R.id.tableLayout1);
+		spinner_complainarea = (Spinner) v.findViewById(R.id.spinner_complainarea);
+		spinner_complaindescr = (Spinner) v.findViewById(R.id.spinner_complaindesc);
+		btn_addComplain = (Button) v.findViewById(R.id.btn_addComplain);
+		edit_voice = (EditText) v.findViewById(R.id.edit_custVoice);
+		btn_bookService = (Button) v.findViewById(R.id.btn_boookService);
+		 table_layout.removeAllViews();
+		 
+		 
+		String req1 = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+		  +"<SOAP:Body>"
+		  +"<GetComplaintAreaCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+		      +"<SUB_TYPE>TMPC</SUB_TYPE>"
+		    +"</GetComplaintAreaCSB>"
+		  +"</SOAP:Body>"
+		+"</SOAP:Envelope>";
+		
+		
+	    new WebServiceCall(getActivity(), req1, Constants.GetComplaintAreaCSB, new ResponseCallback() {
+			
+			@Override
+			public void onResponseReceive(Object object) {
+				@SuppressWarnings("unchecked")
+				ArrayList <String> list = (ArrayList<String>) object;
+				adapteraea = new ArrayAdapter<String>(getActivity(),R.layout.spinner_text, list);
+				adapteraea.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				  spinner_complainarea.setAdapter(adapteraea);
+			}
+			
+			@Override
+			public void onErrorReceive(String string) {
+				
+				Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+				
+//				final Dialog dialog = new Dialog(getActivity());
+//	            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//	            dialog.setContentView(R.layout.error_popup);
+//	            dialog.show();
+//	            
+//	            TextView title = (TextView) dialog.findViewById(R.id.title);
+//	            TextView error = (TextView) dialog.findViewById(R.id.error);
+//	            title.setText(TITLE);
+//	            error.setText(string);
+//	            
+//	            Button btnOK = (Button) dialog.findViewById(R.id.btnOk);
+//	            btnOK.setOnClickListener(new View.OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						dialog.dismiss();
+//					}
+//				});
+			}
+		},"Populating Complaint Area..").execute();   
+	    
+	    //SERVICE
+	    
+	    checkbox_van.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				
+				String req = null;
+				if (checkbox_van.isChecked()) {
+					req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">" + "<SOAP:Body>"
+							+ "<GetDSSDealerCitiesCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\" />"
+							+ "</SOAP:Body>" + "</SOAP:Envelope>";
+					chekboxcheck = true;
+				} else {
+					req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">" + "<SOAP:Body>"
+							+ "<GetCitiesforServiceOrderCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\" />"
+							+ "</SOAP:Body>" + "</SOAP:Envelope>";
+					chekboxcheck = false;
+				}
+
+				
+				new WebServiceCall(getActivity(), req, Constants.GetDSSDealerCitiesCSB, new ResponseCallback() {
+
+					@Override
+					public void onResponseReceive(Object object) {
+						
+						@SuppressWarnings("unchecked")
+						ArrayList <String> list = (ArrayList<String>) object;
+						adaptercities = new ArrayAdapter<String>(getActivity(),R.layout.spinner_text, list);
+						adaptercities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+						spinner_city.setAdapter(adaptercities);
+					}
+
+					@Override
+					public void onErrorReceive(String string) {
+						
+						Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+					}
+					
+				},"Populating Cities..").execute();       
+				
+
+			}
+
+		});
+
+		spinner_regNo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long arg3) {
+
+				String regNo = spinner_regNo.getSelectedItem().toString();
+				
+				Log.i("Selected item : ", regNo + " AT " + pos);
+				if (pos != 0) {
+					// fire web service
+
+					String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+							+ "<SOAP:Body>"
+							+ "<GetCustomerVehicleDetailsCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+							+ "<RegistrationNumber>" + regNo + "</RegistrationNumber>"
+							+ "<ChassisNumber></ChassisNumber>" + "<MobileNo></MobileNo>"
+							+ "</GetCustomerVehicleDetailsCSB>" + "</SOAP:Body>" + "</SOAP:Envelope>";
+				
+					new WebServiceCall(getActivity(), req, Constants.GetCustomerVehicleDetailsCSB, new ResponseCallback() {
+
+						@Override
+						public void onResponseReceive(Object object) {
+							
+							
+							user = (ServiceBookingUser) object;
+							Log.i("onResponseRecieve", user.PL + " " + user.PPL + " "+user.email);
+							edit_model.setText(user.PPL);
+							edit_varient.setText(user.PL);
+							
+							edit_email.setText(user.getEmail());
+							edit_fname.setText(user.getFname());
+							edit_lname.setText(user.getLname());
+							edit_mobile.setText(user.getPhoneno());
+						}
+
+						@Override
+						public void onErrorReceive(String string) {
+							
+							Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+						}
+					},"Populating Data..").execute();    
+				}
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				
+
+			}
+
+		});
+		spinner_city.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				
+				if (position != 0) {
+					
+					String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+							+ "<SOAP:Body>"
+							+ "<GetDlrsByCityAndTypeCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+							+ "<CITY>" + spinner_city.getSelectedItem().toString() + "</CITY>" + "<BU>TMPC</BU>"
+							+ "</GetDlrsByCityAndTypeCSB>" + "</SOAP:Body>" + "</SOAP:Envelope>";
+		
+					new WebServiceCall(getActivity(), req, Constants.GetDlrsByCityAndTypeCSB, new ResponseCallback() {
+						
+						@SuppressWarnings("unchecked")
+						@Override
+						public void onResponseReceive(Object object) {
+							
+							dealers = (ArrayList<Dealer>) object;
+							List<String> commonname = new ArrayList<String>();
+							commonname.add("Select Dealer");
+							for (int i = 0; i < dealers.size(); i++) {
+								Log.i("dealers", dealers.get(i).commonname + " "+ dealers.get(i).divisionId);
+							commonname.add(dealers.get(i).commonname);
+							}
+							ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+							        R.layout.spinner_text,  commonname);
+							adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+							spinner_dealer.setAdapter(adapter);
+						
+						}
+						
+						@Override
+						public void onErrorReceive(String string) {
+							
+							Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+						}
+					},"Populating Dealers..").execute();  
+					//new AsyncServiceBooking(getActivity(), req, Constants.GetDlrsByCityAndTypeCSB, "Populating Dealers..").execute();  
+					
+					
+					
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				
+
+			}
+		});
+
+		spinner_dealer.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				
+				
+				if (position != 0) {
+					
+					Log.i("DIVISIONID", dealers.get(position-1).getDivisionId() + " at " + (position-1));
+					DIVISIONID = dealers.get(position-1).getDivisionId();
+					orgname = dealers.get(position-1).getDivisionName();
+					orgname = orgname.replaceAll("&", "&amp;");
+				String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+				  +"<SOAP:Body>"
+				  +"<GetdivphonebydivCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+				      +"<DIVISIONID>"+DIVISIONID+"</DIVISIONID>"
+				    +"</GetdivphonebydivCSB>"
+				  +"</SOAP:Body>"
+				+"</SOAP:Envelope>";
+				
+				String req1 =	"<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+						  +"<SOAP:Body>"
+						  +"<GetPositionbyPositionAndOUID_CSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+						      +"<POSTN_TYPE_CD>DSvCRO</POSTN_TYPE_CD>"
+						      +"<OU_ID>"+DIVISIONID+"</OU_ID>"
+						    +"</GetPositionbyPositionAndOUID_CSB>"
+						  +"</SOAP:Body>"
+						+"</SOAP:Envelope>";
+				
+				//new AsyncServiceBooking(getActivity(), req, Constants.GetdivphonebydivCSB, "Getting dealer contatct number.").execute();
+				
+				new WebServiceCall(getActivity(), req, Constants.GetdivphonebydivCSB, new ResponseCallback() {
+					
+					@Override
+					public void onResponseReceive(Object object) {
+						
+						String dealercntctNum = (String) object;
+						if(TextUtils.isEmpty(dealercntctNum))
+							edit_dealerNo.setText("Not available");
+						else
+							edit_dealerNo.setText(dealercntctNum);
+					}
+					
+					@Override
+					public void onErrorReceive(String string) {
+						
+						edit_dealerNo.setText("Contact Number Not Found");
+						//Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+					}
+				} ,"Getting dealer contact number.").execute();
+				
+				
+				new WebServiceCall(getActivity(), req1, Constants.GetPositionbyPositionAndOUID_CSB, new ResponseCallback() {
+					
+					@Override
+					public void onResponseReceive(Object object) {
+						PRI_EMP_ID = (String) object;	
+						
+					}
+					
+					@Override
+					public void onErrorReceive(String string) {
+						Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+					}
+				} ,"Getting dealer contact number.").execute();
+				
+				
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				
+
+			}
+		});
+
+		
+
+		edit_servicedate.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				
+				showDatePickerDialog(v);
+			}
+		});
+		
+		edit_servicetime.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				
+				showTimePickerDialog(v);
+			}
+		});
+		
+		left.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				scrollView.scrollTo((int)scrollView.getScrollX() - 150, (int)scrollView.getScrollY()); 
+			}
+		});
+		right.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				scrollView.scrollTo((int)scrollView.getScrollX() + 150, (int)scrollView.getScrollY()); 
+			}
+		});
+		
+//		btn_reminder.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				
+//				addEventIntent(year, month, day, hour, minute);
+//			}
+//		});
+//	    
+	    
+	  //COMPLAINTS
+		 btn_addComplain.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+			Log.i("POSITIONS", spinner_complainarea.getSelectedItemPosition() + " "+spinner_complaindescr.getSelectedItemPosition())	;
+				
+				
+			if(spinner_complainarea.getSelectedItemPosition()==0){
+				Toast.makeText(getActivity(), "Select complaint Area", Toast.LENGTH_SHORT).show();
+			}if(spinner_complaindescr.getSelectedItemPosition()==0){
+				Toast.makeText(getActivity(), "Select complaint Description", Toast.LENGTH_SHORT).show();
+			}else{
+				//ArrayList<String>complaints = new ArrayList<String>();
+				
+			    String area = spinner_complainarea.getSelectedItem().toString();
+				String desc = spinner_complaindescr.getSelectedItem().toString();
+				String code = lst_c_desc.get(spinner_complaindescr.getSelectedItemPosition()-1).getDEFECT_NUM();
+				String voice = edit_voice.getText().toString();
+				String[] complainttext = new String[]{"Complaint\nArea","Complaint\nDescription","Complaint\nCode","Customer\nVoice"};
+				String[] complaints = new String[]{area,desc,code,voice};
+				serv_compl.add(complaints);
+				BuildTable(complainttext,complaints);
+				spinner_complainarea.setSelection(0);
+				spinner_complaindescr.setSelection(0);
+				edit_voice.setText("");
+			}
+			
+			}
+			
+		});
+		 
+		 spinner_complainarea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+				@Override
+				public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long arg3) {
+
+					String area = spinner_complainarea.getSelectedItem().toString();
+					if(area.equals("MUV&CARS")){
+						area = "MUV&amp;CARS";
+					}
+					
+					Log.i("Selected item : ", area + " AT " + pos);
+					if (pos != 0) {
+						// fire web service
+						String req= "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+						 +"<SOAP:Body>"
+						 +"<GetComplaintDesc xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+						       +"<FAILCODETYPEBU>"+area+"</FAILCODETYPEBU>"
+						     +"</GetComplaintDesc>"
+						   +"</SOAP:Body>"
+						 +"</SOAP:Envelope>";
+					
+						new WebServiceCall(getActivity(), req, Constants.GetComplaintDesc, new ResponseCallback() {
+							
+							@SuppressWarnings("unchecked")
+							@Override
+							public void onResponseReceive(Object object) {
+								
+								lst_c_desc = (ArrayList<ServiceComplaintDesc>) object;
+								List<String> c_desc_text = new ArrayList<String>();
+								c_desc_text.add("Complaint Description");
+									for (int i = 0; i < lst_c_desc.size(); i++) {
+										Log.i("lst_c_desc", lst_c_desc.get(i).DESC_TEXT + " "+ lst_c_desc.get(i).DEFECT_NUM);
+										c_desc_text.add(lst_c_desc.get(i).DESC_TEXT);
+									}
+									ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+									        R.layout.spinner_text,  c_desc_text);
+									adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+									spinner_complaindescr.setAdapter(adapter);
+							}
+							
+							@Override
+							public void onErrorReceive(String string) {
+								
+								Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+							}
+						},"Populating complaint desc").execute();
+					}
+
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) {
+					
+
+				}
+
+			});
+		 btn_bookService.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					// TODO Auto-generated method stub
+//					String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+//							+"<SOAP:Body>"
+//							+"<TMSiebelServiceInsertOrUpdate_Input xmlns=\"http://siebel.com/asi/\">"
+//					      +"<ListOfTmServiceInterface xmlns=\"http://www.siebel.com/xml/TM%20Service%20Interface\">"
+//					        +"<ServiceRequest operation=\"\">"
+//					+"<Created />"
+//					        +"<AssetNumber>"+user.CHASSISNUMBER+"</AssetNumber>"
+//					        +"<IntegrationId>"+System.currentTimeMillis()+"</IntegrationId>"
+//					        +"<OwnedByGroupId>"+DIVISIONID+"</OwnedByGroupId>"
+//					        +"<OwnedById>"+PRI_EMP_ID+"</OwnedById>"
+//					        +"<SRType>"+spinner_servicetype.getSelectedItem().toString()+"</SRType>"
+//					        +"<TMBookingDate>"+BOOKINGDATE+"</TMBookingDate>"
+//					        +"<TMBusinessUnit>TMPC</TMBusinessUnit>"
+//					        +"<CurrentMileage>"+edit_currentkm.getText().toString()+"</CurrentMileage>"
+//					        +"<Description>"+descr+"</Description>"
+//					        +"<VehicleLicenseNumber>"+spinner_regNo.getSelectedItem().toString()+"</VehicleLicenseNumber>"    
+//					       +"<TMMSVRequired>"+tick+"</TMMSVRequired>"// if tick set to Y  
+//							/*+"<ListOfServiceRequest_Organization>"
+//							            +"<ServiceRequest_Organization IsPrimaryMVG=\"Y\" operation=\"\" searchspec=\"\">"// Set Value to Y
+//							            +"<Organization>"+orgname+"</Organization>"
+//							            +"</ServiceRequest_Organization>"
+//							            +"</ListOfServiceRequest_Organization>"*/
+//
+//					         +"<ListOfTmCustomerComplaint>"
+//					            +sb
+//					           +"</ListOfTmCustomerComplaint>"
+//					        +"</ServiceRequest>"
+//					      +"</ListOfTmServiceInterface>"
+//					      +"<StatusObject></StatusObject>"
+//					    +"</TMSiebelServiceInsertOrUpdate_Input>"
+//					  +"</SOAP:Body>"
+//					+"</SOAP:Envelope>";
+					String descr = user.fname + " "+user.lname + " "+user.phoneno +" "+user.email;
+					Log.i("DATE", BOOKINGDATE);
+					ArrayList<String> emptyFields = new ArrayList<>();
+					//validations
+					if(TextUtils.isEmpty(user.CHASSISNUMBER)){
+						emptyFields.add("Registration Number");
+					}
+					if(spinner_city.getSelectedItemPosition()==0)
+						emptyFields.add("City");
+					if(spinner_dealer.getSelectedItemPosition()==0)
+						emptyFields.add("Preferred Dealer");
+					if(TextUtils.isEmpty(PRI_EMP_ID))
+						emptyFields.add("Dealer EMP ID.Select Other dealer.");
+					if(BOOKINGDATE.equals("1/0/0"))
+						emptyFields.add("Booked for Date");
+					if(spinner_servicetype.getSelectedItemPosition()==0)
+						emptyFields.add("Service type");
+					if(TextUtils.isEmpty(edit_currentkm.getText().toString()))
+						emptyFields.add("Current KM");
+//					if(spinner_complainarea.getSelectedItemPosition()==0)
+//						emptyFields.add("Complaint Area");
+//					if(spinner_complaindescr.getSelectedItemPosition()==0)
+//						emptyFields.add("Complaint Description");
+					
+					if(emptyFields.size()==0){
+						
+//					String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+//							+"<SOAP:Body>"
+//							+"<TMSiebelServiceInsertOrUpdate_Input xmlns=\"http://siebel.com/asi/\">"
+//					      +"<ListOfTmServiceInterface xmlns=\"http://www.siebel.com/xml/TM%20Service%20Interface\">"
+//					        +"<ServiceRequest operation=\"\">"
+//					+"<Created /><AssetNumber>"+user.CHASSISNUMBER+"</AssetNumber>"
+//					+ "<IntegrationId>"+System.currentTimeMillis()+"</IntegrationId>"
+//					+ "<OwnedByGroupId>"+DIVISIONID+"</OwnedByGroupId>"
+//					+ "<OwnedById></OwnedById>"
+//					+ "<SRType>"+spinner_servicetype.getSelectedItem().toString()+"</SRType>NEW<TMBookingDate>"+date+"</TMBookingDate>"
+//					+ "<TMBusinessUnit>TMPC</TMBusinessUnit>"
+//					+ "<CurrentMileage>"+edit_currentkm.getText().toString()+"</CurrentMileage>"
+//					+ "<Description>"+descr+"</Description>"
+//					+ "<VehicleLicenseNumber>"+spinner_regNo.getSelectedItem().toString()+"</VehicleLicenseNumber>Web</ServiceRequest></ListOfTmServiceInterface><StatusObject></StatusObject>"         
+//					+ "</TMSiebelServiceInsertOrUpdate_Input>"
+//					+ "</SOAP:Body>"
+//					+ "</SOAP:Envelope>";
+						//area,desc,code,voice
+						StringBuilder sb = new StringBuilder();
+						for (int i = 0; i < serv_compl.size(); i++) {
+						String compl =	"<TmCustomerComplaint operation=\"\" searchspec=\"\">"
+						               +"<Id>"+(System.currentTimeMillis()+i)+"</Id>"
+						              +"<TMCustomerComplaintCode>"+serv_compl.get(i)[2]+"</TMCustomerComplaintCode>"
+						              +"<TMCustomerComplaintDesc>"+serv_compl.get(i)[1]+"</TMCustomerComplaintDesc>"
+						              +"<TMCustomerVoice>"+serv_compl.get(i)[3]+"</TMCustomerVoice>"
+						              +"</TmCustomerComplaint>";
+						sb.append(compl);
+						}
+						
+//					String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+//							+"<SOAP:Body>"
+//							+"<TMSiebelServiceInsertOrUpdate_Input xmlns=\"http://siebel.com/asi/\">"
+//					      +"<ListOfTmServiceInterface xmlns=\"http://www.siebel.com/xml/TM%20Service%20Interface\">"
+//					        +"<ServiceRequest operation=\"\">"
+//					+"<Created />"
+//					        +"<AssetNumber>"+user.CHASSISNUMBER+"</AssetNumber>"
+//					        +"<IntegrationId>"+System.currentTimeMillis()+"</IntegrationId>"
+//					        +"<OwnedByGroupId>"+DIVISIONID+"</OwnedByGroupId>"
+//					        +"<OwnedById>1-2PAE25</OwnedById>"
+//					        +"<SRType>"+spinner_servicetype.getSelectedItem().toString()+"</SRType>"
+//					        +"<TMBookingDate>"+date+"</TMBookingDate>"
+//					        +"<TMBusinessUnit>TMPC</TMBusinessUnit>"
+//					        +"<CurrentMileage>"+edit_currentkm.getText().toString()+"</CurrentMileage>"
+//					        +"<Description>"+descr+"</Description>"
+//					        +"<VehicleLicenseNumber>"+spinner_regNo.getSelectedItem().toString()+"</VehicleLicenseNumber>"    
+//					         +"<ListOfTmCustomerComplaint>"
+//					            +"<TmCustomerComplaint operation=\"\" searchspec=\"\">"
+//					               +"<Id>"+System.currentTimeMillis()+"</Id>"
+//					              +"<TMCustomerComplaintCode>SSC</TMCustomerComplaintCode>"
+//					              +"<TMCustomerComplaintDesc>Scheduled Service</TMCustomerComplaintDesc>"
+//					              +"<TMCustomerVoice>gfg</TMCustomerVoice>"
+//					              +"</TmCustomerComplaint>"
+//					           +"</ListOfTmCustomerComplaint>"
+//					        +"</ServiceRequest>"
+//					      +"</ListOfTmServiceInterface>"
+//					      +"<StatusObject>PARAMETER</StatusObject>"
+//					    +"</TMSiebelServiceInsertOrUpdate_Input>"
+//					  +"</SOAP:Body>"
+//					+"</SOAP:Envelope>";
+						
+						if(chekboxcheck)
+						{
+							tick = "Y";
+						}else
+							tick="";
+							
+					String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+							+"<SOAP:Body>"
+							+"<TMSiebelServiceInsertOrUpdate_Input xmlns=\"http://siebel.com/asi/\">"
+					      +"<ListOfTmServiceInterface xmlns=\"http://www.siebel.com/xml/TM%20Service%20Interface\">"
+					        +"<ServiceRequest operation=\"\">"
+					+"<Created />"
+					        +"<AssetNumber>"+user.CHASSISNUMBER+"</AssetNumber>"
+					        +"<IntegrationId>"+System.currentTimeMillis()+"</IntegrationId>"
+					        +"<OwnedByGroupId>"+DIVISIONID+"</OwnedByGroupId>"
+					        +"<OwnedById>"+PRI_EMP_ID+"</OwnedById>"
+					        +"<SRType>"+spinner_servicetype.getSelectedItem().toString()+"</SRType>"
+					        +"<TMBookingDate>"+BOOKINGDATE+"</TMBookingDate>"
+					        +"<TMBusinessUnit>TMPC</TMBusinessUnit>"
+					        +"<CurrentMileage>"+edit_currentkm.getText().toString()+"</CurrentMileage>"
+					        +"<Description>"+descr+"</Description>"
+					        +"<VehicleLicenseNumber>"+spinner_regNo.getSelectedItem().toString()+"</VehicleLicenseNumber>"    
+					       +"<TMMSVRequired>"+tick+"</TMMSVRequired>"// if tick set to Y  
+							/*+"<ListOfServiceRequest_Organization>"
+							            +"<ServiceRequest_Organization IsPrimaryMVG=\"Y\" operation=\"\" searchspec=\"\">"// Set Value to Y
+							            +"<Organization>"+orgname+"</Organization>"
+							            +"</ServiceRequest_Organization>"
+							            +"</ListOfServiceRequest_Organization>"*/
+
+					         +"<ListOfTmCustomerComplaint>"
+					            +sb
+					           +"</ListOfTmCustomerComplaint>"
+					        +"</ServiceRequest>"
+					      +"</ListOfTmServiceInterface>"
+					      +"<StatusObject></StatusObject>"
+					    +"</TMSiebelServiceInsertOrUpdate_Input>"
+					  +"</SOAP:Body>"
+					+"</SOAP:Envelope>";
+					
+					
+					new WebServiceCall(getActivity(), req, Constants.TMSiebelServiceInsertOrUpdate_Input, new ResponseCallback() {
+						
+						@Override
+						public void onResponseReceive(Object object) {
+							// TODO Auto-generated method stub
+							ArrayList<String> serviceSuccess = (ArrayList<String>) object;
+						//	Toast.makeText(getActivity(),"Service Booked with SR Number "+ serviceSuccess.get(1), Toast.LENGTH_SHORT).show();
+							AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+							//builder1.setTitle("Service Booked with SR Number "+ serviceSuccess.get(1));
+							builder1.setTitle("Service Booking");
+							builder1.setMessage("Service Booked with SR Number "+ serviceSuccess.get(1));
+							builder1.setCancelable(false);
+							builder1.setPositiveButton(
+							    "OK",
+							    new DialogInterface.OnClickListener() {
+							        public void onClick(DialogInterface dialog, int id) {
+							            dialog.cancel();
+							            FragmentManager fragmentManager = getFragmentManager();
+							           Fragment fragment = new HomeFragment();
+							           fragmentManager.beginTransaction()
+										.replace(R.id.frame_container, fragment).commit();
+							        }
+							    });
+
+
+							AlertDialog alert11 = builder1.create();
+							alert11.show();
+							//STORE OFFLINE
+                            Date date = null;
+                            String offlineDate = null;
+                           SimpleDateFormat curFormater = new SimpleDateFormat("MM/dd/yyyy",Locale.US); 
+                           try {
+                               date = curFormater.parse(BOOKINGDATE);
+                               offlineDate = curFormater.format(date);
+                           } catch (ParseException e) {
+                               // TODO Auto-generated catch block
+                               e.printStackTrace();
+                           }
+							s_parent.setUserId(UserDetails.getUser_id());
+							  s_parent.setComplaint_sr_no(serviceSuccess.get(1));
+							 s_parent.setComplaint_reg_no(user.REGISTRATIONNUMBER);
+					         s_parent.setComplaint_date(offlineDate);
+					         s_parent.setKms(edit_currentkm.getText().toString());
+					         
+					         
+					         s_parent.setModel(user.PPL);
+					        // s_parent.setDate_of_booking(BOOKINGDATE);
+					         s_parent.setBooked_for_time(historyTime);
+					         s_parent.setBooked_for_dealer(spinner_dealer.getSelectedItem().toString());
+					         s_parent.setService_type(spinner_servicetype.getSelectedItem().toString());
+					         s_parent.setMsv_flag(tick);
+					         
+					         String log = "USERID: "+UserDetails.getUser_id() +" SR: " + serviceSuccess.get(1)+ " ,REG: " + user.REGISTRATIONNUMBER+ " ,DATE: " + BOOKINGDATE+ " ,KM: " + edit_currentkm.getText().toString();
+					            Log.i("s_parent", log);
+					         
+					         db.addServiceParent(s_parent);
+							
+						}
+						
+						@Override
+						public void onErrorReceive(String string) {
+							// TODO Auto-generated method stub
+							
+						}
+					},"Booking Service.").execute();
+					}
+					else{
+					//	Toast.makeText(getActivity(), "Fields Missing.", Toast.LENGTH_SHORT).show();
+						StringBuilder sb = new StringBuilder();
+						for (int j = 0; j < emptyFields.size(); j++) {
+							sb.append(emptyFields.get(j)+"\n");
+						}
+						
+						AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+						builder1.setTitle("Following fields are missing:");
+						builder1.setMessage(sb);
+						
+						builder1.setCancelable(true);
+						builder1.setPositiveButton(
+						    "OK",
+						    new DialogInterface.OnClickListener() {
+						        public void onClick(DialogInterface dialog, int id) {
+						            dialog.cancel();
+						        }
+						    });
+
+
+						AlertDialog alert11 = builder1.create();
+						alert11.show();
+					}
+				}
+			});
+		 ll1.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					toggle_contents(ll2);
+				}
+			});
+			ll3.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					toggle_contents(ll4);
+				}
+			});
+			ll5.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					toggle_contents(ll6);
+				}
+			});
+			ll7.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					toggle_contents(ll8);
+				}
+			});
+		//	TableRow tr = (TableRow)table_layout.getChildAt(tag);
+		//	ImageView delete = (ImageView)tr.getChildAt(4);
+			v.getRootView().setFocusableInTouchMode(true);
+			v.getRootView().requestFocus();
+
+			v.getRootView().setOnKeyListener(new OnKeyListener() {
+				@Override
+				public boolean onKey(View v, int keyCode, KeyEvent event) {
+					if (event.getAction() == KeyEvent.ACTION_DOWN) {
+						if (keyCode == KeyEvent.KEYCODE_BACK) {						
+							FragmentManager fm = getFragmentManager();
+							FragmentTransaction tx = fm.beginTransaction();
+							tx.replace(R.id.frame_container, new HomeFragment())
+									.commit();
+							return true;
+						}
+					}
+					return false;
+				}
+			});
+
+			
+		return v;
+	}
+	
+	
+	private void addEventIntent(int year,int month,int day ,int hour,int minutes){
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(year, month, day, hour,minutes );
+     //   Calendar endTime = Calendar.getInstance();
+      //  endTime.set(2015, 9, 29, 17,33 );
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(Events.CONTENT_URI)
+               .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+              //  .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                .putExtra(Events.TITLE, "Service")
+                .putExtra(Events.DESCRIPTION, "Add Desciption")
+                .putExtra(Events.EVENT_LOCATION, "Add Location")
+                .putExtra(Events.AVAILABILITY, Events.AVAILABILITY_BUSY);
+                //.putExtra(Intent.EXTRA_EMAIL, "rowan@example.com,trevor@example.com");
+        startActivity(intent);
+
+    }
+	private void showDatePickerDialog(View v) {
+		DialogFragment newFragment = new DatePickerFragment();
+		newFragment.show(getActivity().getFragmentManager(), "datePicker");
+	}
+
+	
+	public void showTimePickerDialog(View v) {
+	    DialogFragment newFragment = new TimePickerFragment();
+	    newFragment.show(getActivity().getFragmentManager(), "timePicker");
+	}
+	private class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			// Use the current date as the default date in the picker
+			final Calendar c = Calendar.getInstance();
+			year = c.get(Calendar.YEAR);
+			 month = c.get(Calendar.MONTH);
+			day = c.get(Calendar.DAY_OF_MONTH);
+		    hour = c.get(Calendar.HOUR_OF_DAY);
+		    minute = c.get(Calendar.MINUTE);
+			// Create a new instance of DatePickerDialog and return it
+		    DatePickerDialog d = new DatePickerDialog(getActivity(), this, year, month, day);
+		    DatePicker dp = d.getDatePicker(); 
+		   // dp.setMinDate(c.getTimeInMillis());
+		    c.add(Calendar.DAY_OF_YEAR, 2);
+		    dp.setMinDate(c.getTimeInMillis());
+			return d;
+		}
+
+		public void onDateSet(DatePicker view, int year, int month, int day) {
+			// Do something with the date chosen by the user
+			  historyDate = day + "-" + (month+1) + "-"+year;
+	            edit_servicedate.setText(historyDate);
+			edit_servicedate.setText(day + "-" + (month+1) + "-"+year);
+			BOOKINGDATE = (month+1)+"/"+day+"/"+year;
+			//btn_reminder.setVisibility(View.VISIBLE);
+			
+		}
+
+	}
+			private class TimePickerFragment extends DialogFragment
+		    implements TimePickerDialog.OnTimeSetListener {
+				String aMpM = "AM";
+				 int currentHour;
+					@Override
+					public Dialog onCreateDialog(Bundle savedInstanceState) {
+					// Use the current time as the default values for the picker
+					final Calendar c = Calendar.getInstance();
+					int hour = c.get(Calendar.HOUR_OF_DAY);
+					int minute = c.get(Calendar.MINUTE);
+					
+					// Create a new instance of TimePickerDialog and return it
+					return new TimePickerDialog(getActivity(), this, hour, minute,
+					DateFormat.is24HourFormat(getActivity()));
+					
+					}
+					
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+					// Do something with the time chosen by the user
+					//	edit_servicetime.setText(hourOfDay+":"+minute);
+						
+						
+				        if(hourOfDay >11)
+				        {
+				            aMpM = "PM";
+				        }
+
+				        //Make the 24 hour time format to 12 hour time format
+				       
+				        if(hourOfDay>11)
+				        {
+				            currentHour = hourOfDay - 12;
+				        }
+				        else
+				        {
+				            currentHour = hourOfDay;
+				        }
+				       BOOKINGTIME = String.valueOf(currentHour)+ " : " + String.valueOf(minute) + " " + aMpM;
+				        edit_servicetime.setText(String.valueOf(currentHour)+ " : " + String.valueOf(minute) + " " + aMpM );
+				        
+		                
+					}
+		}
+	
+	
+	
+	private void toggle_contents(View v){
+		if(v.isShown()){
+		   slide_up(getActivity(), v);
+		   v.setVisibility(View.GONE);
+		  }
+		  else{
+		    v.setVisibility(View.VISIBLE);
+		    slide_down(getActivity(), v);
+		    if(v.getId() == R.id.ll4){
+		    	slide_up(getActivity(), ll2);
+		    	slide_up(getActivity(), ll6);
+		    	slide_up(getActivity(), ll8);
+		    	ll2.setVisibility(View.GONE);
+		    	ll6.setVisibility(View.GONE);
+		    	ll8.setVisibility(View.GONE);
+		    }else
+		    	if(v.getId() == R.id.ll6){
+			    	slide_up(getActivity(), ll2);
+			    	slide_up(getActivity(), ll4);
+			    	slide_up(getActivity(), ll8);
+			    	ll2.setVisibility(View.GONE);
+			    	ll4.setVisibility(View.GONE);
+			    	ll8.setVisibility(View.GONE);
+			    }else
+			    	if(v.getId() == R.id.ll8){
+				    	slide_up(getActivity(), ll4);
+				    	slide_up(getActivity(), ll6);
+				    	slide_up(getActivity(), ll2);
+				    	ll4.setVisibility(View.GONE);
+				    	ll6.setVisibility(View.GONE);
+				    	ll2.setVisibility(View.GONE);
+				    }else
+				    	if(v.getId() == R.id.ll2){
+					    	slide_up(getActivity(), ll4);
+					    	slide_up(getActivity(), ll6);
+					    	slide_up(getActivity(), ll8);
+					    	ll4.setVisibility(View.GONE);
+					    	ll6.setVisibility(View.GONE);
+					    	ll8.setVisibility(View.GONE);
+					    }
+		  }
+	}
+	
+	private void slide_down(Context ctx, View v){
+		// Toast.makeText(ctx, "SLIDING DOWN", Toast.LENGTH_SHORT).show();
+		 /* Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_down);
+		  if(a != null){
+		     a.reset();
+		     if(v != null){
+		      v.clearAnimation();
+		      v.startAnimation(a);
+		     }
+		  }*/
+		 
+		  switch (v.getId()) {
+		case  R.id.ll2:
+			setArrowImage(img_arrow, R.drawable.downarrow);
+			break;
+		case  R.id.ll4:
+			setArrowImage(img_arrow1, R.drawable.downarrow);
+			break;
+		case  R.id.ll6:
+			setArrowImage(img_arrow2, R.drawable.downarrow);
+			break;
+		case  R.id.ll8:
+			setArrowImage(img_arrow3, R.drawable.downarrow);
+			break;
+		default:
+			break;
+		}
+		}
+	
+	private void setArrowImage(ImageView arrow,int image){
+		arrow.setMaxHeight(20);
+		arrow.setMaxWidth(20);
+		arrow.setImageDrawable(getResources().getDrawable(image));
+	}
+	
+	private void slide_up(Context ctx, View v){
+		//Toast.makeText(ctx, "SLIDING UP", Toast.LENGTH_SHORT).show();
+		/*  Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_up);
+		  if(a != null){
+		     a.reset();
+		     if(v != null){
+		      v.clearAnimation();
+		      v.startAnimation(a);
+		     }
+		  }*/
+		  	
+	  		switch (v.getId()) {
+			case  R.id.ll2:
+				setArrowImage(img_arrow, R.drawable.orangerightarrow);
+				break;
+			case  R.id.ll4:
+				setArrowImage(img_arrow1, R.drawable.orangerightarrow);
+				break;
+			case  R.id.ll6:
+				setArrowImage(img_arrow2, R.drawable.orangerightarrow);
+				break;
+			case  R.id.ll8:
+				setArrowImage(img_arrow3, R.drawable.orangerightarrow);
+				break;
+			default:
+				break;
+			}
+		}
+	
+	private void BuildTable(String[] complainttext, String[] complaints) {
+		//LayoutParams params = new LayoutParams(500, LayoutParams.MATCH_PARENT);
+		TableRow.LayoutParams lp = new TableRow.LayoutParams(
+			    300, 
+			    TableRow.LayoutParams.MATCH_PARENT
+			);
+		TableLayout.LayoutParams tbl = new TableLayout.LayoutParams(
+				TableLayout.LayoutParams.MATCH_PARENT, 
+			    TableLayout.LayoutParams.MATCH_PARENT
+			);
+		
+		if(firstclick){
+			
+		TableRow tbrow0 = new TableRow(getActivity());
+		for(int i=0;i<4;i++){
+			TextView tv0 = new TextView(getActivity());
+	        tv0.setText(complainttext[i]);
+	        tv0.setTextColor(Color.GRAY);
+	       
+	       // tv0.setHeight(LayoutParams.FILL_PARENT);
+	       tv0.setLayoutParams(lp);
+	        tv0.setTextSize(13);
+	        tv0.setGravity(Gravity.CENTER_HORIZONTAL);
+	        tv0.setPadding(20, 20, 20, 20);
+	      //  tv0.setBackgroundColor(Color.BLACK);
+	        tv0.setBackgroundDrawable(getResources().getDrawable(R.drawable.grey_border_blackrectangle));
+	       // tbrow0.setLayoutParams(tbl);
+	        tbrow0.addView(tv0);
+		}
+		//tbrow0.setBackgroundColor(Color.BLACK);
+		//tbrow0.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
+		left.setVisibility(View.VISIBLE);
+		right.setVisibility(View.VISIBLE);
+        table_layout.addView(tbrow0);
+        firstclick = false;
+		}
+		
+		TableRow tbrow = new TableRow(getActivity());
+		//Toast.makeText(getActivity(), "TABLEROW AT " +tag+"", Toast.LENGTH_SHORT).show();
+		tbrow.setTag(tag);
+		for(int i=0;i<4;i++){
+        TextView tv = new TextView(getActivity());
+        tv.setText(complaints[i]);
+        tv.setTextColor(Color.BLACK);
+        tv.setTextSize(17);
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setPadding(20, 20, 20, 20);
+        tv.setLayoutParams(lp);
+        if(tag%2==0)
+        	tv.setBackgroundDrawable(getResources().getDrawable(R.drawable.gray_border_grayrectangle));
+    		else 
+    			tv.setBackgroundDrawable(getResources().getDrawable(R.drawable.grey_border_lightgrayrectangle));
+       // tv.setBackground(getResources().getDrawable(R.drawable.grey_border_rectangle));
+        tbrow.addView(tv);
+		}
+		////TODO
+		//add delete button
+		del = new ImageView(getActivity());
+		del.setTag(tag);
+		del.setBackgroundColor(Color.TRANSPARENT);
+		TableRow.LayoutParams lp1 = new TableRow.LayoutParams(
+				TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.MATCH_PARENT
+			);
+		del.setLayoutParams(lp1);
+		del.setPadding(20, 0, 20, 0);
+		del.setImageDrawable(getResources().getDrawable(R.drawable.delete2));
+		
+		tbrow.addView(del);
+		del.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			//	Toast.makeText(getActivity(), v.getTag()+"", Toast.LENGTH_SHORT).show();
+				final TableRow parent = (TableRow) v.getParent();
+                table_layout.removeView(parent);
+//               
+			}
+		});
+
+        table_layout.addView(tbrow);
+        tag++;
+		 }
+	
+
+}
+

@@ -1,0 +1,17 @@
+<<<<<<< HEAD
+IMPORT_FILES_AND_FOLDERS_RELATIVE=true
+IMPORT_FILES_AND_FOLDERS_TYPE=23,1
+PROBLEMS_FILTERS_MIGRATE=true
+eclipse.preferences.version=1
+platformState=1467358941884
+quickStart=false
+tipsAndTricks=true
+=======
+IMPORT_FILES_AND_FOLDERS_RELATIVE=true
+IMPORT_FILES_AND_FOLDERS_TYPE=23,1
+PROBLEMS_FILTERS_MIGRATE=true
+eclipse.preferences.version=1
+platformState=1478079456630
+quickStart=false
+tipsAndTricks=true
+>>>>>>> TMSC QA 3.4V

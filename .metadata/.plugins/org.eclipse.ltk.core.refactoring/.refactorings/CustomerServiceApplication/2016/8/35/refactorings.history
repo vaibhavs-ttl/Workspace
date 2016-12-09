@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;complaintreg_layout&apos; in &apos;com.ttl.customersocialapp.R.id&apos; to &apos;complaintreg_linear_layout&apos;&#x0D;&#x0A;- Original project: &apos;CustomerServiceApplication&apos;&#x0D;&#x0A;- Original element: &apos;com.ttl.customersocialapp.R.id.complaintreg_layout&apos;&#x0D;&#x0A;- Renamed element: &apos;com.ttl.customersocialapp.R.id.complaintreg_linear_layout&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="true" description="Rename field &apos;complaintreg_layout&apos;" flags="589830" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/gen&lt;com.ttl.customersocialapp{R.java[R[id^complaintreg_layout" name="complaintreg_linear_layout" references="true" setter="false" stamp="1472119269535" textual="false" version="1.0"/>
+</session>

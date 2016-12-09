@@ -1,0 +1,1603 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="340dp" >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:padding="5dp"
+            android:background="@drawable/blue_border_rectangle" >
+
+            <ImageView
+                android:id="@+id/imagetemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                />
+
+            <TextView
+                android:id="@+id/txttemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imagetemp"
+                android:layout_alignTop="@+id/imagetemp"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/imagetemp"
+                android:textColor="@color/white"
+                android:textSize="18pt" />
+
+            <TextView
+                android:id="@+id/textcity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/txttemp"
+                android:layout_marginLeft="18dp"
+                android:layout_toRightOf="@+id/txttemp"
+                android:textColor="@color/black"
+                android:textSize="11pt" />
+
+            <TextView
+                android:id="@+id/txtdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/txttemp"
+                android:layout_alignBottom="@+id/txttemp"
+                android:layout_alignLeft="@+id/textcity"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayout1"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:orientation="vertical" >
+            <ListView 
+                android:id="@+id/notificationlist"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                ></ListView>
+        </LinearLayout>
+
+    </RelativeLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"    
+        android:gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:layout_marginBottom="1dp">
+            
+         <LinearLayout 	        
+		     	android:layout_width="match_parent"
+		       	android:layout_height="wrap_content"
+		       	android:layout_gravity="center"
+		       	android:gravity="center"  	
+		       	android:weightSum="6"	       	 
+		       	android:layout_margin="0.1dip"       
+		       	android:orientation="horizontal"> 
+		       	
+               
+               <LinearLayout 
+                     android:id="@+id/notifications"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"
+               	   android:padding="1dp"
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		               android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/notificationsh"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Notification"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:textSize="8sp"		          
+		               android:layout_gravity="center"/>
+	             
+	            </LinearLayout>	            
+	             <LinearLayout 
+	                   android:id="@+id/dealerlocator"
+	                   android:layout_width="0dp"
+	                    android:layout_height="50dp"
+	               	   android:orientation="vertical"
+	               	   android:layout_weight="2"
+	               		android:padding="1dp"
+	               	   android:layout_marginLeft="1dp"
+	               	   android:layout_marginRight="1dp"	
+	               	   android:layout_gravity="center"
+	               	   android:background="@color/white"
+	               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:src="@drawable/dealerlocatorh"
+		               android:scaleType="centerInside"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			     <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Delear Locator"
+		               android:layout_marginTop="1dp"
+		                   android:fontFamily="roboto"
+		               android:textSize="8sp"
+		               android:gravity="center"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+
+	            <LinearLayout 
+	                  android:id="@+id/gpstripmeter"
+                   android:layout_width="0dp"
+                     android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"	
+               	   android:padding="1dp"             	
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:background="@color/white"
+		               android:padding="1dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/gpstripmeterh" />
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="GPS Trip Meter"
+		               android:layout_marginTop="1dp"
+		                  android:fontFamily="roboto"
+		               android:gravity="center"
+		               android:textSize="8sp"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+	           
+	        </LinearLayout>
+	       
+         
+            <LinearLayout 	        
+		     	android:layout_width="match_parent"
+		       	android:layout_height="wrap_content"
+		       	android:layout_gravity="center"
+		       	android:gravity="center"  	
+		       	android:weightSum="6"	       	 
+		       	android:layout_margin="0.1dp"       
+		       	android:orientation="horizontal"> 
+		       	
+               
+               <LinearLayout 
+                    android:id="@+id/customerdetailswithout"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"
+               	   android:padding="1dp"
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		               android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/customerdetailsh"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Customer Details"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:textSize="8sp"		          
+		               android:layout_gravity="center"/>
+	             
+	            </LinearLayout>	            
+	             <LinearLayout 
+	                	android:id="@+id/infoandterms"
+	                   	android:layout_width="0dp"
+	                    android:layout_height="50dp"
+	               	   	android:orientation="vertical"
+	               	   	android:layout_weight="2"
+	               		android:padding="1dp"
+	               	   	android:layout_marginLeft="1dp"
+	               	   	android:layout_marginRight="1dp"	
+	               	   	android:layout_gravity="center"
+	               	   	android:background="@color/white"
+	               	   	android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:src="@drawable/infoandtermsh"
+		               android:scaleType="centerInside"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			     <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Info and Terms"
+		               android:layout_marginTop="1dp"
+		               android:textSize="8sp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+
+	            <LinearLayout 
+	               android:id="@+id/newsandupdates"
+                   android:layout_width="0dp"
+                     android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"	
+               	   android:padding="1dp"             	
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:background="@color/white"
+		               android:padding="1dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/newsandupdatesh" />
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="News and Updates"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:textSize="8sp"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+	           
+	        </LinearLayout>
+    </LinearLayout>
+    
+ 
+<!-- With Login -->
+    
+ <LinearLayout 
+     android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"    
+        android:gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:layout_marginBottom="1dp">
+            
+           <LinearLayout 	 
+                
+		     	android:layout_width="match_parent"
+		       	android:layout_height="wrap_content"
+		       	android:layout_gravity="center"
+		       	android:gravity="center"  	
+		       	android:weightSum="6"	       	 
+		       	android:layout_margin="0.1dp"       
+		       	android:orientation="horizontal"> 
+		       	
+               
+               <LinearLayout 
+                   android:id="@+id/servicebooking"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"
+               	   android:padding="1dp"
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		               android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hservicebooking"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Service Booking"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:textSize="8sp"		          
+		               android:layout_gravity="center"/>
+	             
+	            </LinearLayout>	            
+	             <LinearLayout 
+	              android:id="@+id/maintenncecost"
+	                   android:layout_width="0dp"
+	                    android:layout_height="50dp"
+	               	   android:orientation="vertical"
+	               	   android:layout_weight="2"
+	               		android:padding="1dp"
+	               	   android:layout_marginLeft="1dp"
+	               	   android:layout_marginRight="1dp"	
+	               	   android:layout_gravity="center"
+	               	   android:background="@color/white"
+	               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:src="@drawable/hmaintenancecost"
+		               android:scaleType="centerInside"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			     <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Maintenance Cost"
+		               android:layout_marginTop="1dp"
+		                   android:fontFamily="roboto"
+		               android:textSize="8sp"
+		               android:gravity="center"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+
+	            <LinearLayout 
+	            android:id="@+id/complaintreg"
+                   android:layout_width="0dp"
+                     android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"	
+               	   android:padding="1dp"             	
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:background="@color/white"
+		               android:padding="1dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hcomplaintregistration" />
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Complaints"
+		               android:layout_marginTop="1dp"
+		                  android:fontFamily="roboto"
+		               android:gravity="center"
+		               android:textSize="8sp"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+	           
+	        </LinearLayout>
+	       
+         
+                      <LinearLayout 	        
+		     	android:layout_width="match_parent"
+		       	android:layout_height="wrap_content"
+		       	android:layout_gravity="center"
+		       	android:gravity="center"  	
+		       	android:weightSum="6"	       	 
+		       	android:layout_margin="0.1dp"       
+		       	android:orientation="horizontal"> 
+		       	
+               
+               <LinearLayout 
+               
+                 android:id="@+id/costcal"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"
+               	   android:padding="1dp"
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		               android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hcostcalculator"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Cost Calulator"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:textSize="8sp"		          
+		               android:layout_gravity="center"/>
+	             
+	            </LinearLayout>	            
+	             <LinearLayout 
+	             android:id="@+id/feedback"
+	                   android:layout_width="0dp"
+	                    android:layout_height="50dp"
+	               	   android:orientation="vertical"
+	               	   android:layout_weight="2"
+	               		android:padding="1dp"
+	               	   android:layout_marginLeft="1dp"
+	               	   android:layout_marginRight="1dp"	
+	               	   android:layout_gravity="center"
+	               	   android:background="@color/white"
+	               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:src="@drawable/hfeedback"
+		               android:scaleType="centerInside"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			     <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Feedback"
+		               android:layout_marginTop="1dp"
+		               android:textSize="8sp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+
+	            <LinearLayout 
+	             android:id="@+id/servicehistory"
+                   android:layout_width="0dp"
+                     android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"	
+               	   android:padding="1dp"             	
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:background="@color/white"
+		               android:padding="1dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hservicehistory" />
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Service Histroy"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:textSize="8sp"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+	           
+	        </LinearLayout>
+           
+                      
+                      
+                      
+           
+           
+           <LinearLayout 	        
+		     	android:layout_width="match_parent"
+		       	android:layout_height="wrap_content"
+		       	android:layout_gravity="center"
+		       	android:gravity="center"  	
+		       	android:weightSum="6"	       	 
+		       	android:layout_margin="0.1dp"       
+		       	android:orientation="horizontal"> 
+		       	
+               
+               <LinearLayout 
+                android:id="@+id/mydocument"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"
+               	   android:padding="1dp"
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		               android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hmydocuments"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="My Document"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:textSize="8sp"		          
+		               android:layout_gravity="center"/>
+	             
+	            </LinearLayout>	            
+	             <LinearLayout 
+	              android:id="@+id/vehicledetails"
+	                   android:layout_width="0dp"
+	                    android:layout_height="50dp"
+	               	   android:orientation="vertical"
+	               	   android:layout_weight="2"
+	               		android:padding="1dp"
+	               	   android:layout_marginLeft="1dp"
+	               	   android:layout_marginRight="1dp"	
+	               	   android:layout_gravity="center"
+	               	   android:background="@color/white"
+	               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:src="@drawable/hvehicledetails"
+		               android:scaleType="centerInside"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			     <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Vehicle Details"
+		               android:layout_marginTop="1dp"
+		               android:textSize="8sp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+
+	            <LinearLayout 
+	            
+	             	android:id="@+id/customerdetails"
+                   android:layout_width="0dp"
+                     android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"	
+               	   android:padding="1dp"             	
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:background="@color/white"
+		               android:padding="1dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hcustomerdetails" />
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Customer Details"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:textSize="8sp"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+	           
+	        </LinearLayout>       
+    </LinearLayout>    
+<!-- <RelativeLayout
+        android:id="@+id/layout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:background="@drawable/back" >
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/gps" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/imageView2"
+            android:layout_marginBottom="40dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/info" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/dealer" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/notify" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView6"
+            android:layout_alignParentLeft="true"
+            android:adjustViewBounds="true"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/customerdetails" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView4"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/news" />
+       
+    </RelativeLayout> -->
+    <!-- <RelativeLayout
+        android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:background="@drawable/home_menu_background" >
+
+        <ImageView
+            android:id="@+id/costcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/servicebooking"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/costcalculator" />
+
+        <ImageView
+            android:id="@+id/feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/feedback_menu" />
+
+        <ImageView
+            android:id="@+id/vehicledetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/mydocument"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/vehicledetails" />
+
+        <ImageView
+            android:id="@+id/customerdetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/vehicledetails"
+            android:layout_alignLeft="@+id/servicehistory"
+            android:layout_marginRight="15dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/customerdetails" />
+
+        <ImageView
+            android:id="@+id/maintenncecost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/servicebooking"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/maintenancecost" />
+
+        <ImageView
+            android:id="@+id/mydocument"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8dp"
+            android:adjustViewBounds="true"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/my_doc" />
+
+        <ImageView
+            android:id="@+id/servicebooking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/mydocument"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="14dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/servicebooking" />
+
+        <ImageView
+            android:id="@+id/servicehistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/costcal"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/servicehistory" />
+
+        <ImageView
+            android:id="@+id/complaintreg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/servicebooking"
+            android:layout_alignRight="@+id/customerdetails"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ccomplaint" />
+
+    </RelativeLayout> -->
+
+</RelativeLayout>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="340dp" >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:padding="5dp"
+            android:background="@drawable/blue_border_rectangle" >
+
+            <ImageView
+                android:id="@+id/imagetemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                />
+
+            <TextView
+                android:id="@+id/txttemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imagetemp"
+                android:layout_alignTop="@+id/imagetemp"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/imagetemp"
+                android:textColor="@color/white"
+                android:textSize="18pt" />
+
+            <TextView
+                android:id="@+id/textcity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/txttemp"
+                android:layout_marginLeft="18dp"
+                android:layout_toRightOf="@+id/txttemp"
+                android:textColor="@color/black"
+                android:textSize="11pt" />
+
+            <TextView
+                android:id="@+id/txtdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/txttemp"
+                android:layout_alignBottom="@+id/txttemp"
+                android:layout_alignLeft="@+id/textcity"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayout1"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:orientation="vertical" >
+            <ListView 
+                android:id="@+id/notificationlist"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                ></ListView>
+        </LinearLayout>
+
+    </RelativeLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"    
+        android:gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:layout_marginBottom="1dp">
+            
+         <LinearLayout 	        
+		     	android:layout_width="match_parent"
+		       	android:layout_height="wrap_content"
+		       	android:layout_gravity="center"
+		       	android:gravity="center"  	
+		       	android:weightSum="6"	       	 
+		       	android:layout_margin="0.1dip"       
+		       	android:orientation="horizontal"> 
+		       	
+               
+               <LinearLayout 
+                     android:id="@+id/notifications"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"
+               	   android:padding="1dp"
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		               android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/notificationsh"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Notification"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:textSize="8sp"		          
+		               android:layout_gravity="center"/>
+	             
+	            </LinearLayout>	            
+	             <LinearLayout 
+	                   android:id="@+id/dealerlocator"
+	                   android:layout_width="0dp"
+	                    android:layout_height="50dp"
+	               	   android:orientation="vertical"
+	               	   android:layout_weight="2"
+	               		android:padding="1dp"
+	               	   android:layout_marginLeft="1dp"
+	               	   android:layout_marginRight="1dp"	
+	               	   android:layout_gravity="center"
+	               	   android:background="@color/white"
+	               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:src="@drawable/dealerlocatorh"
+		               android:scaleType="centerInside"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			     <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Delear Locator"
+		               android:layout_marginTop="1dp"
+		                   android:fontFamily="roboto"
+		               android:textSize="8sp"
+		               android:gravity="center"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+
+	            <LinearLayout 
+	                  android:id="@+id/gpstripmeter"
+                   android:layout_width="0dp"
+                     android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"	
+               	   android:padding="1dp"             	
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:background="@color/white"
+		               android:padding="1dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/gpstripmeterh" />
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="GPS Trip Meter"
+		               android:layout_marginTop="1dp"
+		                  android:fontFamily="roboto"
+		               android:gravity="center"
+		               android:textSize="8sp"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+	           
+	        </LinearLayout>
+	       
+         
+            <LinearLayout 	        
+		     	android:layout_width="match_parent"
+		       	android:layout_height="wrap_content"
+		       	android:layout_gravity="center"
+		       	android:gravity="center"  	
+		       	android:weightSum="6"	       	 
+		       	android:layout_margin="0.1dp"       
+		       	android:orientation="horizontal"> 
+		       	
+               
+               <LinearLayout 
+                    android:id="@+id/customerdetailswithout"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"
+               	   android:padding="1dp"
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		               android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/customerdetailsh"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Customer Details"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:textSize="8sp"		          
+		               android:layout_gravity="center"/>
+	             
+	            </LinearLayout>	            
+	             <LinearLayout 
+	                	android:id="@+id/infoandterms"
+	                   	android:layout_width="0dp"
+	                    android:layout_height="50dp"
+	               	   	android:orientation="vertical"
+	               	   	android:layout_weight="2"
+	               		android:padding="1dp"
+	               	   	android:layout_marginLeft="1dp"
+	               	   	android:layout_marginRight="1dp"	
+	               	   	android:layout_gravity="center"
+	               	   	android:background="@color/white"
+	               	   	android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:src="@drawable/infoandtermsh"
+		               android:scaleType="centerInside"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			     <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Info and Terms"
+		               android:layout_marginTop="1dp"
+		               android:textSize="8sp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+
+	            <LinearLayout 
+	               android:id="@+id/newsandupdates"
+                   android:layout_width="0dp"
+                     android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"	
+               	   android:padding="1dp"             	
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:background="@color/white"
+		               android:padding="1dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/newsandupdatesh" />
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="News and Updates"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:textSize="8sp"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+	           
+	        </LinearLayout>
+    </LinearLayout>
+    
+ 
+<!-- With Login -->
+    
+ <LinearLayout 
+     android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"    
+        android:gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:layout_marginBottom="1dp">
+            
+           <LinearLayout 	 
+                
+		     	android:layout_width="match_parent"
+		       	android:layout_height="wrap_content"
+		       	android:layout_gravity="center"
+		       	android:gravity="center"  	
+		       	android:weightSum="6"	       	 
+		       	android:layout_margin="0.1dp"       
+		       	android:orientation="horizontal"> 
+		       	
+               
+               <LinearLayout 
+                   android:id="@+id/servicebooking"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"
+               	   android:padding="1dp"
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		               android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hservicebooking"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Service Booking"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:textSize="8sp"		          
+		               android:layout_gravity="center"/>
+	             
+	            </LinearLayout>	            
+	             <LinearLayout 
+	              android:id="@+id/maintenncecost"
+	                   android:layout_width="0dp"
+	                    android:layout_height="50dp"
+	               	   android:orientation="vertical"
+	               	   android:layout_weight="2"
+	               		android:padding="1dp"
+	               	   android:layout_marginLeft="1dp"
+	               	   android:layout_marginRight="1dp"	
+	               	   android:layout_gravity="center"
+	               	   android:background="@color/white"
+	               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:src="@drawable/hmaintenancecost"
+		               android:scaleType="centerInside"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			     <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Maintenance Cost"
+		               android:layout_marginTop="1dp"
+		                   android:fontFamily="roboto"
+		               android:textSize="8sp"
+		               android:gravity="center"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+
+	            <LinearLayout 
+	            android:id="@+id/complaintreg"
+                   android:layout_width="0dp"
+                     android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"	
+               	   android:padding="1dp"             	
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:background="@color/white"
+		               android:padding="1dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hcomplaintregistration" />
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Complaints"
+		               android:layout_marginTop="1dp"
+		                  android:fontFamily="roboto"
+		               android:gravity="center"
+		               android:textSize="8sp"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+	           
+	        </LinearLayout>
+	       
+         
+                      <LinearLayout 	        
+		     	android:layout_width="match_parent"
+		       	android:layout_height="wrap_content"
+		       	android:layout_gravity="center"
+		       	android:gravity="center"  	
+		       	android:weightSum="6"	       	 
+		       	android:layout_margin="0.1dp"       
+		       	android:orientation="horizontal"> 
+		       	
+               
+               <LinearLayout 
+               
+                 android:id="@+id/costcal"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"
+               	   android:padding="1dp"
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		               android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hcostcalculator"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Cost Calulator"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:textSize="8sp"		          
+		               android:layout_gravity="center"/>
+	             
+	            </LinearLayout>	            
+	             <LinearLayout 
+	             android:id="@+id/feedback"
+	                   android:layout_width="0dp"
+	                    android:layout_height="50dp"
+	               	   android:orientation="vertical"
+	               	   android:layout_weight="2"
+	               		android:padding="1dp"
+	               	   android:layout_marginLeft="1dp"
+	               	   android:layout_marginRight="1dp"	
+	               	   android:layout_gravity="center"
+	               	   android:background="@color/white"
+	               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:src="@drawable/hfeedback"
+		               android:scaleType="centerInside"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			     <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Feedback"
+		               android:layout_marginTop="1dp"
+		               android:textSize="8sp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+
+	            <LinearLayout 
+	             android:id="@+id/servicehistory"
+                   android:layout_width="0dp"
+                     android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"	
+               	   android:padding="1dp"             	
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:background="@color/white"
+		               android:padding="1dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hservicehistory" />
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Service Histroy"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:textSize="8sp"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+	           
+	        </LinearLayout>
+           
+                      
+                      
+                      
+           
+           
+           <LinearLayout 	        
+		     	android:layout_width="match_parent"
+		       	android:layout_height="wrap_content"
+		       	android:layout_gravity="center"
+		       	android:gravity="center"  	
+		       	android:weightSum="6"	       	 
+		       	android:layout_margin="0.1dp"       
+		       	android:orientation="horizontal"> 
+		       	
+               
+               <LinearLayout 
+                android:id="@+id/mydocument"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"
+               	   android:padding="1dp"
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		               android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hmydocuments"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="My Document"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:textSize="8sp"		          
+		               android:layout_gravity="center"/>
+	             
+	            </LinearLayout>	            
+	             <LinearLayout 
+	              android:id="@+id/vehicledetails"
+	                   android:layout_width="0dp"
+	                    android:layout_height="50dp"
+	               	   android:orientation="vertical"
+	               	   android:layout_weight="2"
+	               		android:padding="1dp"
+	               	   android:layout_marginLeft="1dp"
+	               	   android:layout_marginRight="1dp"	
+	               	   android:layout_gravity="center"
+	               	   android:background="@color/white"
+	               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:src="@drawable/hvehicledetails"
+		               android:scaleType="centerInside"
+		               android:padding="1dp"	           
+		               android:background="@color/white"/>
+		           
+			     <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Vehicle Details"
+		               android:layout_marginTop="1dp"
+		               android:textSize="8sp"
+		               android:gravity="center"
+		               android:fontFamily="roboto"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+
+	            <LinearLayout 
+	            
+	             	android:id="@+id/customerdetails"
+                   android:layout_width="0dp"
+                     android:layout_height="50dp"
+               	   android:orientation="vertical"
+               	   android:layout_weight="2"	
+               	   android:padding="1dp"             	
+               	   android:layout_gravity="center"
+               	   android:background="@color/white"
+               	   android:gravity="top|center">               
+		                        
+		           <ImageView
+		              android:layout_width="30dp"
+		               android:layout_height="30dp"
+		               android:background="@color/white"
+		               android:padding="1dp"
+		               android:scaleType="centerInside"
+		               android:src="@drawable/hcustomerdetails" />
+		           
+			       <TextView 
+		               android:layout_width="wrap_content"
+		               android:layout_height="wrap_content"
+		               android:text="Customer Details"
+		               android:layout_marginTop="1dp"
+		               android:gravity="center"
+		               android:textSize="8sp"
+		               android:layout_gravity="center"/> 
+	             
+	            </LinearLayout>	            
+	           
+	        </LinearLayout>       
+    </LinearLayout>    
+<!-- <RelativeLayout
+        android:id="@+id/layout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:background="@drawable/back" >
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/gps" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/imageView2"
+            android:layout_marginBottom="40dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/info" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/dealer" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/notify" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView6"
+            android:layout_alignParentLeft="true"
+            android:adjustViewBounds="true"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/customerdetails" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView4"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/news" />
+       
+    </RelativeLayout> -->
+    <!-- <RelativeLayout
+        android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:background="@drawable/home_menu_background" >
+
+        <ImageView
+            android:id="@+id/costcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/servicebooking"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/costcalculator" />
+
+        <ImageView
+            android:id="@+id/feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/feedback_menu" />
+
+        <ImageView
+            android:id="@+id/vehicledetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/mydocument"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/vehicledetails" />
+
+        <ImageView
+            android:id="@+id/customerdetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/vehicledetails"
+            android:layout_alignLeft="@+id/servicehistory"
+            android:layout_marginRight="15dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/customerdetails" />
+
+        <ImageView
+            android:id="@+id/maintenncecost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/servicebooking"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/maintenancecost" />
+
+        <ImageView
+            android:id="@+id/mydocument"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8dp"
+            android:adjustViewBounds="true"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/my_doc" />
+
+        <ImageView
+            android:id="@+id/servicebooking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/mydocument"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="14dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/servicebooking" />
+
+        <ImageView
+            android:id="@+id/servicehistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/costcal"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/servicehistory" />
+
+        <ImageView
+            android:id="@+id/complaintreg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/servicebooking"
+            android:layout_alignRight="@+id/customerdetails"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ccomplaint" />
+
+    </RelativeLayout> -->
+
+</RelativeLayout>
+>>>>>>> TMSC QA 3.4V

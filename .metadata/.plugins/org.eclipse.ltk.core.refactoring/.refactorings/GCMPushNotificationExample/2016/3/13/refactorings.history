@@ -1,0 +1,10 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy package &apos;com.prgguru.example&apos; to &apos;GCMCilentDemo/src&apos;&#x0D;&#x0A;- Original project: &apos;GCMPushNotificationExample&apos;&#x0D;&#x0A;- Destination element: &apos;GCMCilentDemo/src&apos;&#x0D;&#x0A;- Original element: &apos;GCMPushNotificationExample/src/com.prgguru.example&apos;" description="Copy package" destination="=GCMCilentDemo/src" element1="/src&lt;com.prgguru.example" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1458552868176" version="1.0"/>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy package &apos;com.prgguru.example&apos; to &apos;GCMCilentDemo/src&apos;&#x0D;&#x0A;- Original project: &apos;GCMPushNotificationExample&apos;&#x0D;&#x0A;- Destination element: &apos;GCMCilentDemo/src&apos;&#x0D;&#x0A;- Original element: &apos;GCMPushNotificationExample/src/com.prgguru.example&apos;" description="Copy package" destination="=GCMCilentDemo/src" element1="/src&lt;com.prgguru.example" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1458552868176" version="1.0"/>
+>>>>>>> TMSC QA 3.4V
+</session>

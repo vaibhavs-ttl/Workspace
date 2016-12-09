@@ -1,0 +1,57 @@
+<<<<<<< HEAD
+package com.ttl.model;
+
+import java.util.ArrayList;
+
+public class VehicleAMC_ParentRow {
+
+	public String amc_no;
+
+	public ArrayList<VehicleAMC_ChildRow> children;
+
+	public String getAmc_no() {
+		return amc_no;
+	}
+
+	public void setAmc_no(String amc_no) {
+		this.amc_no = amc_no;
+	}
+
+	public ArrayList<VehicleAMC_ChildRow> getChildren() {
+		return children;
+	}
+
+	public void setChildren(ArrayList<VehicleAMC_ChildRow> children) {
+		this.children = children;
+	}
+
+}
+=======
+package com.ttl.model;
+
+import java.util.ArrayList;
+
+public class VehicleAMC_ParentRow {
+
+	public String amc_no;
+
+	public ArrayList<VehicleAMC_ChildRow> children;
+
+	public String getAmc_no() {
+		return amc_no;
+	}
+
+	public void setAmc_no(String amc_no) {
+		this.amc_no = amc_no;
+	}
+
+	public ArrayList<VehicleAMC_ChildRow> getChildren() {
+		return children;
+	}
+
+	public void setChildren(ArrayList<VehicleAMC_ChildRow> children) {
+		this.children = children;
+	}
+
+}
+>>>>>>> TMSC QA 3.4V

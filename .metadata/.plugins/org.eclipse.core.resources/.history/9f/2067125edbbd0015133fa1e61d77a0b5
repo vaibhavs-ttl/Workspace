@@ -1,0 +1,1613 @@
+<<<<<<< HEAD
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import com.ttl.adapter.AwsResponseCallback;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.communication.SamlArtifact;
+import com.ttl.helper.VehicleRegister;
+import com.ttl.model.ServiceBookingUser;
+import com.ttl.model.ServiceHandler;
+import com.ttl.model.UserDetails;
+import com.ttl.webservice.AWS_WebServiceCall;
+import com.ttl.webservice.Config;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import zh.wang.android.apis.yweathergetter4a.WeatherInfo;
+import zh.wang.android.apis.yweathergetter4a.YahooWeather;
+import zh.wang.android.apis.yweathergetter4a.YahooWeatherExceptionListener;
+import zh.wang.android.apis.yweathergetter4a.YahooWeatherInfoListener;
+import zh.wang.android.apis.yweathergetter4a.WeatherInfo.ForecastInfo;
+import zh.wang.android.apis.yweathergetter4a.YahooWeather.SEARCH_MODE;
+import zh.wang.android.apis.yweathergetter4a.YahooWeather.UNIT;
+
+import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.database.DataSetObserver;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.webkit.WebView.FindListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class HomeFragment extends Fragment implements OnClickListener,
+		YahooWeatherInfoListener, YahooWeatherExceptionListener {
+	private final static String TAG_FRAGMENT = "HOME_FRAGMENT";
+	View rootView;
+	Fragment fragment = null;
+	ListView notifylist;
+	CustomAdapter adapter;
+	ArrayList<HashMap<String, String>> notificationslist;
+	HashMap<String, String> notifications;
+	LinearLayout servicebook, montenancecost, servicehistory, feedback,
+			vehicledetails, customerdetails, mydocumnets, compliantreg,
+			costcalculator , notification , dealerLocator , gpsTripMeter , infoandterms , newandupdate , customerdeatils2;
+	ImageView imagetemp;
+	private YahooWeather mYahooWeather = YahooWeather.getInstance(5000, 5000,
+			true);
+	private Dialog dialog;
+	TextView txttemp, textcity, txtdate;
+	RelativeLayout weatherLayout;
+	LinearLayout  button_6 , button_9;
+	static public boolean regvehicle = false;
+	Dialog proceeddialog , vehiclenodialog ,mobilenumberdialog ,contactdealerdialog , otpdialog ;
+	Button proceed , notnow;
+	 EditText regnumber ,chassis;
+	  public static boolean weather=false;
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		
+		rootView = inflater.inflate(R.layout.fragment_home, container, false);
+		
+		if(HomeFragment.regvehicle)
+		{
+			
+		}else
+		{
+		 proceeddialog = new Dialog(getActivity());
+		 proceeddialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		 proceeddialog.setContentView(R.layout.vehicle_reg_popup);
+		 proceeddialog.setCancelable(false);
+		 proceeddialog.show();
+		}
+		 
+		 
+	/*	dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.progress_bar);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(false);
+        dialog.show();*/
+        proceed = (Button) proceeddialog.findViewById(R.id.btnproceed);
+        notnow = (Button) proceeddialog.findViewById(R.id.btnnotnow);
+        proceed.setOnClickListener(this);
+        notnow.setOnClickListener(this);
+        
+        
+		servicebook = (LinearLayout) rootView.findViewById(R.id.servicebooking);
+		montenancecost = (LinearLayout) rootView.findViewById(R.id.maintenncecost);
+		servicehistory = (LinearLayout) rootView.findViewById(R.id.servicehistory);
+		feedback = (LinearLayout) rootView.findViewById(R.id.feedback);
+		vehicledetails = (LinearLayout) rootView.findViewById(R.id.vehicledetails);
+		customerdetails = (LinearLayout) rootView
+				.findViewById(R.id.customerdetails);
+		mydocumnets = (LinearLayout) rootView.findViewById(R.id.mydocument);
+		compliantreg = (LinearLayout) rootView.findViewById(R.id.complaintreg);
+		costcalculator = (LinearLayout) rootView.findViewById(R.id.costcal);
+		
+		notification = (LinearLayout) rootView.findViewById(R.id.notifications);
+		dealerLocator = (LinearLayout) rootView.findViewById(R.id.dealerlocator);
+		gpsTripMeter = (LinearLayout) rootView.findViewById(R.id.gpstripmeter);
+		infoandterms = (LinearLayout) rootView.findViewById(R.id.infoandterms);
+		newandupdate = (LinearLayout) rootView.findViewById(R.id.newsandupdates);
+		customerdeatils2 = (LinearLayout) rootView.findViewById(R.id.customerdetailswithout);
+		
+		imagetemp = (ImageView) rootView.findViewById(R.id.imagetemp);
+		txttemp = (TextView) rootView.findViewById(R.id.txttemp);
+		textcity = (TextView) rootView.findViewById(R.id.textcity);
+		txtdate = (TextView) rootView.findViewById(R.id.txtdate);
+		servicebook.setOnClickListener(this);
+		montenancecost.setOnClickListener(this);
+		servicehistory.setOnClickListener(this);
+		feedback.setOnClickListener(this);
+		vehicledetails.setOnClickListener(this);
+		customerdetails.setOnClickListener(this);
+		mydocumnets.setOnClickListener(this);
+		compliantreg.setOnClickListener(this);
+		costcalculator.setOnClickListener(this);
+
+		button_6 = (LinearLayout) rootView.findViewById(R.id.layout3);
+		button_9 = (LinearLayout) rootView.findViewById(R.id.layout2);
+		getVehicles();
+
+		checkvehiclereg(regvehicle);
+		weatherLayout = (RelativeLayout) rootView
+		        .findViewById(R.id.relativeLayout1);
+		weatherLayout.setOnClickListener(new OnClickListener() {
+
+		      @Override
+		      public void onClick(View v) {
+		        // TODO Auto-generated method stub
+		        weather=true;
+		        fragment = new TrafficAndWeather_fragment();
+		        if (fragment != null) {
+		          FragmentManager fragmentManager = getFragmentManager();
+		          fragmentManager.beginTransaction()
+		              .replace(R.id.frame_container, fragment)
+		              .addToBackStack(null).commit();
+
+		        } else {
+		          // error in creating fragment
+		          Log.e("MainActivity", "Error in creating fragment");
+		        }
+		      }
+		    });
+		
+		
+		notifylist = (ListView) rootView.findViewById(R.id.notificationlist);
+		notifications = new HashMap<String, String>();
+		notificationslist = new ArrayList<HashMap<String, String>>();
+		
+		if(Config.getSAMLARTIFACT().equals(""))
+		{
+			new SamlArtifact(rootView.getContext()).execute();
+		}
+
+		for (int i = 0; i < 3; i++) {
+			notifications.put("type", "Service Alert");
+			notifications.put("regno", "MH14 PC 8957");
+			notifications.put("details", "service completed");
+			notificationslist.add(notifications);
+		}
+		adapter = new CustomAdapter(rootView.getContext(),
+				R.layout.lis_item_notification, notificationslist);
+		notifylist.setAdapter(adapter);
+		searchByGPS();
+		Date date = new Date();
+		String dayOfTheWeek = (String) android.text.format.DateFormat.format(
+				"E", date);// Thursday
+		String stringMonth = (String) android.text.format.DateFormat.format(
+				"MMM", date); // Jun
+		String day = (String) android.text.format.DateFormat.format("dd", date); // 20
+		Log.d(dayOfTheWeek + stringMonth + day, "day format");
+		txtdate.setText(dayOfTheWeek + ", " + stringMonth + " " + day);
+		return rootView;
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		FragmentManager fragmentManager = getFragmentManager();
+
+		switch (v.getId()) {
+		case R.id.servicebooking:
+			fragment = new BookServiceFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.maintenncecost:
+			fragment = new MaintenanceCostFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.complaintreg:
+			fragment = new ComplaintRegistrationFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.costcal:
+			fragment = new Cost_EstimationFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+
+		case R.id.feedback:
+			fragment = new Feedback_Fragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.servicehistory:
+			fragment = new ServiceHistoyFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.mydocument:
+			fragment = new DocumentUploadFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.vehicledetails:
+			fragment = new VehicleDetailsFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.customerdetails:
+			fragment = new CustomerDetailFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.notifications:
+			fragment = new Notifiaction_fragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.dealerlocator:
+			fragment = new DelearLocator_fragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.gpstripmeter:
+			fragment = new GPSTripMeter_fragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.infoandterms:
+			fragment = new InfoTerms_fragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.customerdetailswithout:
+			fragment = new CustomerDetailFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.btnproceed:
+			proceeddialog.dismiss();
+			
+			//new VehicleRegister(getActivity());
+			 vehiclenodialog = new Dialog(getActivity());
+			 vehiclenodialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			 vehiclenodialog.setContentView(R.layout.vehicle_vari_regno_popup);
+			 vehiclenodialog.setCancelable(false);
+			 vehiclenodialog.show();
+			 ImageView close = (ImageView) vehiclenodialog.findViewById(R.id.imgclose);
+			 close.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					vehiclenodialog.dismiss();
+					regvehicle = false;
+					checkvehiclereg(regvehicle);
+				}
+			});
+			 Button submit = (Button) vehiclenodialog.findViewById(R.id.btnsubmit);
+			 regnumber = (EditText) vehiclenodialog.findViewById(R.id.txtregnum);
+			 chassis = (EditText) vehiclenodialog.findViewById(R.id.txtchassisnum);
+			submit.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if(Config.getSAMLARTIFACT().equals(""))
+					{
+						new SamlArtifact(getActivity()).execute();
+					}
+					vehiclenodialog.dismiss();
+					String _url = getActivity().getResources()
+							.getString(R.string.URL)
+							+ Config.getSAMLARTIFACT();
+							String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+									+ "<SOAP:Body>"
+									+ "<GetCustomerVehicleDetailsCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+									+ "<RegistrationNumber>"+regnumber.getText().toString()+"</RegistrationNumber>"
+									+ "<ChassisNumber>"+chassis.getText().toString()+"</ChassisNumber>" + "<MobileNo></MobileNo>"
+									+ "</GetCustomerVehicleDetailsCSB>" + "</SOAP:Body>" + "</SOAP:Envelope>";
+
+							new WebServiceCall(getActivity(), req, Constants.GetCustomerVehicleDetailsCSB, new ResponseCallback() {
+
+								@Override
+								public void onResponseReceive(Object object) {
+									
+									
+									final ServiceBookingUser user = (ServiceBookingUser) object;
+									if(!(user.getPhoneno().equals("")))
+									{
+										
+										mobilenumberdialog = new Dialog(getActivity());
+										mobilenumberdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+										mobilenumberdialog.setContentView(R.layout.vehicle_vari_mobno);
+										mobilenumberdialog.setCancelable(false);
+										mobilenumberdialog.show();
+										
+										 ImageView close = (ImageView) mobilenumberdialog.findViewById(R.id.imgclose);
+										 close.setOnClickListener(new OnClickListener() {
+											
+											@Override
+											public void onClick(View v) {
+												// TODO Auto-generated method stub
+												mobilenumberdialog.dismiss();
+												regvehicle = false;
+												checkvehiclereg(regvehicle);
+											}
+										});
+										
+										TextView reg = (TextView) mobilenumberdialog.findViewById(R.id.txtregno);
+										String regnumber = "(Reg.No: "+user.getREGISTRATIONNUMBER()+")";
+										reg.setText(regnumber);
+										String mob = "(********"+user.getPhoneno().toString().substring(user.getPhoneno().length()-3)+") to proceed";
+										TextView mobtext = (TextView) mobilenumberdialog.findViewById(R.id.txtmoilenumber);
+										mobtext.setText(mob);
+										
+										final EditText mobile = (EditText) mobilenumberdialog.findViewById(R.id.edtmobileno);
+										Button submitmob = (Button) mobilenumberdialog.findViewById(R.id.btnsubmit);
+										submitmob.setOnClickListener(new OnClickListener() {
+											
+											@Override
+											public void onClick(View v) {
+												// TODO Auto-generated method stub
+												String enteredmob = mobile.getText().toString();
+												Log.d("Here", user.getPhoneno());
+												if(enteredmob.equals(user.getPhoneno().toString()))
+												{
+													Log.d("Here", user.getPhoneno());
+													otpGeneration(user);
+													
+
+												}else
+												{
+													Toast.makeText(getActivity(), "You have entered wrong number.Please re-enter.", Toast.LENGTH_SHORT).show();
+
+												}
+											}
+										});
+									}else
+									{
+										
+									}
+								}
+
+								@Override
+								public void onErrorReceive(String string) {
+									
+									Toast.makeText(getActivity(), "Number you have enetred is not match with our record. Please verify number with nearest Tata Dealer", Toast.LENGTH_SHORT).show();
+								}
+
+							
+							},"Populating Data..").execute();  
+				}
+			}) ;
+			 
+			break;
+		case R.id.btnnotnow:
+			proceeddialog.dismiss();
+			regvehicle = false;
+			checkvehiclereg(regvehicle);
+			break;
+		default:
+			break;
+
+		}
+	}
+	private int gen() {
+		 Random r = new Random( System.currentTimeMillis() );
+		    return (1 + r.nextInt(2)) * 10000 + r.nextInt(10000);
+	}
+	private class CustomAdapter extends ArrayAdapter<HashMap<String, String>> {
+
+		public CustomAdapter(Context context, int textViewResourceId,
+				ArrayList<HashMap<String, String>> Strings) {
+
+			// let android do the initializing :)
+			super(context, textViewResourceId, Strings);
+		}
+
+		// class for caching the views in a row
+		private class ViewHolder {
+
+			/*
+			 * TextView offer_date, offer_details, offer_name, campaign_date;
+			 * ImageView messageimage;
+			 */
+		}
+
+		ViewHolder viewHolder;
+
+		@Override
+		public View getView(final int position, View convertView,
+				ViewGroup parent) {
+
+			final int position1 = position;
+			if (convertView == null) {
+				LayoutInflater inflater = (LayoutInflater) getContext()
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				convertView = inflater.inflate(R.layout.lis_item_notification,
+						null);
+				viewHolder = new ViewHolder();
+
+				/*
+				 * viewHolder.offer_date = (TextView)
+				 * convertView.findViewById(R.id.date); viewHolder.offer_details
+				 * = (TextView) convertView.findViewById(R.id.offer_details);
+				 * viewHolder.offer_name = (TextView)
+				 * convertView.findViewById(R.id.offer_name);
+				 * viewHolder.messageimage = (ImageView)
+				 * convertView.findViewById(R.id.imageButton1); // link the
+				 * cached views to the convertview
+				 * convertView.setTag(viewHolder);
+				 */
+
+			} else
+				viewHolder = (ViewHolder) convertView.getTag();
+
+			/*
+			 * if(searchResults.get(position).get("ready_to_publish").toString().
+			 * equalsIgnoreCase("Yes")) { String offerdate =
+			 * dateFmtConversion(searchResults.get(position).get("offer_date")
+			 * .toString()); viewHolder.offer_date.setText(offerdate);
+			 * viewHolder.offer_details.setText(searchResults.get(position).get(
+			 * "offer_details") .toString());
+			 * viewHolder.offer_name.setText(searchResults
+			 * .get(position).get("offer_name") .toString());
+			 * 
+			 * if(!(searchResults.get(position).get("read_flag").equals("No")))
+			 * {
+			 * viewHolder.messageimage.setBackgroundResource(R.drawable.message_open
+			 * ); viewHolder.offer_name.setTextColor(Color.WHITE); } else {
+			 * viewHolder
+			 * .offer_name.setTextColor(getApplicationContext().getResources
+			 * ().getColor(R.color.orange));
+			 * viewHolder.messageimage.setBackgroundResource
+			 * (R.drawable.message_unopen); } } else { Toast toast =
+			 * Toast.makeText(getApplicationContext(), "Offers not available",
+			 * Toast.LENGTH_LONG); toast.setGravity(Gravity.CENTER, 0, 0);
+			 * toast.show(); } HashMap<String , String> data =
+			 * searchResults.get(position); if(data!=null) {
+			 * //viewHolder.offer_name.setText("BOLT"); final HashMap<String ,
+			 * String> _data = data; convertView.setOnClickListener(new
+			 * OnClickListener() {
+			 * 
+			 * @Override public void onClick(View v) { // TODO Auto-generated
+			 * method stub offer_dialog = new Dialog(DashboardActivity.this);
+			 * offer_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			 * offer_dialog.setContentView(R.layout.offer_details);
+			 * offer_dialog.setCancelable(true); offer_dialog.show(); TextView
+			 * name = (TextView) offer_dialog.findViewById(R.id.offerName);
+			 * TextView details = (TextView)
+			 * offer_dialog.findViewById(R.id.offerDetails); TextView fromdate =
+			 * (TextView) offer_dialog.findViewById(R.id.fromdate); TextView
+			 * todate = (TextView) offer_dialog.findViewById(R.id.tilldate);
+			 * 
+			 * Log.d("Data", _data.toString()); Log.d("Data name",
+			 * _data.get("offer_name"));
+			 * 
+			 * name.setText(_data.get("offer_name"));
+			 * details.setText(_data.get("offer_details"));
+			 * 
+			 * viewHolder = (ViewHolder) v.getTag();
+			 * viewHolder.messageimage.setBackgroundResource
+			 * (R.drawable.message_open);
+			 * viewHolder.offer_name.setTextColor(Color.WHITE);
+			 * 
+			 * 
+			 * String offerdate = dateFmtConversion(_data.get("offer_date"));
+			 * fromdate.setText(offerdate); String camdate =
+			 * dateFmtConversion(_data.get("campaign_date"));
+			 * todate.setText(camdate);
+			 * if(_data.get("read_flag").equalsIgnoreCase("No")) { new
+			 * UpdateReadOffer(_data.get("id")).execute(); }
+			 * 
+			 * //mNotificationManager.cancelAll(); } }); }
+			 */
+			return convertView;
+		}
+
+	}
+
+	private void searchByGPS() {
+		mYahooWeather.setNeedDownloadIcons(true);
+		mYahooWeather.setUnit(UNIT.CELSIUS);
+		mYahooWeather.setSearchMode(SEARCH_MODE.GPS);
+		mYahooWeather.queryYahooWeatherByGPS(getActivity(), this);
+	}
+
+	@Override
+	public void onFailConnection(Exception e) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "Fail Connection", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+	@Override
+	public void onFailParsing(Exception e) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "Fail Parsing", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+	@Override
+	public void onFailFindLocation(Exception e) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "Fail Find Location", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+	@Override
+	public void gotWeatherInfo(WeatherInfo weatherInfo) {
+		// TODO Auto-generated method stub
+		//hideProgressDialog();
+		if (weatherInfo != null) {
+			// setNormalLayout();
+			// ----- current data---
+
+			textcity.setText(weatherInfo.getLocationCity());
+			txttemp.setText(weatherInfo.getCurrentTemp() + "ºC");
+
+			Log.d(weatherInfo.getCurrentCode() + "", "weather info code");
+			String code = String.valueOf(weatherInfo.getCurrentCode());
+			if (code.equalsIgnoreCase("32") || code.equalsIgnoreCase("36")) {
+				imagetemp.setBackgroundResource(R.drawable.mon);
+			} else if (code.equalsIgnoreCase("26")
+					|| code.equalsIgnoreCase("27")
+					|| code.equalsIgnoreCase("28")
+					|| code.equalsIgnoreCase("29")
+					|| code.equalsIgnoreCase("30")
+					|| code.equalsIgnoreCase("34")
+					|| code.equalsIgnoreCase("44")) {
+				imagetemp.setBackgroundResource(R.drawable.tue);
+
+			} else if (code.equalsIgnoreCase("1") || code.equalsIgnoreCase("2")
+					|| code.equalsIgnoreCase("3") || code.equalsIgnoreCase("4")
+					|| code.equalsIgnoreCase("5") || code.equalsIgnoreCase("6")
+					|| code.equalsIgnoreCase("7") || code.equalsIgnoreCase("8")
+					|| code.equalsIgnoreCase("9")
+					|| code.equalsIgnoreCase("10")
+					|| code.equalsIgnoreCase("11")
+					|| code.equalsIgnoreCase("12")
+					|| code.equalsIgnoreCase("13")
+					|| code.equalsIgnoreCase("14")
+					|| code.equalsIgnoreCase("15")
+					|| code.equalsIgnoreCase("16")
+					|| code.equalsIgnoreCase("17")
+					|| code.equalsIgnoreCase("18")
+					|| code.equalsIgnoreCase("35")
+					|| code.equalsIgnoreCase("37")
+					|| code.equalsIgnoreCase("38")
+					|| code.equalsIgnoreCase("39")
+					|| code.equalsIgnoreCase("40")
+					|| code.equalsIgnoreCase("41")
+					|| code.equalsIgnoreCase("42")
+					|| code.equalsIgnoreCase("43")
+					|| code.equalsIgnoreCase("45")
+					|| code.equalsIgnoreCase("47")
+					|| code.equalsIgnoreCase("48")) {
+				imagetemp.setBackgroundResource(R.drawable.thu);
+
+			} else {
+				imagetemp.setBackgroundResource(R.drawable.maintemp);
+			}
+
+		} else {
+			// setNoResultLayout();
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		//hideProgressDialog();
+		dialog = null;
+		super.onDestroy();
+	}
+
+	/*private void hideProgressDialog() {
+		if (dialog != null && dialog.isShowing()) {
+			dialog.cancel();
+		}
+	}*/
+
+	public void otpGeneration(final ServiceBookingUser user)
+	{
+		String _url = getActivity().getResources()
+				.getString(R.string.URL)
+				+ Config.getSAMLARTIFACT();
+		final int otp = gen();
+		String otpmessage = "To register your vehicle "+user.getREGISTRATIONNUMBER().toString()+" in Tata Motors customer service mobile app please use One Time Password(OTP). NEVER SHARE THE OTP WITH ANYONE. TATA MOTORS NEVER CALLS TO VERIFY IT. The OTP is "+otp+".";
+		String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+				+"<SOAP:Body>"
+				+"<bpmSendSMS xmlns=\"http://schemas.cordys.com/default\">"
+				+"<PHNUMBER>9561816990</PHNUMBER>" 				
+			 /* +"<PHNUMBER>"+user.getPhoneno().toString()+"</PHNUMBER>"*/
+				+"<MESSAGETEXT>"+otpmessage+"</MESSAGETEXT>"
+				+"<RULENAME>Customer App OTP</RULENAME>"
+				+"</bpmSendSMS>"
+				+"</SOAP:Body></SOAP:Envelope>";
+		new WebServiceCall(getActivity(), req, Constants.bpmSendSMS, new ResponseCallback() {
+			
+			@Override
+			public void onResponseReceive(Object object) {
+				// TODO Auto-generated method stub
+				boolean otpsent = (boolean) object;
+				
+				if(otpsent)
+				{
+					mobilenumberdialog.dismiss();
+					otpdialog = new Dialog(getActivity());
+					otpdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					otpdialog.setContentView(R.layout.vehicle_vari_otpno);
+					otpdialog.setCancelable(false);
+					otpdialog.show();
+					
+					 ImageView close = (ImageView) otpdialog.findViewById(R.id.imgclose);
+					 close.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							otpdialog.dismiss();
+							regvehicle = false;
+							checkvehiclereg(regvehicle);
+						}
+					});
+					
+					TextView regnum = (TextView) otpdialog.findViewById(R.id.txtregno);
+					String regnumber = "(Reg.No: "+user.getREGISTRATIONNUMBER()+")";
+					regnum.setText(regnumber);
+					String mob = "Mobile Number (*******"+user.getPhoneno().toString().substring(user.getPhoneno().length()-3)+")";
+					TextView mobtext = (TextView) otpdialog.findViewById(R.id.custmobnum);
+					mobtext.setText(mob);
+					final EditText otptext = (EditText) otpdialog.findViewById(R.id.edtotpno);
+					
+					final String enteredotp = otptext.getText().toString();
+					Button verifyotp = (Button) otpdialog.findViewById(R.id.btnsubmit);
+					verifyotp.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							String otpstring = ""+otp;
+							 String enteredotp = otptext.getText().toString();
+								Log.d("otp", otpstring+""+enteredotp);
+
+							if(enteredotp.toString().equals(otpstring))
+							{
+							otpdialog.dismiss();
+							regvehicle = true;
+							checkvehiclereg(regvehicle);
+							Toast.makeText(getActivity(), "Vehicle registered successfully.", Toast.LENGTH_SHORT).show();
+							regvehicle = true;
+							registerVehicle(user);
+							}else
+							{
+								Toast.makeText(getActivity(), "OTP not matching please re-enter.", Toast.LENGTH_SHORT).show();
+								regvehicle = false;
+								checkvehiclereg(regvehicle);
+							}
+						}
+					});
+					Button resend = (Button) otpdialog.findViewById(R.id.btnresend);
+					resend.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							otpGeneration(user);
+						}
+					});
+				}
+			}
+			
+			@Override
+			public void onErrorReceive(String string) {
+				// TODO Auto-generated method stub
+				
+			}
+		}, "").execute();
+	}
+	
+	public void registerVehicle(ServiceBookingUser user)
+	{
+		String req = "http://tmlmobilityservices.co.in:8080/CustomerApp_Restws/customerapp/vehicleServices/insertVehicleDetails";
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+		nameValuePairs.add(new BasicNameValuePair("chassis_num",user.getCHASSISNUMBER()));
+		nameValuePairs.add(new BasicNameValuePair("registration_num",user.getREGISTRATIONNUMBER()));
+		nameValuePairs.add(new BasicNameValuePair("user_id",UserDetails.getUser_id()));
+		new AWS_WebServiceCall(getActivity(), req,ServiceHandler.POST ,Constants.insertVehicleDetails,
+				nameValuePairs,new AwsResponseCallback() {
+
+					@Override
+					public void onResponseReceive(Object object) {
+						// TODO Auto-generated method stub
+						boolean res = (boolean) object;
+						if(res)
+						{
+							
+							getVehicles();
+							
+						}
+						else
+						{
+							Toast.makeText(getActivity(), "unsuccessful", Toast.LENGTH_LONG).show();
+						}
+					
+					}
+
+					@Override
+					public void onErrorReceive(String string) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getActivity(), "Invalid credentials, please check username passsword you entered.", Toast.LENGTH_LONG).show();
+						//edtuser_id.setFocusable(true);
+					}
+
+				
+				}).execute();
+
+	}
+	
+	public void checkvehiclereg(boolean regvehicle)
+	{
+		if(regvehicle)
+		{
+			button_9.setVisibility(View.VISIBLE);
+			button_6.setVisibility(View.GONE);
+		}else
+		{
+			button_6.setVisibility(View.VISIBLE);
+			button_9.setVisibility(View.GONE);
+			
+		}
+	}
+	
+	public void getVehicles()
+	{
+		String req = "http://tmlmobilityservices.co.in:8080/CustomerApp_Restws/customerapp/vehicleServices/getVehicleDetailsByUserId/"+UserDetails.getUser_id();
+		new AWS_WebServiceCall(getActivity(), req,ServiceHandler.GET ,Constants.getVehicleDetailsByUserId,
+				new AwsResponseCallback() {
+
+					@Override
+					public void onResponseReceive(Object object) {
+						// TODO Auto-generated method stub
+						
+							new UserDetails().setRegNumberList((ArrayList<HashMap<String, String>>) object);
+							HomeFragment.regvehicle = true;
+					}
+
+					@Override
+					public void onErrorReceive(String string) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getActivity(), "Invalid credentials, please check username passsword you entered.", Toast.LENGTH_LONG).show();
+						//edtuser_id.setFocusable(true);
+					}
+
+				
+				}).execute();
+	}
+	
+}
+=======
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import com.ttl.adapter.AwsResponseCallback;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.communication.SamlArtifact;
+import com.ttl.helper.VehicleRegister;
+import com.ttl.model.ServiceBookingUser;
+import com.ttl.model.ServiceHandler;
+import com.ttl.model.UserDetails;
+import com.ttl.webservice.AWS_WebServiceCall;
+import com.ttl.webservice.Config;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import zh.wang.android.apis.yweathergetter4a.WeatherInfo;
+import zh.wang.android.apis.yweathergetter4a.YahooWeather;
+import zh.wang.android.apis.yweathergetter4a.YahooWeatherExceptionListener;
+import zh.wang.android.apis.yweathergetter4a.YahooWeatherInfoListener;
+import zh.wang.android.apis.yweathergetter4a.WeatherInfo.ForecastInfo;
+import zh.wang.android.apis.yweathergetter4a.YahooWeather.SEARCH_MODE;
+import zh.wang.android.apis.yweathergetter4a.YahooWeather.UNIT;
+
+import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.database.DataSetObserver;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.webkit.WebView.FindListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class HomeFragment extends Fragment implements OnClickListener,
+		YahooWeatherInfoListener, YahooWeatherExceptionListener {
+	private final static String TAG_FRAGMENT = "HOME_FRAGMENT";
+	View rootView;
+	Fragment fragment = null;
+	ListView notifylist;
+	CustomAdapter adapter;
+	ArrayList<HashMap<String, String>> notificationslist;
+	HashMap<String, String> notifications;
+	LinearLayout servicebook, montenancecost, servicehistory, feedback,
+			vehicledetails, customerdetails, mydocumnets, compliantreg,
+			costcalculator , notification , dealerLocator , gpsTripMeter , infoandterms , newandupdate , customerdeatils2;
+	ImageView imagetemp;
+	private YahooWeather mYahooWeather = YahooWeather.getInstance(5000, 5000,
+			true);
+	private Dialog dialog;
+	TextView txttemp, textcity, txtdate;
+	RelativeLayout weatherLayout;
+	LinearLayout  button_6 , button_9;
+	static public boolean regvehicle = false;
+	Dialog proceeddialog , vehiclenodialog ,mobilenumberdialog ,contactdealerdialog , otpdialog ;
+	Button proceed , notnow;
+	 EditText regnumber ,chassis;
+	  public static boolean weather=false;
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		
+		rootView = inflater.inflate(R.layout.fragment_home, container, false);
+		
+		if(HomeFragment.regvehicle)
+		{
+			
+		}else
+		{
+		 proceeddialog = new Dialog(getActivity());
+		 proceeddialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		 proceeddialog.setContentView(R.layout.vehicle_reg_popup);
+		 proceeddialog.setCancelable(false);
+		 proceeddialog.show();
+		}
+		 
+		 
+	/*	dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.progress_bar);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(false);
+        dialog.show();*/
+        proceed = (Button) proceeddialog.findViewById(R.id.btnproceed);
+        notnow = (Button) proceeddialog.findViewById(R.id.btnnotnow);
+        proceed.setOnClickListener(this);
+        notnow.setOnClickListener(this);
+        
+        
+		servicebook = (LinearLayout) rootView.findViewById(R.id.servicebooking);
+		montenancecost = (LinearLayout) rootView.findViewById(R.id.maintenncecost);
+		servicehistory = (LinearLayout) rootView.findViewById(R.id.servicehistory);
+		feedback = (LinearLayout) rootView.findViewById(R.id.feedback);
+		vehicledetails = (LinearLayout) rootView.findViewById(R.id.vehicledetails);
+		customerdetails = (LinearLayout) rootView
+				.findViewById(R.id.customerdetails);
+		mydocumnets = (LinearLayout) rootView.findViewById(R.id.mydocument);
+		compliantreg = (LinearLayout) rootView.findViewById(R.id.complaintreg);
+		costcalculator = (LinearLayout) rootView.findViewById(R.id.costcal);
+		
+		notification = (LinearLayout) rootView.findViewById(R.id.notifications);
+		dealerLocator = (LinearLayout) rootView.findViewById(R.id.dealerlocator);
+		gpsTripMeter = (LinearLayout) rootView.findViewById(R.id.gpstripmeter);
+		infoandterms = (LinearLayout) rootView.findViewById(R.id.infoandterms);
+		newandupdate = (LinearLayout) rootView.findViewById(R.id.newsandupdates);
+		customerdeatils2 = (LinearLayout) rootView.findViewById(R.id.customerdetailswithout);
+		
+		imagetemp = (ImageView) rootView.findViewById(R.id.imagetemp);
+		txttemp = (TextView) rootView.findViewById(R.id.txttemp);
+		textcity = (TextView) rootView.findViewById(R.id.textcity);
+		txtdate = (TextView) rootView.findViewById(R.id.txtdate);
+		servicebook.setOnClickListener(this);
+		montenancecost.setOnClickListener(this);
+		servicehistory.setOnClickListener(this);
+		feedback.setOnClickListener(this);
+		vehicledetails.setOnClickListener(this);
+		customerdetails.setOnClickListener(this);
+		mydocumnets.setOnClickListener(this);
+		compliantreg.setOnClickListener(this);
+		costcalculator.setOnClickListener(this);
+
+		button_6 = (LinearLayout) rootView.findViewById(R.id.layout3);
+		button_9 = (LinearLayout) rootView.findViewById(R.id.layout2);
+		getVehicles();
+
+		checkvehiclereg(regvehicle);
+		weatherLayout = (RelativeLayout) rootView
+		        .findViewById(R.id.relativeLayout1);
+		weatherLayout.setOnClickListener(new OnClickListener() {
+
+		      @Override
+		      public void onClick(View v) {
+		        // TODO Auto-generated method stub
+		        weather=true;
+		        fragment = new TrafficAndWeather_fragment();
+		        if (fragment != null) {
+		          FragmentManager fragmentManager = getFragmentManager();
+		          fragmentManager.beginTransaction()
+		              .replace(R.id.frame_container, fragment)
+		              .addToBackStack(null).commit();
+
+		        } else {
+		          // error in creating fragment
+		          Log.e("MainActivity", "Error in creating fragment");
+		        }
+		      }
+		    });
+		
+		
+		notifylist = (ListView) rootView.findViewById(R.id.notificationlist);
+		notifications = new HashMap<String, String>();
+		notificationslist = new ArrayList<HashMap<String, String>>();
+		
+		if(Config.getSAMLARTIFACT().equals(""))
+		{
+			new SamlArtifact(rootView.getContext()).execute();
+		}
+
+		for (int i = 0; i < 3; i++) {
+			notifications.put("type", "Service Alert");
+			notifications.put("regno", "MH14 PC 8957");
+			notifications.put("details", "service completed");
+			notificationslist.add(notifications);
+		}
+		adapter = new CustomAdapter(rootView.getContext(),
+				R.layout.lis_item_notification, notificationslist);
+		notifylist.setAdapter(adapter);
+		searchByGPS();
+		Date date = new Date();
+		String dayOfTheWeek = (String) android.text.format.DateFormat.format(
+				"E", date);// Thursday
+		String stringMonth = (String) android.text.format.DateFormat.format(
+				"MMM", date); // Jun
+		String day = (String) android.text.format.DateFormat.format("dd", date); // 20
+		Log.d(dayOfTheWeek + stringMonth + day, "day format");
+		txtdate.setText(dayOfTheWeek + ", " + stringMonth + " " + day);
+		return rootView;
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		FragmentManager fragmentManager = getFragmentManager();
+
+		switch (v.getId()) {
+		case R.id.servicebooking:
+			fragment = new BookServiceFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.maintenncecost:
+			fragment = new MaintenanceCostFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.complaintreg:
+			fragment = new ComplaintRegistrationFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.costcal:
+			fragment = new Cost_EstimationFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+
+		case R.id.feedback:
+			fragment = new Feedback_Fragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.servicehistory:
+			fragment = new ServiceHistoyFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.mydocument:
+			fragment = new DocumentUploadFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.vehicledetails:
+			fragment = new VehicleDetailsFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.customerdetails:
+			fragment = new CustomerDetailFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.notifications:
+			fragment = new Notifiaction_fragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.dealerlocator:
+			fragment = new DelearLocator_fragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.gpstripmeter:
+			fragment = new GPSTripMeter_fragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.infoandterms:
+			fragment = new InfoTerms_fragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.customerdetailswithout:
+			fragment = new CustomerDetailFragment();
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			break;
+		case R.id.btnproceed:
+			proceeddialog.dismiss();
+			
+			//new VehicleRegister(getActivity());
+			 vehiclenodialog = new Dialog(getActivity());
+			 vehiclenodialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			 vehiclenodialog.setContentView(R.layout.vehicle_vari_regno_popup);
+			 vehiclenodialog.setCancelable(false);
+			 vehiclenodialog.show();
+			 ImageView close = (ImageView) vehiclenodialog.findViewById(R.id.imgclose);
+			 close.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					vehiclenodialog.dismiss();
+					regvehicle = false;
+					checkvehiclereg(regvehicle);
+				}
+			});
+			 Button submit = (Button) vehiclenodialog.findViewById(R.id.btnsubmit);
+			 regnumber = (EditText) vehiclenodialog.findViewById(R.id.txtregnum);
+			 chassis = (EditText) vehiclenodialog.findViewById(R.id.txtchassisnum);
+			submit.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if(Config.getSAMLARTIFACT().equals(""))
+					{
+						new SamlArtifact(getActivity()).execute();
+					}
+					vehiclenodialog.dismiss();
+					String _url = getActivity().getResources()
+							.getString(R.string.URL)
+							+ Config.getSAMLARTIFACT();
+							String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+									+ "<SOAP:Body>"
+									+ "<GetCustomerVehicleDetailsCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+									+ "<RegistrationNumber>"+regnumber.getText().toString()+"</RegistrationNumber>"
+									+ "<ChassisNumber>"+chassis.getText().toString()+"</ChassisNumber>" + "<MobileNo></MobileNo>"
+									+ "</GetCustomerVehicleDetailsCSB>" + "</SOAP:Body>" + "</SOAP:Envelope>";
+
+							new WebServiceCall(getActivity(), req, Constants.GetCustomerVehicleDetailsCSB, new ResponseCallback() {
+
+								@Override
+								public void onResponseReceive(Object object) {
+									
+									
+									final ServiceBookingUser user = (ServiceBookingUser) object;
+									if(!(user.getPhoneno().equals("")))
+									{
+										
+										mobilenumberdialog = new Dialog(getActivity());
+										mobilenumberdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+										mobilenumberdialog.setContentView(R.layout.vehicle_vari_mobno);
+										mobilenumberdialog.setCancelable(false);
+										mobilenumberdialog.show();
+										
+										 ImageView close = (ImageView) mobilenumberdialog.findViewById(R.id.imgclose);
+										 close.setOnClickListener(new OnClickListener() {
+											
+											@Override
+											public void onClick(View v) {
+												// TODO Auto-generated method stub
+												mobilenumberdialog.dismiss();
+												regvehicle = false;
+												checkvehiclereg(regvehicle);
+											}
+										});
+										
+										TextView reg = (TextView) mobilenumberdialog.findViewById(R.id.txtregno);
+										String regnumber = "(Reg.No: "+user.getREGISTRATIONNUMBER()+")";
+										reg.setText(regnumber);
+										String mob = "(********"+user.getPhoneno().toString().substring(user.getPhoneno().length()-3)+") to proceed";
+										TextView mobtext = (TextView) mobilenumberdialog.findViewById(R.id.txtmoilenumber);
+										mobtext.setText(mob);
+										
+										final EditText mobile = (EditText) mobilenumberdialog.findViewById(R.id.edtmobileno);
+										Button submitmob = (Button) mobilenumberdialog.findViewById(R.id.btnsubmit);
+										submitmob.setOnClickListener(new OnClickListener() {
+											
+											@Override
+											public void onClick(View v) {
+												// TODO Auto-generated method stub
+												String enteredmob = mobile.getText().toString();
+												Log.d("Here", user.getPhoneno());
+												if(enteredmob.equals(user.getPhoneno().toString()))
+												{
+													Log.d("Here", user.getPhoneno());
+													otpGeneration(user);
+													
+
+												}else
+												{
+													Toast.makeText(getActivity(), "You have entered wrong number.Please re-enter.", Toast.LENGTH_SHORT).show();
+
+												}
+											}
+										});
+									}else
+									{
+										
+									}
+								}
+
+								@Override
+								public void onErrorReceive(String string) {
+									
+									Toast.makeText(getActivity(), "Number you have enetred is not match with our record. Please verify number with nearest Tata Dealer", Toast.LENGTH_SHORT).show();
+								}
+
+							
+							},"Populating Data..").execute();  
+				}
+			}) ;
+			 
+			break;
+		case R.id.btnnotnow:
+			proceeddialog.dismiss();
+			regvehicle = false;
+			checkvehiclereg(regvehicle);
+			break;
+		default:
+			break;
+
+		}
+	}
+	private int gen() {
+		 Random r = new Random( System.currentTimeMillis() );
+		    return (1 + r.nextInt(2)) * 10000 + r.nextInt(10000);
+	}
+	private class CustomAdapter extends ArrayAdapter<HashMap<String, String>> {
+
+		public CustomAdapter(Context context, int textViewResourceId,
+				ArrayList<HashMap<String, String>> Strings) {
+
+			// let android do the initializing :)
+			super(context, textViewResourceId, Strings);
+		}
+
+		// class for caching the views in a row
+		private class ViewHolder {
+
+			/*
+			 * TextView offer_date, offer_details, offer_name, campaign_date;
+			 * ImageView messageimage;
+			 */
+		}
+
+		ViewHolder viewHolder;
+
+		@Override
+		public View getView(final int position, View convertView,
+				ViewGroup parent) {
+
+			final int position1 = position;
+			if (convertView == null) {
+				LayoutInflater inflater = (LayoutInflater) getContext()
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				convertView = inflater.inflate(R.layout.lis_item_notification,
+						null);
+				viewHolder = new ViewHolder();
+
+				/*
+				 * viewHolder.offer_date = (TextView)
+				 * convertView.findViewById(R.id.date); viewHolder.offer_details
+				 * = (TextView) convertView.findViewById(R.id.offer_details);
+				 * viewHolder.offer_name = (TextView)
+				 * convertView.findViewById(R.id.offer_name);
+				 * viewHolder.messageimage = (ImageView)
+				 * convertView.findViewById(R.id.imageButton1); // link the
+				 * cached views to the convertview
+				 * convertView.setTag(viewHolder);
+				 */
+
+			} else
+				viewHolder = (ViewHolder) convertView.getTag();
+
+			/*
+			 * if(searchResults.get(position).get("ready_to_publish").toString().
+			 * equalsIgnoreCase("Yes")) { String offerdate =
+			 * dateFmtConversion(searchResults.get(position).get("offer_date")
+			 * .toString()); viewHolder.offer_date.setText(offerdate);
+			 * viewHolder.offer_details.setText(searchResults.get(position).get(
+			 * "offer_details") .toString());
+			 * viewHolder.offer_name.setText(searchResults
+			 * .get(position).get("offer_name") .toString());
+			 * 
+			 * if(!(searchResults.get(position).get("read_flag").equals("No")))
+			 * {
+			 * viewHolder.messageimage.setBackgroundResource(R.drawable.message_open
+			 * ); viewHolder.offer_name.setTextColor(Color.WHITE); } else {
+			 * viewHolder
+			 * .offer_name.setTextColor(getApplicationContext().getResources
+			 * ().getColor(R.color.orange));
+			 * viewHolder.messageimage.setBackgroundResource
+			 * (R.drawable.message_unopen); } } else { Toast toast =
+			 * Toast.makeText(getApplicationContext(), "Offers not available",
+			 * Toast.LENGTH_LONG); toast.setGravity(Gravity.CENTER, 0, 0);
+			 * toast.show(); } HashMap<String , String> data =
+			 * searchResults.get(position); if(data!=null) {
+			 * //viewHolder.offer_name.setText("BOLT"); final HashMap<String ,
+			 * String> _data = data; convertView.setOnClickListener(new
+			 * OnClickListener() {
+			 * 
+			 * @Override public void onClick(View v) { // TODO Auto-generated
+			 * method stub offer_dialog = new Dialog(DashboardActivity.this);
+			 * offer_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			 * offer_dialog.setContentView(R.layout.offer_details);
+			 * offer_dialog.setCancelable(true); offer_dialog.show(); TextView
+			 * name = (TextView) offer_dialog.findViewById(R.id.offerName);
+			 * TextView details = (TextView)
+			 * offer_dialog.findViewById(R.id.offerDetails); TextView fromdate =
+			 * (TextView) offer_dialog.findViewById(R.id.fromdate); TextView
+			 * todate = (TextView) offer_dialog.findViewById(R.id.tilldate);
+			 * 
+			 * Log.d("Data", _data.toString()); Log.d("Data name",
+			 * _data.get("offer_name"));
+			 * 
+			 * name.setText(_data.get("offer_name"));
+			 * details.setText(_data.get("offer_details"));
+			 * 
+			 * viewHolder = (ViewHolder) v.getTag();
+			 * viewHolder.messageimage.setBackgroundResource
+			 * (R.drawable.message_open);
+			 * viewHolder.offer_name.setTextColor(Color.WHITE);
+			 * 
+			 * 
+			 * String offerdate = dateFmtConversion(_data.get("offer_date"));
+			 * fromdate.setText(offerdate); String camdate =
+			 * dateFmtConversion(_data.get("campaign_date"));
+			 * todate.setText(camdate);
+			 * if(_data.get("read_flag").equalsIgnoreCase("No")) { new
+			 * UpdateReadOffer(_data.get("id")).execute(); }
+			 * 
+			 * //mNotificationManager.cancelAll(); } }); }
+			 */
+			return convertView;
+		}
+
+	}
+
+	private void searchByGPS() {
+		mYahooWeather.setNeedDownloadIcons(true);
+		mYahooWeather.setUnit(UNIT.CELSIUS);
+		mYahooWeather.setSearchMode(SEARCH_MODE.GPS);
+		mYahooWeather.queryYahooWeatherByGPS(getActivity(), this);
+	}
+
+	@Override
+	public void onFailConnection(Exception e) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "Fail Connection", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+	@Override
+	public void onFailParsing(Exception e) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "Fail Parsing", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+	@Override
+	public void onFailFindLocation(Exception e) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "Fail Find Location", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+	@Override
+	public void gotWeatherInfo(WeatherInfo weatherInfo) {
+		// TODO Auto-generated method stub
+		//hideProgressDialog();
+		if (weatherInfo != null) {
+			// setNormalLayout();
+			// ----- current data---
+
+			textcity.setText(weatherInfo.getLocationCity());
+			txttemp.setText(weatherInfo.getCurrentTemp() + "ºC");
+
+			Log.d(weatherInfo.getCurrentCode() + "", "weather info code");
+			String code = String.valueOf(weatherInfo.getCurrentCode());
+			if (code.equalsIgnoreCase("32") || code.equalsIgnoreCase("36")) {
+				imagetemp.setBackgroundResource(R.drawable.mon);
+			} else if (code.equalsIgnoreCase("26")
+					|| code.equalsIgnoreCase("27")
+					|| code.equalsIgnoreCase("28")
+					|| code.equalsIgnoreCase("29")
+					|| code.equalsIgnoreCase("30")
+					|| code.equalsIgnoreCase("34")
+					|| code.equalsIgnoreCase("44")) {
+				imagetemp.setBackgroundResource(R.drawable.tue);
+
+			} else if (code.equalsIgnoreCase("1") || code.equalsIgnoreCase("2")
+					|| code.equalsIgnoreCase("3") || code.equalsIgnoreCase("4")
+					|| code.equalsIgnoreCase("5") || code.equalsIgnoreCase("6")
+					|| code.equalsIgnoreCase("7") || code.equalsIgnoreCase("8")
+					|| code.equalsIgnoreCase("9")
+					|| code.equalsIgnoreCase("10")
+					|| code.equalsIgnoreCase("11")
+					|| code.equalsIgnoreCase("12")
+					|| code.equalsIgnoreCase("13")
+					|| code.equalsIgnoreCase("14")
+					|| code.equalsIgnoreCase("15")
+					|| code.equalsIgnoreCase("16")
+					|| code.equalsIgnoreCase("17")
+					|| code.equalsIgnoreCase("18")
+					|| code.equalsIgnoreCase("35")
+					|| code.equalsIgnoreCase("37")
+					|| code.equalsIgnoreCase("38")
+					|| code.equalsIgnoreCase("39")
+					|| code.equalsIgnoreCase("40")
+					|| code.equalsIgnoreCase("41")
+					|| code.equalsIgnoreCase("42")
+					|| code.equalsIgnoreCase("43")
+					|| code.equalsIgnoreCase("45")
+					|| code.equalsIgnoreCase("47")
+					|| code.equalsIgnoreCase("48")) {
+				imagetemp.setBackgroundResource(R.drawable.thu);
+
+			} else {
+				imagetemp.setBackgroundResource(R.drawable.maintemp);
+			}
+
+		} else {
+			// setNoResultLayout();
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		//hideProgressDialog();
+		dialog = null;
+		super.onDestroy();
+	}
+
+	/*private void hideProgressDialog() {
+		if (dialog != null && dialog.isShowing()) {
+			dialog.cancel();
+		}
+	}*/
+
+	public void otpGeneration(final ServiceBookingUser user)
+	{
+		String _url = getActivity().getResources()
+				.getString(R.string.URL)
+				+ Config.getSAMLARTIFACT();
+		final int otp = gen();
+		String otpmessage = "To register your vehicle "+user.getREGISTRATIONNUMBER().toString()+" in Tata Motors customer service mobile app please use One Time Password(OTP). NEVER SHARE THE OTP WITH ANYONE. TATA MOTORS NEVER CALLS TO VERIFY IT. The OTP is "+otp+".";
+		String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+				+"<SOAP:Body>"
+				+"<bpmSendSMS xmlns=\"http://schemas.cordys.com/default\">"
+				+"<PHNUMBER>9561816990</PHNUMBER>" 				
+			 /* +"<PHNUMBER>"+user.getPhoneno().toString()+"</PHNUMBER>"*/
+				+"<MESSAGETEXT>"+otpmessage+"</MESSAGETEXT>"
+				+"<RULENAME>Customer App OTP</RULENAME>"
+				+"</bpmSendSMS>"
+				+"</SOAP:Body></SOAP:Envelope>";
+		new WebServiceCall(getActivity(), req, Constants.bpmSendSMS, new ResponseCallback() {
+			
+			@Override
+			public void onResponseReceive(Object object) {
+				// TODO Auto-generated method stub
+				boolean otpsent = (boolean) object;
+				
+				if(otpsent)
+				{
+					mobilenumberdialog.dismiss();
+					otpdialog = new Dialog(getActivity());
+					otpdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					otpdialog.setContentView(R.layout.vehicle_vari_otpno);
+					otpdialog.setCancelable(false);
+					otpdialog.show();
+					
+					 ImageView close = (ImageView) otpdialog.findViewById(R.id.imgclose);
+					 close.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							otpdialog.dismiss();
+							regvehicle = false;
+							checkvehiclereg(regvehicle);
+						}
+					});
+					
+					TextView regnum = (TextView) otpdialog.findViewById(R.id.txtregno);
+					String regnumber = "(Reg.No: "+user.getREGISTRATIONNUMBER()+")";
+					regnum.setText(regnumber);
+					String mob = "Mobile Number (*******"+user.getPhoneno().toString().substring(user.getPhoneno().length()-3)+")";
+					TextView mobtext = (TextView) otpdialog.findViewById(R.id.custmobnum);
+					mobtext.setText(mob);
+					final EditText otptext = (EditText) otpdialog.findViewById(R.id.edtotpno);
+					
+					final String enteredotp = otptext.getText().toString();
+					Button verifyotp = (Button) otpdialog.findViewById(R.id.btnsubmit);
+					verifyotp.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							String otpstring = ""+otp;
+							 String enteredotp = otptext.getText().toString();
+								Log.d("otp", otpstring+""+enteredotp);
+
+							if(enteredotp.toString().equals(otpstring))
+							{
+							otpdialog.dismiss();
+							regvehicle = true;
+							checkvehiclereg(regvehicle);
+							Toast.makeText(getActivity(), "Vehicle registered successfully.", Toast.LENGTH_SHORT).show();
+							regvehicle = true;
+							registerVehicle(user);
+							}else
+							{
+								Toast.makeText(getActivity(), "OTP not matching please re-enter.", Toast.LENGTH_SHORT).show();
+								regvehicle = false;
+								checkvehiclereg(regvehicle);
+							}
+						}
+					});
+					Button resend = (Button) otpdialog.findViewById(R.id.btnresend);
+					resend.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							otpGeneration(user);
+						}
+					});
+				}
+			}
+			
+			@Override
+			public void onErrorReceive(String string) {
+				// TODO Auto-generated method stub
+				
+			}
+		}, "").execute();
+	}
+	
+	public void registerVehicle(ServiceBookingUser user)
+	{
+		String req = "http://tmlmobilityservices.co.in:8080/CustomerApp_Restws/customerapp/vehicleServices/insertVehicleDetails";
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+		nameValuePairs.add(new BasicNameValuePair("chassis_num",user.getCHASSISNUMBER()));
+		nameValuePairs.add(new BasicNameValuePair("registration_num",user.getREGISTRATIONNUMBER()));
+		nameValuePairs.add(new BasicNameValuePair("user_id",UserDetails.getUser_id()));
+		new AWS_WebServiceCall(getActivity(), req,ServiceHandler.POST ,Constants.insertVehicleDetails,
+				nameValuePairs,new AwsResponseCallback() {
+
+					@Override
+					public void onResponseReceive(Object object) {
+						// TODO Auto-generated method stub
+						boolean res = (boolean) object;
+						if(res)
+						{
+							
+							getVehicles();
+							
+						}
+						else
+						{
+							Toast.makeText(getActivity(), "unsuccessful", Toast.LENGTH_LONG).show();
+						}
+					
+					}
+
+					@Override
+					public void onErrorReceive(String string) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getActivity(), "Invalid credentials, please check username passsword you entered.", Toast.LENGTH_LONG).show();
+						//edtuser_id.setFocusable(true);
+					}
+
+				
+				}).execute();
+
+	}
+	
+	public void checkvehiclereg(boolean regvehicle)
+	{
+		if(regvehicle)
+		{
+			button_9.setVisibility(View.VISIBLE);
+			button_6.setVisibility(View.GONE);
+		}else
+		{
+			button_6.setVisibility(View.VISIBLE);
+			button_9.setVisibility(View.GONE);
+			
+		}
+	}
+	
+	public void getVehicles()
+	{
+		String req = "http://tmlmobilityservices.co.in:8080/CustomerApp_Restws/customerapp/vehicleServices/getVehicleDetailsByUserId/"+UserDetails.getUser_id();
+		new AWS_WebServiceCall(getActivity(), req,ServiceHandler.GET ,Constants.getVehicleDetailsByUserId,
+				new AwsResponseCallback() {
+
+					@Override
+					public void onResponseReceive(Object object) {
+						// TODO Auto-generated method stub
+						
+							new UserDetails().setRegNumberList((ArrayList<HashMap<String, String>>) object);
+							HomeFragment.regvehicle = true;
+					}
+
+					@Override
+					public void onErrorReceive(String string) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getActivity(), "Invalid credentials, please check username passsword you entered.", Toast.LENGTH_LONG).show();
+						//edtuser_id.setFocusable(true);
+					}
+
+				
+				}).execute();
+	}
+	
+}
+>>>>>>> TMSC QA 3.4V

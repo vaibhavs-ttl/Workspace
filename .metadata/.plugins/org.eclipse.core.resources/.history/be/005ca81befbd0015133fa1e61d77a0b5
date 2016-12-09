@@ -1,0 +1,899 @@
+<<<<<<< HEAD
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+
+import android.R.color;
+import android.app.Fragment;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.ttl.adapter.DealerListAdapter;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.model.DelearLocatorData;
+
+import com.ttl.webservice.Config;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+public class DelearLocator_fragment extends Fragment implements
+		LocationListener {
+	View rootView;
+	Button list, map, viewmap, viewlist, btnhide;
+	RelativeLayout relmap, rellist;
+	private LocationManager locationManager;
+	public static MapView mapView;
+	public static GoogleMap googleMap;
+	InstantAutoComplete txtcity;
+	ArrayList<String> citylist = new ArrayList<String>();
+	ArrayAdapter<String> cityaadapter;
+	ListView dealerlist;
+	public String acticityname_DealerLocatorcity = "DealerLocatorCity";
+	public String acticityname_DealerLocatordata = "DealerLocatorData";
+	boolean flag = false;
+	String getcityname;
+	ArrayList<DelearLocatorData> dealerlist1 = new ArrayList<DelearLocatorData>();
+	DealerListAdapter dealeradapter;
+	boolean deleardata = false;
+	public static Double MyLat, MyLong;
+	Location location;
+
+	public DelearLocator_fragment() {
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		deleardata = false;
+		rootView = inflater.inflate(R.layout.fragment_delear_locator,
+				container, false);
+
+		list = (Button) rootView.findViewById(R.id.btnlist);
+		map = (Button) rootView.findViewById(R.id.btnmap);
+
+		relmap = (RelativeLayout) rootView.findViewById(R.id.relview);
+		rellist = (RelativeLayout) rootView.findViewById(R.id.rellistview);
+		viewlist = (Button) rootView.findViewById(R.id.viewlist);
+		viewmap = (Button) rootView.findViewById(R.id.viewmap);
+		list.setBackgroundColor(rootView.getContext().getResources()
+				.getColor(R.color.stronggray));
+		list.setTextColor(rootView.getContext().getResources()
+				.getColor(R.color.litegray));
+		viewlist.setBackgroundColor(rootView.getContext().getResources()
+				.getColor(R.color.stronggray));
+		rellist.setVisibility(View.GONE);
+
+		mapView = (MapView) rootView.findViewById(R.id.mapview);
+		mapView.onCreate(savedInstanceState);
+
+		// Gets to GoogleMap from the MapView and does initialization stuff
+		googleMap = mapView.getMap();
+		googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+		googleMap.setMyLocationEnabled(false);
+		mapView.onResume();// needed to get the map to display immediately
+
+		try {
+			MapsInitializer.initialize(getActivity().getApplicationContext());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		/*
+		 * LatLng markerLoc = new LatLng(21.000000, 78.000000);
+		 * 
+		 * final CameraPosition cameraPosition = new CameraPosition.Builder()
+		 * .target(markerLoc).build();
+		 * 
+		 * // Enabling MyLocation Layer of Google Map
+		 * 
+		 * CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(
+		 * 21.000000, 78.000000)); CameraUpdate zoom =
+		 * CameraUpdateFactory.zoomTo(3);
+		 * 
+		 * googleMap.moveCamera(center); googleMap.animateCamera(zoom);
+		 */
+
+		btnhide = (Button) rootView.findViewById(R.id.btnhide);
+		txtcity = (InstantAutoComplete) rootView.findViewById(R.id.autocity);
+
+		Log.d(citylist.toString(), "citylist");
+		locationManager = (LocationManager) rootView.getContext()
+				.getSystemService(Context.LOCATION_SERVICE);
+
+		/*
+		 * Parameters : First(provider) : the name of the provider with which to
+		 * register Second(minTime) : the minimum time interval for
+		 * notifications, in milliseconds. This field is only used as a hint to
+		 * conserve power, and actual time between location updates may be
+		 * greater or lesser than this value. Third(minDistance) : the minimum
+		 * distance interval for notifications, in meters Fourth(listener) : a
+		 * {#link LocationListener} whose onLocationChanged(Location) method
+		 * will be called for each location update
+		 */
+
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				3000, // 3 sec
+				10, this);
+
+		/*********
+		 * After registration onLocationChanged method called periodically after
+		 * each 3 sec
+		 ***********/
+		location = locationManager
+				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		location = locationManager
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+		if (location != null) {
+
+			MyLat = location.getLatitude();
+			MyLong = location.getLongitude();
+			CameraPosition cameraPosition = new CameraPosition.Builder()
+					.target(new LatLng(MyLat, MyLong)).zoom(13).build();
+
+			googleMap.animateCamera(CameraUpdateFactory
+					.newCameraPosition(cameraPosition));
+
+		}
+
+		String _url = rootView.getContext().getResources()
+				.getString(R.string.URL)
+				+ Config.getSAMLARTIFACT();
+		String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+				+ "  <SOAP:Body>"
+				+ " <GetCitiesforServiceOrderCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\" />"
+				+ "</SOAP:Body>" + "</SOAP:Envelope>";
+		Log.d("get city request", req);
+		new WebServiceCall(getActivity(), req,
+				Constants.GetCitiesforServiceOrderCSB, new ResponseCallback() {
+
+					@Override
+					public void onResponseReceive(Object object) {
+						// TODO Auto-generated method stub
+						citylist = (ArrayList<String>) object;
+						cityaadapter = new ArrayAdapter<String>(
+
+						rootView.getContext(),
+								android.R.layout.simple_list_item_1, citylist);
+
+						txtcity.setAdapter(cityaadapter);
+						if (citylist == null) {
+							Toast.makeText(getActivity(),
+									"Server Error Please Try Again",
+									Toast.LENGTH_LONG).show();
+						} else {
+							/*
+							 * cityaadapter = new ArrayAdapter<String>(
+							 * 
+							 * rootView.getContext(),
+							 * android.R.layout.simple_list_item_1, citylist);
+							 */
+
+							// txtcity.setAdapter(cityaadapter);
+							cityaadapter.notifyDataSetChanged();
+						}
+					}
+
+					@Override
+					public void onErrorReceive(String string) {
+						// TODO Auto-generated method stub
+
+					}
+				}, "Run").execute();
+
+		// aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// spinState.setAdapter(aa);
+		txtcity.setThreshold(1);
+		txtcity.setDropDownBackgroundResource(color.darker_gray);
+
+		txtcity.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				txtcity.showDropDown();
+				txtcity.requestFocus();
+			}
+		});
+
+		txtcity.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				InputMethodManager inputMethodManager = (InputMethodManager) getActivity()
+						.getSystemService(getActivity().INPUT_METHOD_SERVICE);
+				inputMethodManager.hideSoftInputFromWindow(getActivity()
+						.getCurrentFocus().getWindowToken(), 0);
+				// TODO Auto-generated method stub
+				/*Toast.makeText(rootView.getContext(), citylist.get(position),
+						Toast.LENGTH_LONG).show();*/
+				deleardata = true;
+				// Log.d(citylist.get(arg2), "city name");
+				InputMethodManager in = (InputMethodManager) getActivity()
+						.getSystemService(Context.INPUT_METHOD_SERVICE);
+				in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+				//getcityname = citylist.get(position);
+				getcityname = parent.getItemAtPosition(position).toString();
+				Log.d(getcityname, "city name");
+				googleMap.clear();
+				String _url = getActivity().getResources().getString(
+						R.string.URL)
+						+ Config.getSAMLARTIFACT();
+
+				String req1 = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+						+ "<SOAP:Body>"
+						+ "<GetDlrLocDtlsCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+						+ "<City>"
+						+ getcityname.toString()
+						+ "</City>"
+						+ "<LAT></LAT>"
+						+ "<LONG></LONG>"
+						+ " </GetDlrLocDtlsCSB>"
+						+ "</SOAP:Body>"
+						+ "</SOAP:Envelope>";
+
+				Log.d("get city request", req1);
+				new WebServiceCall(getActivity(), req1,
+						Constants.GetDlrLocDtlsCSB, new ResponseCallback() {
+
+							@Override
+							public void onResponseReceive(Object object) {
+								// TODO Auto-generated method stub
+								dealerlist1 = (ArrayList<DelearLocatorData>) object;
+
+								for (int i = 0; i < dealerlist1.size(); i++) {
+									Log.d(dealerlist1.get(i).delear_LATITUDE,
+											"yet ahe");
+									double lat = Double.parseDouble(dealerlist1
+											.get(i).delear_LATITUDE);
+									double lng = Double.parseDouble(dealerlist1
+											.get(i).delear_LONGITUDE);
+									MarkerOptions marker = new MarkerOptions()
+											.position(new LatLng(lat, lng))
+											.title(dealerlist1.get(i).delear_Name);
+									// Changing marker icon
+									marker.icon(BitmapDescriptorFactory
+											.fromResource(R.drawable.marker));
+
+									// adding marker
+									googleMap.addMarker(marker);
+									CameraPosition cameraPosition = new CameraPosition.Builder()
+											.target(new LatLng(lat, lng))
+											.zoom(13).build();
+
+									googleMap.animateCamera(CameraUpdateFactory
+											.newCameraPosition(cameraPosition));
+									
+								}
+
+								dealeradapter = new DealerListAdapter(rootView
+										.getContext(),
+										R.layout.delear_locator_list,
+										dealerlist1);
+
+								/*
+								 * dealerlist.setAdapter(dealeradapter);
+								 * dealeradapter.notifyDataSetChanged();
+								 */
+
+							}
+
+							@Override
+							public void onErrorReceive(String string) {
+								// TODO Auto-generated method stub
+
+							}
+						}, "RUN").execute();
+
+			}
+		});
+
+		btnhide.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				if (flag) {
+					flag = false;
+					txtcity.clearAnimation();
+					txtcity.setVisibility(View.VISIBLE);
+					btnhide.setCompoundDrawablesWithIntrinsicBounds(0,
+							R.drawable.rightarrow, 0, 0);
+
+				} else {
+					flag = true;
+					TranslateAnimation animate = new TranslateAnimation(0,
+							1000, 0, 0);
+					animate.setDuration(500);
+					animate.setFillAfter(true);
+					txtcity.startAnimation(animate);
+					btnhide.setCompoundDrawablesWithIntrinsicBounds(0,
+							R.drawable.leftarrows, 0, 0);
+					txtcity.setVisibility(View.GONE);
+
+				}
+			}
+		});
+
+		map.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				relmap.setVisibility(View.VISIBLE);
+				map.setBackgroundColor(rootView.getContext().getResources()
+						.getColor(R.color.darkgray));
+				map.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.litegray));
+				viewmap.setBackgroundColor(rootView.getContext().getResources()
+						.getColor(R.color.yellow));
+				list.setBackgroundColor(rootView.getContext().getResources()
+						.getColor(R.color.stronggray));
+				list.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.litegray));
+				viewlist.setBackgroundColor(rootView.getContext()
+						.getResources().getColor(R.color.stronggray));
+
+			}
+		});
+
+		list.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				if (deleardata == true) {
+					dealerlist = (ListView) rootView
+							.findViewById(R.id.delearloc);
+					dealerlist.setAdapter(dealeradapter);
+
+					dealeradapter.notifyDataSetChanged();
+					rellist.setVisibility(View.VISIBLE);
+					relmap.setVisibility(View.GONE);
+					list.setBackgroundColor(rootView.getContext()
+							.getResources().getColor(R.color.darkgray));
+					list.setTextColor(rootView.getContext().getResources()
+							.getColor(R.color.litegray));
+					viewlist.setBackgroundColor(rootView.getContext()
+							.getResources().getColor(R.color.yellow));
+					map.setBackgroundColor(rootView.getContext().getResources()
+							.getColor(R.color.stronggray));
+					map.setTextColor(rootView.getContext().getResources()
+							.getColor(R.color.darkgray));
+					viewmap.setBackgroundColor(rootView.getContext()
+							.getResources().getColor(R.color.stronggray));
+				} else {
+					Toast.makeText(getActivity(), "Please Select City",
+							Toast.LENGTH_LONG).show();
+				}
+
+			}
+		});
+
+		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		mapView.onResume();
+		super.onResume();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mapView.onDestroy();
+	}
+
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+		mapView.onLowMemory();
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+=======
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+
+import android.R.color;
+import android.app.Fragment;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.ttl.adapter.DealerListAdapter;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.model.DelearLocatorData;
+
+import com.ttl.webservice.Config;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+public class DelearLocator_fragment extends Fragment implements
+		LocationListener {
+	View rootView;
+	Button list, map, viewmap, viewlist, btnhide;
+	RelativeLayout relmap, rellist;
+	private LocationManager locationManager;
+	public static MapView mapView;
+	public static GoogleMap googleMap;
+	InstantAutoComplete txtcity;
+	ArrayList<String> citylist = new ArrayList<String>();
+	ArrayAdapter<String> cityaadapter;
+	ListView dealerlist;
+	public String acticityname_DealerLocatorcity = "DealerLocatorCity";
+	public String acticityname_DealerLocatordata = "DealerLocatorData";
+	boolean flag = false;
+	String getcityname;
+	ArrayList<DelearLocatorData> dealerlist1 = new ArrayList<DelearLocatorData>();
+	DealerListAdapter dealeradapter;
+	boolean deleardata = false;
+	public static Double MyLat, MyLong;
+	Location location;
+
+	public DelearLocator_fragment() {
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		deleardata = false;
+		rootView = inflater.inflate(R.layout.fragment_delear_locator,
+				container, false);
+
+		list = (Button) rootView.findViewById(R.id.btnlist);
+		map = (Button) rootView.findViewById(R.id.btnmap);
+
+		relmap = (RelativeLayout) rootView.findViewById(R.id.relview);
+		rellist = (RelativeLayout) rootView.findViewById(R.id.rellistview);
+		viewlist = (Button) rootView.findViewById(R.id.viewlist);
+		viewmap = (Button) rootView.findViewById(R.id.viewmap);
+		list.setBackgroundColor(rootView.getContext().getResources()
+				.getColor(R.color.stronggray));
+		list.setTextColor(rootView.getContext().getResources()
+				.getColor(R.color.litegray));
+		viewlist.setBackgroundColor(rootView.getContext().getResources()
+				.getColor(R.color.stronggray));
+		rellist.setVisibility(View.GONE);
+
+		mapView = (MapView) rootView.findViewById(R.id.mapview);
+		mapView.onCreate(savedInstanceState);
+
+		// Gets to GoogleMap from the MapView and does initialization stuff
+		googleMap = mapView.getMap();
+		googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+		googleMap.setMyLocationEnabled(false);
+		mapView.onResume();// needed to get the map to display immediately
+
+		try {
+			MapsInitializer.initialize(getActivity().getApplicationContext());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		/*
+		 * LatLng markerLoc = new LatLng(21.000000, 78.000000);
+		 * 
+		 * final CameraPosition cameraPosition = new CameraPosition.Builder()
+		 * .target(markerLoc).build();
+		 * 
+		 * // Enabling MyLocation Layer of Google Map
+		 * 
+		 * CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(
+		 * 21.000000, 78.000000)); CameraUpdate zoom =
+		 * CameraUpdateFactory.zoomTo(3);
+		 * 
+		 * googleMap.moveCamera(center); googleMap.animateCamera(zoom);
+		 */
+
+		btnhide = (Button) rootView.findViewById(R.id.btnhide);
+		txtcity = (InstantAutoComplete) rootView.findViewById(R.id.autocity);
+
+		Log.d(citylist.toString(), "citylist");
+		locationManager = (LocationManager) rootView.getContext()
+				.getSystemService(Context.LOCATION_SERVICE);
+
+		/*
+		 * Parameters : First(provider) : the name of the provider with which to
+		 * register Second(minTime) : the minimum time interval for
+		 * notifications, in milliseconds. This field is only used as a hint to
+		 * conserve power, and actual time between location updates may be
+		 * greater or lesser than this value. Third(minDistance) : the minimum
+		 * distance interval for notifications, in meters Fourth(listener) : a
+		 * {#link LocationListener} whose onLocationChanged(Location) method
+		 * will be called for each location update
+		 */
+
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				3000, // 3 sec
+				10, this);
+
+		/*********
+		 * After registration onLocationChanged method called periodically after
+		 * each 3 sec
+		 ***********/
+		location = locationManager
+				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		location = locationManager
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+		if (location != null) {
+
+			MyLat = location.getLatitude();
+			MyLong = location.getLongitude();
+			CameraPosition cameraPosition = new CameraPosition.Builder()
+					.target(new LatLng(MyLat, MyLong)).zoom(13).build();
+
+			googleMap.animateCamera(CameraUpdateFactory
+					.newCameraPosition(cameraPosition));
+
+		}
+
+		String _url = rootView.getContext().getResources()
+				.getString(R.string.URL)
+				+ Config.getSAMLARTIFACT();
+		String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+				+ "  <SOAP:Body>"
+				+ " <GetCitiesforServiceOrderCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\" />"
+				+ "</SOAP:Body>" + "</SOAP:Envelope>";
+		Log.d("get city request", req);
+		new WebServiceCall(getActivity(), req,
+				Constants.GetCitiesforServiceOrderCSB, new ResponseCallback() {
+
+					@Override
+					public void onResponseReceive(Object object) {
+						// TODO Auto-generated method stub
+						citylist = (ArrayList<String>) object;
+						cityaadapter = new ArrayAdapter<String>(
+
+						rootView.getContext(),
+								android.R.layout.simple_list_item_1, citylist);
+
+						txtcity.setAdapter(cityaadapter);
+						if (citylist == null) {
+							Toast.makeText(getActivity(),
+									"Server Error Please Try Again",
+									Toast.LENGTH_LONG).show();
+						} else {
+							/*
+							 * cityaadapter = new ArrayAdapter<String>(
+							 * 
+							 * rootView.getContext(),
+							 * android.R.layout.simple_list_item_1, citylist);
+							 */
+
+							// txtcity.setAdapter(cityaadapter);
+							cityaadapter.notifyDataSetChanged();
+						}
+					}
+
+					@Override
+					public void onErrorReceive(String string) {
+						// TODO Auto-generated method stub
+
+					}
+				}, "Run").execute();
+
+		// aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// spinState.setAdapter(aa);
+		txtcity.setThreshold(1);
+		txtcity.setDropDownBackgroundResource(color.darker_gray);
+
+		txtcity.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				txtcity.showDropDown();
+				txtcity.requestFocus();
+			}
+		});
+
+		txtcity.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				InputMethodManager inputMethodManager = (InputMethodManager) getActivity()
+						.getSystemService(getActivity().INPUT_METHOD_SERVICE);
+				inputMethodManager.hideSoftInputFromWindow(getActivity()
+						.getCurrentFocus().getWindowToken(), 0);
+				// TODO Auto-generated method stub
+				/*Toast.makeText(rootView.getContext(), citylist.get(position),
+						Toast.LENGTH_LONG).show();*/
+				deleardata = true;
+				// Log.d(citylist.get(arg2), "city name");
+				InputMethodManager in = (InputMethodManager) getActivity()
+						.getSystemService(Context.INPUT_METHOD_SERVICE);
+				in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+				//getcityname = citylist.get(position);
+				getcityname = parent.getItemAtPosition(position).toString();
+				Log.d(getcityname, "city name");
+				googleMap.clear();
+				String _url = getActivity().getResources().getString(
+						R.string.URL)
+						+ Config.getSAMLARTIFACT();
+
+				String req1 = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+						+ "<SOAP:Body>"
+						+ "<GetDlrLocDtlsCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+						+ "<City>"
+						+ getcityname.toString()
+						+ "</City>"
+						+ "<LAT></LAT>"
+						+ "<LONG></LONG>"
+						+ " </GetDlrLocDtlsCSB>"
+						+ "</SOAP:Body>"
+						+ "</SOAP:Envelope>";
+
+				Log.d("get city request", req1);
+				new WebServiceCall(getActivity(), req1,
+						Constants.GetDlrLocDtlsCSB, new ResponseCallback() {
+
+							@Override
+							public void onResponseReceive(Object object) {
+								// TODO Auto-generated method stub
+								dealerlist1 = (ArrayList<DelearLocatorData>) object;
+
+								for (int i = 0; i < dealerlist1.size(); i++) {
+									Log.d(dealerlist1.get(i).delear_LATITUDE,
+											"yet ahe");
+									double lat = Double.parseDouble(dealerlist1
+											.get(i).delear_LATITUDE);
+									double lng = Double.parseDouble(dealerlist1
+											.get(i).delear_LONGITUDE);
+									MarkerOptions marker = new MarkerOptions()
+											.position(new LatLng(lat, lng))
+											.title(dealerlist1.get(i).delear_Name);
+									// Changing marker icon
+									marker.icon(BitmapDescriptorFactory
+											.fromResource(R.drawable.marker));
+
+									// adding marker
+									googleMap.addMarker(marker);
+									CameraPosition cameraPosition = new CameraPosition.Builder()
+											.target(new LatLng(lat, lng))
+											.zoom(13).build();
+
+									googleMap.animateCamera(CameraUpdateFactory
+											.newCameraPosition(cameraPosition));
+									
+								}
+
+								dealeradapter = new DealerListAdapter(rootView
+										.getContext(),
+										R.layout.delear_locator_list,
+										dealerlist1);
+
+								/*
+								 * dealerlist.setAdapter(dealeradapter);
+								 * dealeradapter.notifyDataSetChanged();
+								 */
+
+							}
+
+							@Override
+							public void onErrorReceive(String string) {
+								// TODO Auto-generated method stub
+
+							}
+						}, "RUN").execute();
+
+			}
+		});
+
+		btnhide.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				if (flag) {
+					flag = false;
+					txtcity.clearAnimation();
+					txtcity.setVisibility(View.VISIBLE);
+					btnhide.setCompoundDrawablesWithIntrinsicBounds(0,
+							R.drawable.rightarrow, 0, 0);
+
+				} else {
+					flag = true;
+					TranslateAnimation animate = new TranslateAnimation(0,
+							1000, 0, 0);
+					animate.setDuration(500);
+					animate.setFillAfter(true);
+					txtcity.startAnimation(animate);
+					btnhide.setCompoundDrawablesWithIntrinsicBounds(0,
+							R.drawable.leftarrows, 0, 0);
+					txtcity.setVisibility(View.GONE);
+
+				}
+			}
+		});
+
+		map.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				relmap.setVisibility(View.VISIBLE);
+				map.setBackgroundColor(rootView.getContext().getResources()
+						.getColor(R.color.darkgray));
+				map.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.litegray));
+				viewmap.setBackgroundColor(rootView.getContext().getResources()
+						.getColor(R.color.yellow));
+				list.setBackgroundColor(rootView.getContext().getResources()
+						.getColor(R.color.stronggray));
+				list.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.litegray));
+				viewlist.setBackgroundColor(rootView.getContext()
+						.getResources().getColor(R.color.stronggray));
+
+			}
+		});
+
+		list.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				if (deleardata == true) {
+					dealerlist = (ListView) rootView
+							.findViewById(R.id.delearloc);
+					dealerlist.setAdapter(dealeradapter);
+
+					dealeradapter.notifyDataSetChanged();
+					rellist.setVisibility(View.VISIBLE);
+					relmap.setVisibility(View.GONE);
+					list.setBackgroundColor(rootView.getContext()
+							.getResources().getColor(R.color.darkgray));
+					list.setTextColor(rootView.getContext().getResources()
+							.getColor(R.color.litegray));
+					viewlist.setBackgroundColor(rootView.getContext()
+							.getResources().getColor(R.color.yellow));
+					map.setBackgroundColor(rootView.getContext().getResources()
+							.getColor(R.color.stronggray));
+					map.setTextColor(rootView.getContext().getResources()
+							.getColor(R.color.darkgray));
+					viewmap.setBackgroundColor(rootView.getContext()
+							.getResources().getColor(R.color.stronggray));
+				} else {
+					Toast.makeText(getActivity(), "Please Select City",
+							Toast.LENGTH_LONG).show();
+				}
+
+			}
+		});
+
+		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		mapView.onResume();
+		super.onResume();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mapView.onDestroy();
+	}
+
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+		mapView.onLowMemory();
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+>>>>>>> TMSC QA 3.4V

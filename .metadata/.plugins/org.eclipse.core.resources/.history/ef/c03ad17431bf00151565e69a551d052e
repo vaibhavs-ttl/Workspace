@@ -1,0 +1,257 @@
+package com.ttl.helper;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ttl.model.Complaint_Registered_Parent;
+import com.ttl.model.Service_Booking_History_Child;
+import com.ttl.model.Service_Booking_History_Parent;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.view.View.OnClickListener;
+
+public class DatabaseHandler extends SQLiteOpenHelper {
+
+	
+	// All Static variables
+    // Database Version
+    private static final int DATABASE_VERSION = 1;
+ 
+    // Database Name
+    private static final String DATABASE_NAME = "serviceManager";
+ 
+    // service table name
+    private static final String TABLE_SERVICE = "service";
+    private static final String TABLE_COMPLAINTS = "complaints";
+	
+	
+ // service Table Columns names
+    private static final String KEY_ID = "id";
+    private static final String KEY_SRNO = "SRNumber";
+    private static final String KEY_REGNO = "regNo";
+    private static final String KEY_DATE = "Date";
+    
+    private static final String KEY_KM = "Km";
+    private static final String KEY_MODEL = "Model";
+    private static final String KEY_TIME = "Time";
+    private static final String KEY_DEALER = "Dealer";
+    private static final String KEY_SERVICETYPE = "SRType";
+    private static final String KEY_MSV = "MSV";
+    
+    //COMPLAINTS
+    private static final String KEY_COMPLID = "id";
+    private static final String KEY_CONTACTID = "contactId";
+    private static final String KEY_COMPSRNO = "SRNumber";
+    private static final String KEY_COMPREGNO = "regNo";
+    private static final String KEY_COMPDATE = "Date";
+    private static final String KEY_COMPMODEL = "Model";
+    private static final String KEY_COMPPRAREA = "Primarea";
+    private static final String KEY_COMPSUBAREA = "Subarea";
+    private static final String KEY_COMPPRBAREA = "Problarea";
+    
+    
+ 
+    public DatabaseHandler(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		// TODO Auto-generated method stub
+//		String CREATE_SERVICE_TABLE = "CREATE TABLE " + TABLE_SERVICE + "("
+//                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_SRNO + " TEXT,"
+//                + KEY_REGNO + " TEXT" + ")";
+		
+		String CREATE_SERVICE_TABLE = "CREATE TABLE " + TABLE_SERVICE + "("
+                +KEY_ID + " INTEGER PRIMARY KEY," + KEY_SRNO + " TEXT,"
+                +KEY_REGNO + " TEXT,"
+                +KEY_DATE + " TEXT,"
+                +KEY_KM + " TEXT,"
+                +KEY_MODEL + " TEXT,"
+                +KEY_TIME + " TEXT," 
+                +KEY_DEALER + " TEXT,"
+                +KEY_SERVICETYPE + " TEXT,"
+                +KEY_MSV + " TEXT"+")";
+        db.execSQL(CREATE_SERVICE_TABLE);
+        
+        String CREATE_COMPLAINT_TABLE = "CREATE TABLE " + TABLE_COMPLAINTS + "("
+                +KEY_COMPLID + " INTEGER PRIMARY KEY,"
+                + KEY_CONTACTID + " TEXT,"
+        		+ KEY_COMPSRNO + " TEXT,"
+                +KEY_COMPREGNO + " TEXT,"
+                +KEY_COMPDATE +  " TEXT,"
+                +KEY_COMPMODEL +  " TEXT,"
+                +KEY_COMPPRAREA +  " TEXT,"
+                +KEY_COMPSUBAREA +  " TEXT,"
+                +KEY_COMPPRBAREA +  " TEXT"+")";
+        db.execSQL(CREATE_COMPLAINT_TABLE);
+        
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		// TODO Auto-generated method stub
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERVICE);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPLAINTS);
+        // Create tables again
+        onCreate(db);
+	}
+
+	public void addServiceParent(Service_Booking_History_Parent sb_parent) {
+	    SQLiteDatabase db = this.getWritableDatabase();
+	 
+	    ContentValues values = new ContentValues();
+	    values.put(KEY_SRNO, sb_parent.getComplaint_sr_no()); 
+	    values.put(KEY_REGNO, sb_parent.getComplaint_reg_no()); 
+	    values.put(KEY_DATE, sb_parent.getComplaint_date());
+	    values.put(KEY_KM, sb_parent.getKms());
+	    values.put(KEY_MODEL, sb_parent.getModel());
+	    values.put(KEY_TIME, sb_parent.getBooked_for_time());
+	    values.put(KEY_DEALER, sb_parent.getBooked_for_dealer());
+	    values.put(KEY_SERVICETYPE, sb_parent.getService_type());
+	    values.put(KEY_MSV, sb_parent.getMsv_flag());
+	 
+	    // Inserting Row
+	    db.insert(TABLE_SERVICE, null, values);
+	    db.close(); // Closing database connection
+	}
+	
+    // Getting All Contacts
+	 public ArrayList<Service_Booking_History_Parent> getAllServices() {
+		 ArrayList<Service_Booking_History_Parent> service_parentList = new ArrayList<Service_Booking_History_Parent>();
+	    // Select All Query
+	    String selectQuery = "SELECT  * FROM " + TABLE_SERVICE;
+	 
+	    SQLiteDatabase db = this.getWritableDatabase();
+	    Cursor cursor = db.rawQuery(selectQuery, null);
+	 
+	    // looping through all rows and adding to list
+	    if (cursor.moveToFirst()) {
+	        do {
+	        	Service_Booking_History_Parent parent = new Service_Booking_History_Parent();
+	        	parent.setID(Integer.parseInt(cursor.getString(0)));
+	        	parent.setComplaint_sr_no(cursor.getString(1));
+	        	parent.setComplaint_reg_no(cursor.getString(2));
+	        	parent.setComplaint_date(cursor.getString(3));
+	        	parent.setKms(cursor.getString(4));
+	        	parent.setModel(cursor.getString(5));
+	        	parent.setBooked_for_time(cursor.getString(6));
+	        	parent.setBooked_for_dealer(cursor.getString(7));
+	        	parent.setService_type(cursor.getString(8));
+	        	parent.setMsv_flag(cursor.getString(9));
+	            // Adding sr to list
+	            service_parentList.add(parent);
+	        } while (cursor.moveToNext());
+	    }
+	 
+	    // return contact list
+	    return service_parentList;
+	}
+
+
+
+		public void addComplaint(Complaint_Registered_Parent complreg) {
+			// TODO Auto-generated method stub
+			SQLiteDatabase db = this.getWritableDatabase();
+			 
+		    ContentValues values = new ContentValues();
+		    values.put(KEY_CONTACTID, complreg.getUserId());
+		    values.put(KEY_COMPSRNO, complreg.getComplaint_no()); // Contact Name
+		    values.put(KEY_COMPREGNO, complreg.getComplaint_reg_no()); // Contact Phone Number
+		    values.put(KEY_COMPDATE, complreg.getComplaint_date());
+		    values.put(KEY_COMPMODEL, complreg.getModel());
+		    values.put(KEY_COMPPRAREA, complreg.getPrimary_area());
+		    values.put(KEY_COMPSUBAREA, complreg.getSub_area());
+		    values.put(KEY_COMPPRBAREA, complreg.getProblem_area());
+		    
+		    db.insert(TABLE_COMPLAINTS, null, values);
+		    db.close(); // Closing database connection
+		}
+
+		public ArrayList<Complaint_Registered_Parent> getAllComplaints() {
+			 ArrayList<Complaint_Registered_Parent> complaint_parentList = new ArrayList<Complaint_Registered_Parent>();
+		    // Select All Query
+		    String selectQuery = "SELECT  * FROM " + TABLE_COMPLAINTS;
+		 
+		    SQLiteDatabase db = this.getWritableDatabase();
+		    Cursor cursor = db.rawQuery(selectQuery, null);
+		 
+		    // looping through all rows and adding to list
+		    if (cursor.moveToFirst()) {
+		        do {
+		        	Complaint_Registered_Parent parent = new Complaint_Registered_Parent();
+		        	parent.setComplID(Integer.parseInt(cursor.getString(0)));
+		        	
+		        	parent.setUserId(cursor.getString(1));
+		        	parent.setComplaint_no(cursor.getString(2));
+		        	parent.setComplaint_reg_no(cursor.getString(3));
+		        	parent.setComplaint_date(cursor.getString(4));
+		        	parent.setModel(cursor.getString(5));
+		        	parent.setPrimary_area(cursor.getString(6));
+		        	parent.setSub_area(cursor.getString(7));
+		        	parent.setProblem_area(cursor.getString(8));
+		        	
+		            // Adding compl to list
+		        	complaint_parentList.add(parent);
+		        } while (cursor.moveToNext());
+		    }
+		 
+		    // return contact list
+		    return complaint_parentList;
+		}
+
+
+
+		public ArrayList<Complaint_Registered_Parent> getComplaintsById(String user_id) {
+			 ArrayList<Complaint_Registered_Parent> complaint_parentList = new ArrayList<Complaint_Registered_Parent>();
+			    // Select All Query
+			    String selectQuery = "SELECT  * FROM " + TABLE_COMPLAINTS + " where "+ KEY_CONTACTID + "="+user_id;
+			 
+			    SQLiteDatabase db = this.getReadableDatabase();
+			    Cursor cursor = db.rawQuery(selectQuery, null);
+			 
+			    // looping through all rows and adding to list
+			    if (cursor.moveToFirst()) {
+			        do {
+			        	Complaint_Registered_Parent parent = new Complaint_Registered_Parent();
+			        	parent.setComplID(Integer.parseInt(cursor.getString(0)));
+			        	parent.setUserId(cursor.getString(1));
+			        	parent.setComplaint_no(cursor.getString(2));
+			        	parent.setComplaint_reg_no(cursor.getString(3));
+			        	parent.setComplaint_date(cursor.getString(4));
+			        	parent.setModel(cursor.getString(5));
+			        	parent.setPrimary_area(cursor.getString(6));
+			        	parent.setSub_area(cursor.getString(7));
+			        	parent.setProblem_area(cursor.getString(8));
+			        	
+			            // Adding compl to list
+			        	complaint_parentList.add(parent);
+			        } while (cursor.moveToNext());
+			    }
+			 
+			    // return contact list
+			    return complaint_parentList;
+			}
+
+//		public ArrayList<Complaint_Registered_Parent> getContact(int id) {
+//		    SQLiteDatabase db = this.getReadableDatabase();
+//		 
+//		    Cursor cursor = db.query(TABLE_COMPLAINTS, new String[] { KEY_COMPSRNO,
+//		            KEY_COMPREGNO, KEY_COMPDATE }, KEY_CONTACTID + "=?",
+//		            new String[] { String.valueOf(id) }, null, null, null, null);
+//		    if (cursor != null)
+//		        cursor.moveToFirst();
+//		 
+//		    Complaint_Registered_Parent contact = new Complaint_Registered_Parent(Integer.parseInt(cursor.getString(0)),
+//		            cursor.getString(1), cursor.getString(2));
+//		    // return contact
+//		    return contact;
+//		}
+	
+}

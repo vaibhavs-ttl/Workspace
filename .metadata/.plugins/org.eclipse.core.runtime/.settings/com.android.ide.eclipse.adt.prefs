@@ -1,0 +1,18 @@
+<<<<<<< HEAD
+com.android.ide.eclipse.adt.autoPickTarget=false
+com.android.ide.eclipse.adt.fixLegacyEditors=1
+com.android.ide.eclipse.adt.sdk=D\:\\Software_setups\\adt-bundle-windows-x86_64-20131030\\adt-bundle-windows-x86_64-20131030\\sdk
+com.android.ide.eclipse.adt.xmlEditor=true
+design.palette.flyout.width=190
+design.structure.flyout.width=164
+eclipse.preferences.version=1
+=======
+com.android.ide.eclipse.adt.autoPickTarget=false
+com.android.ide.eclipse.adt.emuOptions=-dns-server 8.8.8.8,8.8.4.4
+com.android.ide.eclipse.adt.fixLegacyEditors=1
+com.android.ide.eclipse.adt.sdk=D\:\\Akash_sofware\\Android_SDK\\sdk
+com.android.ide.eclipse.adt.xmlEditor=true
+design.palette.flyout.width=190
+design.structure.flyout.width=164
+eclipse.preferences.version=1
+>>>>>>> TMSC QA 3.4V

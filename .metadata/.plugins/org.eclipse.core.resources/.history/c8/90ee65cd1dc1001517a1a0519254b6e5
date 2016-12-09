@@ -1,0 +1,925 @@
+<<<<<<< HEAD
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
+import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.charts.CombinedChart.DrawOrder;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.XAxis.XAxisPosition;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.model.ServiceHistory;
+import com.ttl.model.UserDetails;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import android.app.Fragment;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+public class MaintenanceCostFragment extends Fragment
+{
+	
+	Button btnsch,btnbodyshop,btnunshedules ,btngraph, btnlist;
+	View rootView;
+	  private CombinedChart mChart;
+	RelativeLayout relview;
+	private ArrayList<ServiceHistory> lst_history;
+	private Spinner spinner_regno;
+	List<String> regnovalues = new ArrayList<String>();
+	ListView list;
+	String[] year = {"2009", "2010", "2011", "2012","2013","2014","2015"};
+	String[] rs ={"46481/-","55464/-","54564/-","654645/-","46456/-","648694/-","464654/-"};
+	LinearLayout lllist, llgraph;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		rootView = inflater.inflate(R.layout.fragment_maintenance_cost,
+				container, false);
+		spinner_regno = (Spinner) rootView.findViewById(R.id.spinner_regno);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(),
+				R.array.reg_chassis, R.layout.spinner_item);
+		adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+				spinner_regno.setAdapter(adapter);
+				llgraph = (LinearLayout) rootView.findViewById(R.id.llgraph);
+				lllist = (LinearLayout) rootView.findViewById(R.id.lllist);
+		
+		btnsch = (Button)rootView.findViewById(R.id.btnsch);
+		btnbodyshop = (Button)rootView.findViewById(R.id.btnbodyshop);
+		btnunshedules = (Button)rootView.findViewById(R.id.btnunshedules);
+		btngraph = (Button) rootView.findViewById(R.id.btngraph);
+		btnlist = (Button) rootView.findViewById(R.id.btnlist);
+
+		list = (ListView) rootView.findViewById(R.id.listview);
+		
+		btngraph.setBackgroundColor(rootView.getContext()
+				.getResources().getColor(R.color.darkblue));
+		btngraph.setTextColor(rootView.getContext().getResources()
+				.getColor(R.color.white));
+
+		btnlist.setBackgroundColor(rootView.getContext().getResources()
+				.getColor(R.color.verysoftblue));
+		btnlist.setTextColor(rootView.getContext().getResources()
+				.getColor(R.color.darkblue));
+		llgraph.setVisibility(rootView.VISIBLE);
+		lllist.setVisibility(rootView.GONE);
+		//relview = (RelativeLayout) rootView.findViewById(R.id.relview);
+		 mChart = (CombinedChart) rootView.findViewById(R.id.chart1);
+	        mChart.setDescription("");
+	     //   mChart.setDescriptionColor(Color.DKGRAY);
+	      //  mChart.setDescriptionTextSize(15f);
+	      //  mChart.setDescriptionPosition(500, 50);
+	        mChart.setBackgroundColor(getResources().getColor(R.color.gray_light));
+	        mChart.setDrawGridBackground(false);
+	        mChart.setDrawBarShadow(false);
+	        
+	        // draw bars behind lines
+	        mChart.setDrawOrder(new DrawOrder[] {
+	                DrawOrder.BAR,  DrawOrder.LINE
+	        });
+
+	        YAxis rightAxis = mChart.getAxisRight();
+	      //  rightAxis.setAxisMinValue(0);
+	      //  rightAxis.setAxisMaxValue(10);
+	        rightAxis.setDrawGridLines(false);
+
+	        YAxis leftAxis = mChart.getAxisLeft();
+	        leftAxis.setDrawGridLines(false);
+
+	        XAxis xAxis = mChart.getXAxis();
+	        xAxis.setPosition(XAxisPosition.BOTTOM);
+
+	        regnovalues.add("Registration Number");
+	        int size = new UserDetails().getRegNumberList().size();
+	        for (int i = 0; i < size; i++) {
+	        	regnovalues.add(new UserDetails().getRegNumberList().get(i)
+	        			.get("registration_num"));
+	        }
+	        ArrayAdapter<String> regno = new ArrayAdapter<String>(getActivity(),
+	        		android.R.layout.simple_spinner_item, regnovalues);
+	        regno.setDropDownViewResource(R.layout.spinner_selector);
+	        spinner_regno.setAdapter(regno); 
+		 
+		
+		spinner_regno.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				
+				if(position!=0){
+				String[] regchassis = spinner_regno.getSelectedItem().toString().split("-");	
+				String regNo = regchassis[0].trim();
+					
+				String req =	"<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+					  +"<SOAP:Body>"
+					  +"<GetServiceHistoryByChassis_CSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+					      +"<RegistrationNumber>"+regNo+"</RegistrationNumber>"
+					      +"<chassis_no></chassis_no>"
+					    +"</GetServiceHistoryByChassis_CSB>"
+					  +"</SOAP:Body>"
+					+"</SOAP:Envelope>";
+
+
+						new WebServiceCall(getActivity(), req, Constants.GetServiceHistoryByChassis_CSB, new ResponseCallback() {
+							
+							@Override
+							public void onResponseReceive(Object object) {
+								// TODO Auto-generated method stub
+								lst_history = (ArrayList<ServiceHistory>) object;
+								btnsch.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+								btnsch.setTextColor(rootView.getContext().getResources().getColor(R.color.white));
+								
+								btnbodyshop.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+								btnbodyshop.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+								
+								btnunshedules.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+								btnunshedules.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+								//buildChart(FREESERVICE);
+								buildChartSchedule();
+								//check service type
+							}
+							
+							
+
+							@Override
+							public void onErrorReceive(String string) {
+								// TODO Auto-generated method stub
+								Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+							}
+						},"Getting Service History.").execute();
+						
+			}
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});			
+		
+		btnsch.setOnClickListener(new View.OnClickListener()
+	        {
+				
+				@Override
+				public void onClick(View v) 
+				{
+					btnsch.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+					btnsch.setTextColor(rootView.getContext().getResources().getColor(R.color.white));
+					
+					btnbodyshop.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+					btnbodyshop.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+					
+					btnunshedules.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+					btnunshedules.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+					
+					if(spinner_regno.getSelectedItemPosition()!=0)
+						buildChartSchedule();
+					
+				}
+
+				
+			});
+		
+		btnbodyshop.setOnClickListener(new View.OnClickListener()
+        {
+			
+			@Override
+			public void onClick(View v) 
+			{
+				
+				btnbodyshop.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				btnbodyshop.setTextColor(rootView.getContext().getResources().getColor(R.color.white));
+				
+				btnsch.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+				btnsch.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				
+				btnunshedules.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+				btnunshedules.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				if(spinner_regno.getSelectedItemPosition()!=0)
+				buildChartBodyShop();
+			}
+		});
+		
+		btnunshedules.setOnClickListener(new View.OnClickListener()
+        {
+			
+			@Override
+			public void onClick(View v) 
+			{
+				
+				btnunshedules.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				btnunshedules.setTextColor(rootView.getContext().getResources().getColor(R.color.white));
+				
+				btnbodyshop.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+				btnbodyshop.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				
+				btnsch.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+				btnsch.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				if(spinner_regno.getSelectedItemPosition()!=0)
+				buildChartUnsch();
+				
+			}
+
+			
+		});
+		
+		btngraph.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				btngraph.setBackgroundColor(rootView.getContext()
+						.getResources().getColor(R.color.darkblue));
+				btngraph.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.white));
+
+				btnlist.setBackgroundColor(rootView.getContext().getResources()
+						.getColor(R.color.verysoftblue));
+				btnlist.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.darkblue));
+				llgraph.setVisibility(v.VISIBLE);
+				lllist.setVisibility(v.GONE);
+
+			}
+		});
+
+		btnlist.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				btnlist.setBackgroundColor(rootView.getContext().getResources()
+						.getColor(R.color.darkblue));
+				btnlist.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.white));
+
+				btngraph.setBackgroundColor(rootView.getContext()
+						.getResources().getColor(R.color.verysoftblue));
+				btngraph.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.darkblue));
+				lllist.setVisibility(v.VISIBLE);
+				llgraph.setVisibility(v.GONE);
+
+			}
+		});
+
+	return rootView;	
+	}
+	
+	private void buildChartBodyShop() {
+		// TODO Auto-generated method stub
+		ArrayList<String > dates = new ArrayList<>();
+		ArrayList<String> invc_amt = new ArrayList<>();
+		if(lst_history.size()>0){
+		for (int i = 0; i < lst_history.size(); i++) {
+			Log.i("MaintenanceCostFragment", lst_history.get(i).getSR_TYPE() + " " + lst_history.get(i).getINVC_AMT() + " " +lst_history.get(i).getCLOSE_DATE());
+			if(lst_history.get(i).getSR_TYPE().contains("Accident")){
+			String date = lst_history.get(i).getCLOSE_DATE().substring(0, 4);
+			Log.i("DATE", date);
+			dates.add(date);
+			invc_amt.add(lst_history.get(i).getINVC_AMT());
+			}
+		}
+		
+		buildChart(dates,invc_amt);
+		}
+
+	}
+	
+
+
+	private void buildChartSchedule() {
+		// TODO Auto-generated method stub
+		ArrayList<String > dates = new ArrayList<>();
+		ArrayList<String> invc_amt = new ArrayList<>();
+		
+		if(lst_history.size()>0){
+		
+		for (int i = 0; i < lst_history.size(); i++) {
+			Log.i("MaintenanceCostFragment", lst_history.get(i).getSR_TYPE() + " " + lst_history.get(i).getINVC_AMT() + " " +lst_history.get(i).getCLOSE_DATE());
+			if(lst_history.get(i).getSR_TYPE().contains("Free")|| lst_history.get(i).getSR_TYPE().contains("Paid")){
+			String date = lst_history.get(i).getCLOSE_DATE().substring(0, 4);
+			Log.i("DATE", date);
+			dates.add(date);
+			invc_amt.add(lst_history.get(i).getINVC_AMT());
+			}
+		}
+		buildChart(dates, invc_amt);
+		}
+
+	}
+	
+	
+	
+	 
+	 private void buildChartUnsch() {
+			// TODO Auto-generated method stub
+			ArrayList<String > dates = new ArrayList<>();
+			ArrayList<String> invc_amt = new ArrayList<>();
+			if(lst_history.size()>0){
+			for (int i = 0; i < lst_history.size(); i++) {
+				Log.i("MaintenanceCostFragment", lst_history.get(i).getSR_TYPE() + " " + lst_history.get(i).getINVC_AMT() + " " +lst_history.get(i).getCLOSE_DATE());
+				if(lst_history.get(i).getSR_TYPE().contains("PDI")||
+						lst_history.get(i).getSR_TYPE().contains("Refurbish")||
+						lst_history.get(i).getSR_TYPE().contains("Paid")||
+						lst_history.get(i).getSR_TYPE().contains("Free")||
+						lst_history.get(i).getSR_TYPE().contains("Accident")){
+				
+				}else{
+					String date = lst_history.get(i).getCLOSE_DATE().substring(0, 4);
+					Log.i("DATE", date);
+					dates.add(date);
+					invc_amt.add(lst_history.get(i).getINVC_AMT());
+				}
+			}
+			buildChart(dates, invc_amt);
+			}
+		}
+		
+		private void buildChart(ArrayList<String> dates, ArrayList<String> invc_amt) {
+			// TODO Auto-generated method stub
+			ArrayList<String> uniqueDates = new ArrayList<>();
+			ArrayList<Float> uniqueamount = new ArrayList<>();
+			ArrayList<Float> servicecount = new ArrayList<>();
+			
+			HashSet<String> hs = new HashSet<String>();
+	        hs.addAll(dates);
+	        uniqueDates.addAll(hs);
+	        Collections.sort(uniqueDates);
+	        
+			for (int j = 0; j < uniqueDates.size(); j++) {
+				Log.i("uniqueDates", uniqueDates.get(j));
+				float	amount =0;
+				float count = 0;
+				//calculate amt
+				for (int i = 0; i < dates.size(); i++) {
+					
+					if (dates.get(i).equals(uniqueDates.get(j)) ){
+						Log.i("MATCHING DATES", dates.get(i) + " " + uniqueDates.get(j));
+						int INVC_AMT;
+						//get amount
+						//get count
+						count++;
+						//check for INVC_AMT
+						if(TextUtils.isEmpty(invc_amt.get(i)))
+							INVC_AMT = 0;
+						else
+							INVC_AMT = Integer.parseInt(invc_amt.get(i));
+						
+						amount = amount + INVC_AMT ;
+					}
+					
+				}
+				Log.i("amount", amount+"");
+				Log.i("count", count+"");
+				servicecount.add(count);
+				uniqueamount.add(amount);
+			}
+				CombinedData data = new CombinedData(uniqueDates);
+				data.setValueTextColor(Color.DKGRAY);
+				data.setData(generateLineData(servicecount));
+		        data.setData(generateBarData(uniqueamount));
+		        mChart.setData(data);
+		        mChart.invalidate();
+		}
+		
+	 private BarData generateBarData(ArrayList<Float> uniqueamount) {
+
+	        BarData d = new BarData();
+
+	        ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+
+	        for (int index = 0; index < uniqueamount.size(); index++)
+	            entries.add(new BarEntry(uniqueamount.get(index), index));
+
+	        BarDataSet set = new BarDataSet(entries, "Invoiced Amount");
+	        set.setColor(getResources().getColor(R.color.yellow));
+	        set.setDrawValues(false);
+	        set.setBarSpacePercent(50f);
+	      //  set.setValueTextColor(getResources().getColor(R.color.yellow));
+	      //  set.setValueTextSize(13f);
+	        d.addDataSet(set);
+
+	        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+	        return d;
+	    }
+		 
+		 private LineData generateLineData(ArrayList<Float> servicecount) {
+
+		        LineData d = new LineData();
+
+		        ArrayList<Entry> entries = new ArrayList<Entry>();
+
+		        for (int index = 0; index < servicecount.size(); index++)
+		            entries.add(new Entry(servicecount.get(index), index));
+
+		        LineDataSet set = new LineDataSet(entries, "Number of Visits");
+		        set.setColor(getResources().getColor(R.color.navyblue));
+		        set.setLineWidth(2.5f);
+		        set.setCircleColor(getResources().getColor(R.color.navyblue));
+		        set.setCircleSize(5f);
+		        set.setFillColor(getResources().getColor(R.color.navyblue));
+		      //  set.setDrawCubic(true);
+		        set.setDrawValues(true);
+		        set.setValueTextSize(15f);
+		        set.setValueTextColor(getResources().getColor(R.color.navyblue));
+		        set.setAxisDependency(YAxis.AxisDependency.RIGHT);
+
+		        d.addDataSet(set);
+
+		        return d;
+		    }
+}
+=======
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
+import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.charts.CombinedChart.DrawOrder;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.XAxis.XAxisPosition;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.model.ServiceHistory;
+import com.ttl.model.UserDetails;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import android.app.Fragment;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+public class MaintenanceCostFragment extends Fragment
+{
+	
+	Button btnsch,btnbodyshop,btnunshedules ,btngraph, btnlist;
+	View rootView;
+	  private CombinedChart mChart;
+	RelativeLayout relview;
+	private ArrayList<ServiceHistory> lst_history;
+	private Spinner spinner_regno;
+	List<String> regnovalues = new ArrayList<String>();
+	ListView list;
+	String[] year = {"2009", "2010", "2011", "2012","2013","2014","2015"};
+	String[] rs ={"46481/-","55464/-","54564/-","654645/-","46456/-","648694/-","464654/-"};
+	LinearLayout lllist, llgraph;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		rootView = inflater.inflate(R.layout.fragment_maintenance_cost,
+				container, false);
+		spinner_regno = (Spinner) rootView.findViewById(R.id.spinner_regno);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(),
+				R.array.reg_chassis, R.layout.spinner_item);
+		adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+				spinner_regno.setAdapter(adapter);
+				llgraph = (LinearLayout) rootView.findViewById(R.id.llgraph);
+				lllist = (LinearLayout) rootView.findViewById(R.id.lllist);
+		
+		btnsch = (Button)rootView.findViewById(R.id.btnsch);
+		btnbodyshop = (Button)rootView.findViewById(R.id.btnbodyshop);
+		btnunshedules = (Button)rootView.findViewById(R.id.btnunshedules);
+		btngraph = (Button) rootView.findViewById(R.id.btngraph);
+		btnlist = (Button) rootView.findViewById(R.id.btnlist);
+
+		list = (ListView) rootView.findViewById(R.id.listview);
+		
+		btngraph.setBackgroundColor(rootView.getContext()
+				.getResources().getColor(R.color.darkblue));
+		btngraph.setTextColor(rootView.getContext().getResources()
+				.getColor(R.color.white));
+
+		btnlist.setBackgroundColor(rootView.getContext().getResources()
+				.getColor(R.color.verysoftblue));
+		btnlist.setTextColor(rootView.getContext().getResources()
+				.getColor(R.color.darkblue));
+		llgraph.setVisibility(rootView.VISIBLE);
+		lllist.setVisibility(rootView.GONE);
+		//relview = (RelativeLayout) rootView.findViewById(R.id.relview);
+		 mChart = (CombinedChart) rootView.findViewById(R.id.chart1);
+	        mChart.setDescription("");
+	     //   mChart.setDescriptionColor(Color.DKGRAY);
+	      //  mChart.setDescriptionTextSize(15f);
+	      //  mChart.setDescriptionPosition(500, 50);
+	        mChart.setBackgroundColor(getResources().getColor(R.color.gray_light));
+	        mChart.setDrawGridBackground(false);
+	        mChart.setDrawBarShadow(false);
+	        
+	        // draw bars behind lines
+	        mChart.setDrawOrder(new DrawOrder[] {
+	                DrawOrder.BAR,  DrawOrder.LINE
+	        });
+
+	        YAxis rightAxis = mChart.getAxisRight();
+	      //  rightAxis.setAxisMinValue(0);
+	      //  rightAxis.setAxisMaxValue(10);
+	        rightAxis.setDrawGridLines(false);
+
+	        YAxis leftAxis = mChart.getAxisLeft();
+	        leftAxis.setDrawGridLines(false);
+
+	        XAxis xAxis = mChart.getXAxis();
+	        xAxis.setPosition(XAxisPosition.BOTTOM);
+
+	        regnovalues.add("Registration Number");
+	        int size = new UserDetails().getRegNumberList().size();
+	        for (int i = 0; i < size; i++) {
+	        	regnovalues.add(new UserDetails().getRegNumberList().get(i)
+	        			.get("registration_num"));
+	        }
+	        ArrayAdapter<String> regno = new ArrayAdapter<String>(getActivity(),
+	        		android.R.layout.simple_spinner_item, regnovalues);
+	        regno.setDropDownViewResource(R.layout.spinner_selector);
+	        spinner_regno.setAdapter(regno); 
+		 
+		
+		spinner_regno.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				
+				if(position!=0){
+				String[] regchassis = spinner_regno.getSelectedItem().toString().split("-");	
+				String regNo = regchassis[0].trim();
+					
+				String req =	"<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+					  +"<SOAP:Body>"
+					  +"<GetServiceHistoryByChassis_CSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+					      +"<RegistrationNumber>"+regNo+"</RegistrationNumber>"
+					      +"<chassis_no></chassis_no>"
+					    +"</GetServiceHistoryByChassis_CSB>"
+					  +"</SOAP:Body>"
+					+"</SOAP:Envelope>";
+
+
+						new WebServiceCall(getActivity(), req, Constants.GetServiceHistoryByChassis_CSB, new ResponseCallback() {
+							
+							@Override
+							public void onResponseReceive(Object object) {
+								// TODO Auto-generated method stub
+								lst_history = (ArrayList<ServiceHistory>) object;
+								btnsch.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+								btnsch.setTextColor(rootView.getContext().getResources().getColor(R.color.white));
+								
+								btnbodyshop.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+								btnbodyshop.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+								
+								btnunshedules.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+								btnunshedules.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+								//buildChart(FREESERVICE);
+								buildChartSchedule();
+								//check service type
+							}
+							
+							
+
+							@Override
+							public void onErrorReceive(String string) {
+								// TODO Auto-generated method stub
+								Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+							}
+						},"Getting Service History.").execute();
+						
+			}
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});			
+		
+		btnsch.setOnClickListener(new View.OnClickListener()
+	        {
+				
+				@Override
+				public void onClick(View v) 
+				{
+					btnsch.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+					btnsch.setTextColor(rootView.getContext().getResources().getColor(R.color.white));
+					
+					btnbodyshop.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+					btnbodyshop.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+					
+					btnunshedules.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+					btnunshedules.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+					
+					if(spinner_regno.getSelectedItemPosition()!=0)
+						buildChartSchedule();
+					
+				}
+
+				
+			});
+		
+		btnbodyshop.setOnClickListener(new View.OnClickListener()
+        {
+			
+			@Override
+			public void onClick(View v) 
+			{
+				
+				btnbodyshop.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				btnbodyshop.setTextColor(rootView.getContext().getResources().getColor(R.color.white));
+				
+				btnsch.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+				btnsch.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				
+				btnunshedules.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+				btnunshedules.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				if(spinner_regno.getSelectedItemPosition()!=0)
+				buildChartBodyShop();
+			}
+		});
+		
+		btnunshedules.setOnClickListener(new View.OnClickListener()
+        {
+			
+			@Override
+			public void onClick(View v) 
+			{
+				
+				btnunshedules.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				btnunshedules.setTextColor(rootView.getContext().getResources().getColor(R.color.white));
+				
+				btnbodyshop.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+				btnbodyshop.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				
+				btnsch.setBackgroundColor(rootView.getContext().getResources().getColor(R.color.verysoftblue));
+				btnsch.setTextColor(rootView.getContext().getResources().getColor(R.color.darkblue));
+				if(spinner_regno.getSelectedItemPosition()!=0)
+				buildChartUnsch();
+				
+			}
+
+			
+		});
+		
+		btngraph.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				btngraph.setBackgroundColor(rootView.getContext()
+						.getResources().getColor(R.color.darkblue));
+				btngraph.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.white));
+
+				btnlist.setBackgroundColor(rootView.getContext().getResources()
+						.getColor(R.color.verysoftblue));
+				btnlist.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.darkblue));
+				llgraph.setVisibility(v.VISIBLE);
+				lllist.setVisibility(v.GONE);
+
+			}
+		});
+
+		btnlist.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				btnlist.setBackgroundColor(rootView.getContext().getResources()
+						.getColor(R.color.darkblue));
+				btnlist.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.white));
+
+				btngraph.setBackgroundColor(rootView.getContext()
+						.getResources().getColor(R.color.verysoftblue));
+				btngraph.setTextColor(rootView.getContext().getResources()
+						.getColor(R.color.darkblue));
+				lllist.setVisibility(v.VISIBLE);
+				llgraph.setVisibility(v.GONE);
+
+			}
+		});
+
+	return rootView;	
+	}
+	
+	private void buildChartBodyShop() {
+		// TODO Auto-generated method stub
+		ArrayList<String > dates = new ArrayList<>();
+		ArrayList<String> invc_amt = new ArrayList<>();
+		if(lst_history.size()>0){
+		for (int i = 0; i < lst_history.size(); i++) {
+			Log.i("MaintenanceCostFragment", lst_history.get(i).getSR_TYPE() + " " + lst_history.get(i).getINVC_AMT() + " " +lst_history.get(i).getCLOSE_DATE());
+			if(lst_history.get(i).getSR_TYPE().contains("Accident")){
+			String date = lst_history.get(i).getCLOSE_DATE().substring(0, 4);
+			Log.i("DATE", date);
+			dates.add(date);
+			invc_amt.add(lst_history.get(i).getINVC_AMT());
+			}
+		}
+		
+		buildChart(dates,invc_amt);
+		}
+
+	}
+	
+
+
+	private void buildChartSchedule() {
+		// TODO Auto-generated method stub
+		ArrayList<String > dates = new ArrayList<>();
+		ArrayList<String> invc_amt = new ArrayList<>();
+		
+		if(lst_history.size()>0){
+		
+		for (int i = 0; i < lst_history.size(); i++) {
+			Log.i("MaintenanceCostFragment", lst_history.get(i).getSR_TYPE() + " " + lst_history.get(i).getINVC_AMT() + " " +lst_history.get(i).getCLOSE_DATE());
+			if(lst_history.get(i).getSR_TYPE().contains("Free")|| lst_history.get(i).getSR_TYPE().contains("Paid")){
+			String date = lst_history.get(i).getCLOSE_DATE().substring(0, 4);
+			Log.i("DATE", date);
+			dates.add(date);
+			invc_amt.add(lst_history.get(i).getINVC_AMT());
+			}
+		}
+		buildChart(dates, invc_amt);
+		}
+
+	}
+	
+	
+	
+	 
+	 private void buildChartUnsch() {
+			// TODO Auto-generated method stub
+			ArrayList<String > dates = new ArrayList<>();
+			ArrayList<String> invc_amt = new ArrayList<>();
+			if(lst_history.size()>0){
+			for (int i = 0; i < lst_history.size(); i++) {
+				Log.i("MaintenanceCostFragment", lst_history.get(i).getSR_TYPE() + " " + lst_history.get(i).getINVC_AMT() + " " +lst_history.get(i).getCLOSE_DATE());
+				if(lst_history.get(i).getSR_TYPE().contains("PDI")||
+						lst_history.get(i).getSR_TYPE().contains("Refurbish")||
+						lst_history.get(i).getSR_TYPE().contains("Paid")||
+						lst_history.get(i).getSR_TYPE().contains("Free")||
+						lst_history.get(i).getSR_TYPE().contains("Accident")){
+				
+				}else{
+					String date = lst_history.get(i).getCLOSE_DATE().substring(0, 4);
+					Log.i("DATE", date);
+					dates.add(date);
+					invc_amt.add(lst_history.get(i).getINVC_AMT());
+				}
+			}
+			buildChart(dates, invc_amt);
+			}
+		}
+		
+		private void buildChart(ArrayList<String> dates, ArrayList<String> invc_amt) {
+			// TODO Auto-generated method stub
+			ArrayList<String> uniqueDates = new ArrayList<>();
+			ArrayList<Float> uniqueamount = new ArrayList<>();
+			ArrayList<Float> servicecount = new ArrayList<>();
+			
+			HashSet<String> hs = new HashSet<String>();
+	        hs.addAll(dates);
+	        uniqueDates.addAll(hs);
+	        Collections.sort(uniqueDates);
+	        
+			for (int j = 0; j < uniqueDates.size(); j++) {
+				Log.i("uniqueDates", uniqueDates.get(j));
+				float	amount =0;
+				float count = 0;
+				//calculate amt
+				for (int i = 0; i < dates.size(); i++) {
+					
+					if (dates.get(i).equals(uniqueDates.get(j)) ){
+						Log.i("MATCHING DATES", dates.get(i) + " " + uniqueDates.get(j));
+						int INVC_AMT;
+						//get amount
+						//get count
+						count++;
+						//check for INVC_AMT
+						if(TextUtils.isEmpty(invc_amt.get(i)))
+							INVC_AMT = 0;
+						else
+							INVC_AMT = Integer.parseInt(invc_amt.get(i));
+						
+						amount = amount + INVC_AMT ;
+					}
+					
+				}
+				Log.i("amount", amount+"");
+				Log.i("count", count+"");
+				servicecount.add(count);
+				uniqueamount.add(amount);
+			}
+				CombinedData data = new CombinedData(uniqueDates);
+				data.setValueTextColor(Color.DKGRAY);
+				data.setData(generateLineData(servicecount));
+		        data.setData(generateBarData(uniqueamount));
+		        mChart.setData(data);
+		        mChart.invalidate();
+		}
+		
+	 private BarData generateBarData(ArrayList<Float> uniqueamount) {
+
+	        BarData d = new BarData();
+
+	        ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+
+	        for (int index = 0; index < uniqueamount.size(); index++)
+	            entries.add(new BarEntry(uniqueamount.get(index), index));
+
+	        BarDataSet set = new BarDataSet(entries, "Invoiced Amount");
+	        set.setColor(getResources().getColor(R.color.yellow));
+	        set.setDrawValues(false);
+	        set.setBarSpacePercent(50f);
+	      //  set.setValueTextColor(getResources().getColor(R.color.yellow));
+	      //  set.setValueTextSize(13f);
+	        d.addDataSet(set);
+
+	        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+	        return d;
+	    }
+		 
+		 private LineData generateLineData(ArrayList<Float> servicecount) {
+
+		        LineData d = new LineData();
+
+		        ArrayList<Entry> entries = new ArrayList<Entry>();
+
+		        for (int index = 0; index < servicecount.size(); index++)
+		            entries.add(new Entry(servicecount.get(index), index));
+
+		        LineDataSet set = new LineDataSet(entries, "Number of Visits");
+		        set.setColor(getResources().getColor(R.color.navyblue));
+		        set.setLineWidth(2.5f);
+		        set.setCircleColor(getResources().getColor(R.color.navyblue));
+		        set.setCircleSize(5f);
+		        set.setFillColor(getResources().getColor(R.color.navyblue));
+		      //  set.setDrawCubic(true);
+		        set.setDrawValues(true);
+		        set.setValueTextSize(15f);
+		        set.setValueTextColor(getResources().getColor(R.color.navyblue));
+		        set.setAxisDependency(YAxis.AxisDependency.RIGHT);
+
+		        d.addDataSet(set);
+
+		        return d;
+		    }
+}
+>>>>>>> TMSC QA 3.4V

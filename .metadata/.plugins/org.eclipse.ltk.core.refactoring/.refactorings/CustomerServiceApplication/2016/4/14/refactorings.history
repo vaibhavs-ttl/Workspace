@@ -1,0 +1,10 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;com.ttl.customersocialapp.Notification&apos; to &apos;ReminderNotificationIntentService&apos;&#x0D;&#x0A;- Original project: &apos;CustomerServiceApplication&apos;&#x0D;&#x0A;- Original element: &apos;com.ttl.customersocialapp.Notification&apos;&#x0D;&#x0A;- Renamed element: &apos;com.ttl.customersocialapp.ReminderNotificationIntentService&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;Notification&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;com.ttl.customersocialapp{Notification.java[Notification" matchStrategy="1" name="ReminderNotificationIntentService" qualified="false" references="true" similarDeclarations="false" stamp="1459507649545" textual="false" version="1.0"/>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;com.ttl.customersocialapp.Notification&apos; to &apos;ReminderNotificationIntentService&apos;&#x0D;&#x0A;- Original project: &apos;CustomerServiceApplication&apos;&#x0D;&#x0A;- Original element: &apos;com.ttl.customersocialapp.Notification&apos;&#x0D;&#x0A;- Renamed element: &apos;com.ttl.customersocialapp.ReminderNotificationIntentService&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;Notification&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;com.ttl.customersocialapp{Notification.java[Notification" matchStrategy="1" name="ReminderNotificationIntentService" qualified="false" references="true" similarDeclarations="false" stamp="1459507649545" textual="false" version="1.0"/>
+>>>>>>> TMSC QA 3.4V
+</session>

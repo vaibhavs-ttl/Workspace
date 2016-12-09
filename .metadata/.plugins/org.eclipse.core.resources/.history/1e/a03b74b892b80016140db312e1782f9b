@@ -1,0 +1,38 @@
+package com.ttl.helper;
+
+public class CheckValidations {
+
+	String allowed_characters="@#^&+=";
+	
+	public boolean validate(String email_id)
+	{
+		
+		return android.util.Patterns.EMAIL_ADDRESS.matcher(email_id).matches();
+		
+		
+		
+	}
+	
+	public boolean validatePassword(String value)
+	{
+		
+		
+		for(int index=0;index<value.length();index++)
+		{
+			
+			if (!allowed_characters.contains(String.valueOf(value.charAt(index)))) {
+			
+				
+				return false;
+				
+			}
+			
+			
+		}
+		
+		
+		return true;
+		
+	}
+	
+}

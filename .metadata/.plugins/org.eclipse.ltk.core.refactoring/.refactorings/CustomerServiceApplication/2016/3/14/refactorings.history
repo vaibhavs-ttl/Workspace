@@ -1,0 +1,10 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;CustomerServiceApplication/res/layout/fragment_TermsOfUse.xml&apos; to &apos;fragment_termsofuse.xml&apos;" description="Rename resource &apos;fragment_TermsOfUse.xml&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="res/layout/fragment_TermsOfUse.xml" name="fragment_termsofuse.xml" stamp="1459309618922" updateReferences="true"/>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;CustomerServiceApplication/res/layout/fragment_TermsOfUse.xml&apos; to &apos;fragment_termsofuse.xml&apos;" description="Rename resource &apos;fragment_TermsOfUse.xml&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="res/layout/fragment_TermsOfUse.xml" name="fragment_termsofuse.xml" stamp="1459309618922" updateReferences="true"/>
+>>>>>>> TMSC QA 3.4V
+</session>

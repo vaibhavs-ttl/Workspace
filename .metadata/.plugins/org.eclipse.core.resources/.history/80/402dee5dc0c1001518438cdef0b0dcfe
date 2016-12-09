@@ -1,0 +1,1075 @@
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.model.UserDetails;
+import com.ttl.model.VehcontactScheduler;
+import com.ttl.model.VehicleAMC_ChildRow;
+import com.ttl.model.VehicleAMC_ParentRow;
+import com.ttl.model.VehicleAgreement_ChildRow;
+import com.ttl.model.VehicleAgreement_ParentRow;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnKeyListener;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class VehicleDetails_Fragment extends Fragment {
+
+	private LinearLayout ll1, ll2, ll3, ll4, ll5, ll6;
+	private RelativeLayout rltl1, rltl2, rltl3, rltl4, rltl5, rltl6;
+	private ImageView img_arrow,img_arrow1,img_arrow2,img_arrow3,img_arrow4,img_arrow5;
+	// private InstantAutoComplete spinner_chassisno;
+	private Spinner spinner_chassis;
+	private VehcontactScheduler vehdetails;
+	private TextView text_chassis, text_engine, text_fuel, text_model,
+			text_varient, text_color, text_saledate, text_wend_date,
+			text_lastservicedate, text_lastserviceKM, text_lastservicedealer,
+			text_dealer, text_dealercode, text_company, text_policy,
+			text_policy_sdate, text_policy_edate, text_ew_policyNumber,
+			text_war_sdate, text_war_edate, ew_policyNumber, text_addr,
+			text_phone, text_fname, text_war_sKM, text_war_eKM, text_lname;
+	//private TextView err_veh, err_ins, err_warr, err_cust;
+
+	List<String> chassisvalues = new ArrayList<String>();
+
+	ExpandableListView agreementlist, amclist;
+
+//	private ArrayList<VehicleAgreement_ParentRow> parents;
+	//private ArrayList<VehicleAMC_ParentRow> amcparents;
+	private ArrayList<VehicleAMC_ParentRow> list_amcParent = new ArrayList<VehicleAMC_ParentRow>();
+	private ArrayList<VehicleAgreement_ParentRow> lst_agreement = new ArrayList<VehicleAgreement_ParentRow>();
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		View v = inflater.inflate(R.layout.fragment_vehicle_details, container,
+				false);
+		ll1 = (LinearLayout) v.findViewById(R.id.ll1);
+		ll2 = (LinearLayout) v.findViewById(R.id.ll2);
+		ll3 = (LinearLayout) v.findViewById(R.id.ll3);
+		ll4 = (LinearLayout) v.findViewById(R.id.ll4);
+		ll5 = (LinearLayout) v.findViewById(R.id.ll5);
+		ll6 = (LinearLayout) v.findViewById(R.id.ll6);
+		rltl1 = (RelativeLayout) v.findViewById(R.id.rltl1);
+		rltl2 = (RelativeLayout) v.findViewById(R.id.rltl2);
+		rltl3 = (RelativeLayout) v.findViewById(R.id.rltl3);
+		rltl4 = (RelativeLayout) v.findViewById(R.id.rltl4);
+		rltl5 = (RelativeLayout) v.findViewById(R.id.rltl5);
+		rltl6 = (RelativeLayout) v.findViewById(R.id.rltl6);
+		img_arrow = (ImageView) v.findViewById(R.id.img_arrow);
+		img_arrow1 = (ImageView) v.findViewById(R.id.img_arrow1);
+		img_arrow2 = (ImageView) v.findViewById(R.id.img_arrow2);
+		img_arrow3 = (ImageView) v.findViewById(R.id.img_arrow3);
+		img_arrow4 = (ImageView) v.findViewById(R.id.img_arrow4);
+		img_arrow5 = (ImageView) v.findViewById(R.id.img_arrow5);
+		// spinner_chassisno = (InstantAutoComplete)
+		// v.findViewById(R.id.spinner_chassisno);
+		spinner_chassis = (Spinner) v.findViewById(R.id.spinner_chassisNo);
+
+		text_chassis = (TextView) v.findViewById(R.id.text_chassis);
+		text_engine = (TextView) v.findViewById(R.id.text_engine);
+		text_fuel = (TextView) v.findViewById(R.id.text_fuel);
+		text_model = (TextView) v.findViewById(R.id.text_model);
+		text_varient = (TextView) v.findViewById(R.id.text_varient);
+		text_color = (TextView) v.findViewById(R.id.text_color);
+		text_saledate = (TextView) v.findViewById(R.id.text_saledate);
+		text_wend_date = (TextView) v.findViewById(R.id.text_wend_date);
+		text_lastservicedate = (TextView) v
+				.findViewById(R.id.text_lastservicedate);
+		text_lastserviceKM = (TextView) v.findViewById(R.id.text_lastserviceKM);
+		text_lastservicedealer = (TextView) v
+				.findViewById(R.id.text_lastservicedealer);
+		text_dealer = (TextView) v.findViewById(R.id.text_dealer);
+		text_dealercode = (TextView) v.findViewById(R.id.text_dealercode);
+		text_company = (TextView) v.findViewById(R.id.text_company);
+		text_policy = (TextView) v.findViewById(R.id.text_policy);
+		text_policy_sdate = (TextView) v.findViewById(R.id.text_policy_sdate);
+		text_policy_edate = (TextView) v.findViewById(R.id.text_policy_edate);
+		text_ew_policyNumber = (TextView) v
+				.findViewById(R.id.text_ew_policyNumber);
+		text_war_sdate = (TextView) v.findViewById(R.id.text_war_sdate);
+		text_war_edate = (TextView) v.findViewById(R.id.text_war_edate);
+		text_war_sKM = (TextView) v.findViewById(R.id.text_war_sKM);
+		text_war_eKM = (TextView) v.findViewById(R.id.text_war_eKM);
+		ew_policyNumber = (TextView) v.findViewById(R.id.ew_policyNumber);
+
+		text_addr = (TextView) v.findViewById(R.id.text_address);
+		text_phone = (TextView) v.findViewById(R.id.text_phone);
+		text_fname = (TextView) v.findViewById(R.id.text_fname);
+		text_lname = (TextView) v.findViewById(R.id.text_lname);
+
+//		err_veh = (TextView) v.findViewById(R.id.err_veh);
+//		err_ins = (TextView) v.findViewById(R.id.err_ins);
+//		err_warr = (TextView) v.findViewById(R.id.err_warr);
+//		err_cust = (TextView) v.findViewById(R.id.err_cust);
+		
+		agreementlist = (ExpandableListView) v.findViewById(R.id.agreementlist);
+		amclist = (ExpandableListView) v.findViewById(R.id.amclist);
+
+		// MAT611464BPN97534
+		// 357151BVZ804302
+		chassisvalues.add("Chassis Number");
+		int size = new UserDetails().getRegNumberList().size();
+		for (int i = 0; i < size; i++) {
+			chassisvalues.add(new UserDetails().getRegNumberList().get(i)
+					.get("chassis_num"));
+
+		}
+		ArrayAdapter<String> regno = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_spinner_item, chassisvalues);
+		regno.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner_chassis.setAdapter(regno);
+
+		spinner_chassis
+				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent,
+							View view, int position, long id) {
+						// TODO Auto-generated method stub
+						if (position != 0) {
+
+							String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+									+ "<SOAP:Body>"
+									+ "<GetVechcontactScheduler_CSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+									+ "<chassis_no>"
+									+ spinner_chassis.getSelectedItem()
+											.toString()
+									+ "</chassis_no>"
+									+ "</GetVechcontactScheduler_CSB>"
+									+ "</SOAP:Body>" + "</SOAP:Envelope>";
+
+							String req1 = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+									+ "<SOAP:Body>"
+									+ "<GetAMCDetailsScheduler_CSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+									+ "<chassis_no>"
+									+ spinner_chassis.getSelectedItem()
+											.toString()
+									+ "</chassis_no>"
+									+ "</GetAMCDetailsScheduler_CSB>"
+									+ "</SOAP:Body>" + "</SOAP:Envelope>";
+							//
+							//
+							String req2 = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+									+ "<SOAP:Body>"
+									+ "<GetAgreementScheduler_CSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+									+ "<chassis_no>"
+									+ spinner_chassis.getSelectedItem()
+											.toString()
+									+ "</chassis_no>"
+									+ "</GetAgreementScheduler_CSB>"
+									+ "</SOAP:Body>" + "</SOAP:Envelope>";
+							new WebServiceCall(getActivity(), req1,
+									Constants.GetAMCDetailsScheduler_CSB,
+									new ResponseCallback() {
+
+										@Override
+										public void onResponseReceive(
+												Object object) {
+											// TODO Auto-generated method stub
+											rltl4.setVisibility(View.VISIBLE);
+											ArrayList<VehicleAMC_ParentRow> lst_amcParentSorted = new ArrayList<VehicleAMC_ParentRow> ();
+											list_amcParent = (ArrayList<VehicleAMC_ParentRow>) object;
+											for (int i = 0; i < list_amcParent.size(); i++) {
+												if(!TextUtils.isEmpty(list_amcParent.get(i).getAmc_type()) && list_amcParent.get(i).getAmc_no().startsWith("8") ){
+													lst_amcParentSorted.add(list_amcParent.get(i));
+												}
+												
+											}
+											
+											amclist.setOnGroupExpandListener(new OnGroupExpandListener() {
+												int previousGroup = -1;
+
+												@Override
+												public void onGroupExpand(int groupPosition) {
+													if (groupPosition != previousGroup)
+														amclist.collapseGroup(previousGroup);
+													previousGroup = groupPosition;
+
+												}
+											});
+
+											if(lst_amcParentSorted.size()>0){
+												ArrayList<VehicleAMC_ParentRow> list_amcData = buildAMCData(lst_amcParentSorted);
+												amcloadHosts(lst_amcParentSorted);
+											}
+											else{
+												rltl4.setVisibility(View.GONE);
+												Toast.makeText(getActivity(), "Could not get AMC Details.", Toast.LENGTH_SHORT).show();
+											}
+//											ArrayList<VehicleAMC_ParentRow> list_amcData = buildAMCData(list_amcParent);
+//											amcloadHosts(list_amcData);
+
+
+										}
+
+										@Override
+										public void onErrorReceive(String string) {
+											// TODO Auto-generated method stub
+											rltl4.setVisibility(View.GONE);
+											Toast.makeText(getActivity(), "Could not get AMC Details.", Toast.LENGTH_SHORT).show();
+										}
+									}, "Getting AMC Details.").execute();
+
+							new WebServiceCall(getActivity(), req2,
+									Constants.GetAgreementScheduler_CSB,
+									new ResponseCallback() {
+
+
+										@Override
+										public void onResponseReceive(
+												Object object) {
+											// TODO Auto-generated method stub
+											rltl5.setVisibility(View.VISIBLE);
+											lst_agreement = (ArrayList<VehicleAgreement_ParentRow>) object;
+											agreementlist.setOnGroupExpandListener(new OnGroupExpandListener() {
+												int previousGroup = -1;
+
+												@Override
+												public void onGroupExpand(int groupPosition) {
+													if (groupPosition != previousGroup)
+														agreementlist.collapseGroup(previousGroup);
+													previousGroup = groupPosition;
+
+												}
+											});
+
+											 ArrayList<VehicleAgreement_ParentRow> dummyList = buildAggrData(lst_agreement);
+
+											// Adding ArrayList data to ExpandableListView values
+											loadHosts(dummyList);
+
+
+										}
+
+										@Override
+										public void onErrorReceive(String string) {
+											// TODO Auto-generated method stub
+											rltl5.setVisibility(View.GONE);
+											Toast.makeText(getActivity(), "Could not get Agreement Details.", Toast.LENGTH_SHORT).show();
+										}
+									}, "Getting Agreement Details.").execute();
+
+							
+
+							new WebServiceCall(getActivity(), req,
+									Constants.GetVechcontactScheduler_CSB,
+									new ResponseCallback() {
+
+										@Override
+										public void onResponseReceive(
+												Object object) {
+											rltl1.setVisibility(View.VISIBLE);
+											rltl2.setVisibility(View.VISIBLE);
+											rltl3.setVisibility(View.VISIBLE);
+											rltl6.setVisibility(View.VISIBLE);
+//
+//											ll1.setClickable(true);
+//											ll2.setClickable(true);
+//											ll3.setClickable(true);
+//											ll6.setClickable(true);
+//
+//											err_veh.setVisibility(View.GONE);
+//											err_ins.setVisibility(View.GONE);
+//											err_warr.setVisibility(View.GONE);
+//											err_cust.setVisibility(View.GONE);
+
+											vehdetails = (VehcontactScheduler) object;
+											String[] date;
+											Log.i("GetVechcontactScheduler_CSB",
+													vehdetails.ASSET_NUM);
+											text_chassis
+													.setText(vehdetails.ASSET_NUM);
+											text_engine
+													.setText(vehdetails.ENGINE_NUM);
+											text_fuel
+													.setText(vehdetails.FUEL_TYPE);
+											text_model.setText(vehdetails.PPL);
+											text_varient.setText(vehdetails.PL);
+											text_color
+													.setText(vehdetails.COLOR);
+											if (!TextUtils
+													.isEmpty(vehdetails.FIRST_SALE_DT)) {
+												date = vehdetails.FIRST_SALE_DT
+														.split("T");
+												text_saledate.setText(date[0]);
+											}
+
+											if (!TextUtils
+													.isEmpty(vehdetails.WARRANTY_END_DT)) {
+												String[] date1 = vehdetails.WARRANTY_END_DT
+														.split("T");
+												text_wend_date
+														.setText(date1[0]);
+											}
+
+											if (!TextUtils
+													.isEmpty(vehdetails.LAST_SERVICE_DT)) {
+												date = vehdetails.LAST_SERVICE_DT
+														.split("T");
+												text_lastservicedate
+														.setText(date[0]);
+											}
+
+											text_lastserviceKM
+													.setText(vehdetails.LAST_SERVICE_KM);
+											text_lastservicedealer
+													.setText(vehdetails.LAST_SERVICE_DLR);
+											text_dealer
+													.setText(vehdetails.SELLING_DLR);
+											text_dealercode
+													.setText(vehdetails.SELLING_DLR_CODE);
+											text_company
+													.setText(vehdetails.INSURENCE_COMPONY_NAME);
+											text_policy
+													.setText(vehdetails.POLICY_NUMBER);
+											if (!TextUtils
+													.isEmpty(vehdetails.POLICY_ST_DT)) {
+												date = vehdetails.POLICY_ST_DT
+														.split("T");
+												text_policy_sdate
+														.setText(date[0]);
+											}
+											if (!TextUtils
+													.isEmpty(vehdetails.POLICY_END_DT)) {
+												date = vehdetails.POLICY_END_DT
+														.split("T");
+												text_policy_edate
+														.setText(date[0]);
+											}
+											if (vehdetails.EXTND_WRNTY_FLG
+													.equals("Y")) {
+												text_ew_policyNumber
+														.setText(vehdetails.EW_POLICY_NUM);
+												if (!TextUtils
+														.isEmpty(vehdetails.EXTND_WRNTY_ST_DT)) {
+													date = vehdetails.EXTND_WRNTY_ST_DT
+															.split("T");
+													text_war_sdate
+															.setText(date[0]);
+												}
+												if (!TextUtils
+														.isEmpty(vehdetails.EXTND_WRNTY_END_DT)) {
+													String[] date1 = vehdetails.EXTND_WRNTY_END_DT
+															.split("T");
+													text_war_edate
+															.setText(date1[0]);
+												}
+
+												text_war_sKM
+														.setText(vehdetails.EW_ST_KM);
+												text_war_eKM
+														.setText(vehdetails.EW_END_KM);
+
+											}
+											// else
+											// if(vehdetails.EXTND_WRNTY_FLG.equals("N")||TextUtils.isEmpty(vehdetails.EXTND_WRNTY_FLG)){
+											// ew_policyNumber.setText("NO DATA");
+											// }
+											text_fname
+													.setText(vehdetails.CON_FSTNAME);
+											text_lname
+													.setText(vehdetails.CON_LSTNAME);
+											text_addr
+													.setText(vehdetails.CON_ADDR_LINE1);
+											text_phone
+													.setText(vehdetails.CON_CELL_PH_NUM);
+
+										}
+
+										@Override
+										public void onErrorReceive(String string) {
+
+											Toast.makeText(getActivity(),"Could not get Vehicle Details.", Toast.LENGTH_SHORT).show();
+											rltl1.setVisibility(View.GONE);
+											rltl2.setVisibility(View.GONE);
+											rltl3.setVisibility(View.GONE);
+											rltl6.setVisibility(View.GONE);
+//
+//											ll1.setClickable(false);
+//											ll2.setClickable(false);
+//											ll3.setClickable(false);
+//											ll6.setClickable(false);
+
+//											err_veh.setVisibility(View.VISIBLE);
+//											err_veh.setText("NO DATA");
+//											err_ins.setVisibility(View.VISIBLE);
+//											err_ins.setText("NO DATA");
+//											err_warr.setVisibility(View.VISIBLE);
+//											err_warr.setText("NO DATA");
+//											err_cust.setVisibility(View.VISIBLE);
+//											err_cust.setText("NO DATA");
+
+										}
+									}, "Populating Data..").execute();
+						}
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// TODO Auto-generated method stub
+
+					}
+
+				});
+
+		ll1.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				toggle_contents(rltl1);
+			}
+		});
+		ll2.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				toggle_contents(rltl2);
+			}
+		});
+		ll3.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				toggle_contents(rltl3);
+			}
+		});
+		ll4.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				toggle_contents(rltl4);
+			}
+		});
+		ll5.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				toggle_contents(rltl5);
+			}
+		});
+		ll6.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				toggle_contents(rltl6);
+			}
+		});
+
+		v.getRootView().setFocusableInTouchMode(true);
+		v.getRootView().requestFocus();
+
+		v.getRootView().setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					if (keyCode == KeyEvent.KEYCODE_BACK) {
+						FragmentManager fm = getFragmentManager();
+						FragmentTransaction tx = fm.beginTransaction();
+						tx.replace(R.id.frame_container, new HomeFragment())
+								.commit();
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+		// Agreement
+
+		
+
+
+		return v;
+	}
+
+	private void loadHosts(
+			final ArrayList<VehicleAgreement_ParentRow> newParents) {
+		if (newParents == null)
+			return;
+
+		//parents = newParents;
+
+		// Check for ExpandableListAdapter object
+
+		// Create ExpandableListAdapter Object
+		final MyExpandableListAdapter mAdapter = new MyExpandableListAdapter(newParents);
+
+		// Set Adapter to ExpandableList Adapter
+		agreementlist.setAdapter(mAdapter);
+	}
+
+	private ArrayList<VehicleAgreement_ParentRow> buildAggrData(ArrayList<VehicleAgreement_ParentRow> lst_agreement2) {
+		// Creating ArrayList of type parent class to store parent class objects
+		final ArrayList<VehicleAgreement_ParentRow> list = new ArrayList<VehicleAgreement_ParentRow>();
+
+		for (int i = 0; i < lst_agreement2.size(); i++) {
+			// Create parent class object
+			final VehicleAgreement_ParentRow parent = new VehicleAgreement_ParentRow();
+
+			parent.setAgreement_no(lst_agreement2.get(i).getAgreement_no());
+
+			parent.setChildren(new ArrayList<VehicleAgreement_ChildRow>());
+
+			// Create Child class object
+			final VehicleAgreement_ChildRow child = new VehicleAgreement_ChildRow();
+			child.setAgree_name(lst_agreement2.get(i).getAgree_name());
+			child.setStatus(lst_agreement2.get(i).getStatus());
+			child.setAgreement_amt(lst_agreement2.get(i).getAgreement_amt());
+			child.setMech_reamaing(lst_agreement2.get(i).getMech_reamaing());
+			child.setTowing_reamaing(lst_agreement2.get(i).getTowing_reamaing());
+			child.setMech_avail(lst_agreement2.get(i).getMech_avail());
+			child.setTowing_avail(lst_agreement2.get(i).getTowing_avail());
+
+			// Add Child class object to parent class object
+			parent.getChildren().add(child);
+			// }
+			list.add(parent);
+		}
+		return list;
+	}
+
+	private class MyExpandableListAdapter extends BaseExpandableListAdapter {
+
+		private LayoutInflater inflater;
+		private ArrayList<VehicleAgreement_ParentRow> parents;
+		public MyExpandableListAdapter(ArrayList<VehicleAgreement_ParentRow> newParents) {
+			// Create Layout Inflater
+			inflater = LayoutInflater.from(getActivity());
+			this.parents = newParents;
+		}
+
+		// This Function used to inflate parent rows view
+
+		@Override
+		public View getGroupView(int groupPosition, boolean isExpanded,
+				View convertView, ViewGroup parentView) {
+			final VehicleAgreement_ParentRow parent = parents
+					.get(groupPosition);
+
+			// Inflate grouprow.xml file for parent rows
+			convertView = inflater.inflate(
+					R.layout.vehicledetails_agreement_parent_row, parentView,
+					false);
+
+			// Get grouprow.xml file elements and set values
+
+			((TextView) convertView.findViewById(R.id.txtagreementno))
+					.setText(parent.getAgreement_no());
+
+			if (isExpanded) {
+				ImageView img = (ImageView) convertView.findViewById(R.id.img);
+				img.setBackgroundResource(R.drawable.downarrow);
+			}
+
+			return convertView;
+		}
+
+		// This Function used to inflate child rows view
+		@Override
+		public View getChildView(int groupPosition, int childPosition,
+				boolean isLastChild, View convertView, ViewGroup parentView) {
+			final VehicleAgreement_ParentRow parent = parents
+					.get(groupPosition);
+			final VehicleAgreement_ChildRow child = parent.getChildren().get(
+					childPosition);
+
+			// Inflate childrow.xml file for child rows
+			convertView = inflater.inflate(
+					R.layout.vehicledetails_agreement_child_row, parentView,
+					false);
+
+			// Get childrow.xml file elements and set values
+			((TextView) convertView.findViewById(R.id.txtdec_agreename))
+					.setText(child.getAgree_name());
+			((TextView) convertView.findViewById(R.id.txtdec_status))
+					.setText(child.getStatus());
+			((TextView) convertView.findViewById(R.id.txtdec_agreeamt))
+					.setText(child.getAgreement_amt());
+			((TextView) convertView.findViewById(R.id.txtdec_mechremaing))
+					.setText(child.getMech_reamaing());
+			((TextView) convertView.findViewById(R.id.txtdec_towingremaing))
+					.setText(child.getTowing_reamaing());
+			((TextView) convertView.findViewById(R.id.txtdec_mechaval))
+					.setText(child.getMech_avail());
+			((TextView) convertView.findViewById(R.id.txtdec_towingaval))
+					.setText(child.getTowing_avail());
+			return convertView;
+		}
+
+		@Override
+		public Object getChild(int groupPosition, int childPosition) {
+			// Log.i("Childs", groupPosition+"=  getChild =="+childPosition);
+			return parents.get(groupPosition).getChildren().get(childPosition);
+		}
+
+		// Call when child row clicked
+		@Override
+		public long getChildId(int groupPosition, int childPosition) {
+			/****** When Child row clicked then this function call *******/
+
+			/*
+			 * if( ChildClickStatus!=childPosition) { ChildClickStatus =
+			 * childPosition;
+			 * 
+			 * Toast.makeText(getApplicationContext(), "Parent :"+groupPosition
+			 * + " Child :"+childPosition , Toast.LENGTH_LONG).show(); }
+			 */
+
+			return childPosition;
+		}
+
+		@Override
+		public int getChildrenCount(int groupPosition) {
+			int size = 0;
+			if (parents.get(groupPosition).getChildren() != null)
+				size = parents.get(groupPosition).getChildren().size();
+			return size;
+		}
+
+		@Override
+		public Object getGroup(int groupPosition) {
+			Log.i("Parent", groupPosition + "=  getGroup ");
+
+			return parents.get(groupPosition);
+		}
+
+		@Override
+		public int getGroupCount() {
+			return parents.size();
+		}
+
+		// Call when parent row clicked
+		@Override
+		public long getGroupId(int groupPosition) {
+			/*
+			 * if(groupPosition==2 && ParentClickStatus!=groupPosition){
+			 * 
+			 * //Alert to user Toast.makeText(getApplicationContext(),
+			 * "Parent :"+groupPosition , Toast.LENGTH_LONG).show(); }
+			 * 
+			 * ParentClickStatus=groupPosition; if(ParentClickStatus==0)
+			 * ParentClickStatus=-1;
+			 */
+
+			return groupPosition;
+
+		}
+
+		@Override
+		public void notifyDataSetChanged() {
+			// Refresh List rows
+			super.notifyDataSetChanged();
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return ((parents == null) || parents.isEmpty());
+		}
+
+		@Override
+		public boolean isChildSelectable(int groupPosition, int childPosition) {
+			return true;
+		}
+
+		@Override
+		public boolean hasStableIds() {
+			return true;
+		}
+
+		@Override
+		public boolean areAllItemsEnabled() {
+			return true;
+		}
+
+	}
+
+	// AMC
+	private void amcloadHosts(final ArrayList<VehicleAMC_ParentRow> newParents) {
+		if (newParents == null)
+			return;
+
+
+		// Create ExpandableListAdapter Object
+		final AMCMyExpandableListAdapter mAdapter = new AMCMyExpandableListAdapter(newParents);
+
+		// Set Adapter to ExpandableList Adapter
+		amclist.setAdapter(mAdapter);
+	}
+
+	private ArrayList<VehicleAMC_ParentRow> buildAMCData(ArrayList<VehicleAMC_ParentRow> list_amcParent2) {
+		// Creating ArrayList of type parent class to store parent class objects
+		final ArrayList<VehicleAMC_ParentRow> list = new ArrayList<VehicleAMC_ParentRow>();
+
+		for (int i = 0; i < list_amcParent2.size(); i++) {
+			// Create parent class object
+			final VehicleAMC_ParentRow parent = new VehicleAMC_ParentRow();
+
+			parent.setAmc_no(list_amcParent2.get(i).getAmc_no());
+			
+			Log.i("amcbuildDummyData", list_amcParent2.get(i).getAmc_no());
+
+			parent.setChildren(new ArrayList<VehicleAMC_ChildRow>());
+
+			// Create Child class object
+			 VehicleAMC_ChildRow child = new VehicleAMC_ChildRow();
+			child.setAmc_type(list_amcParent2.get(i).getAmc_type());
+			
+			if(!TextUtils.isEmpty(list_amcParent2.get(i).getStart_date()))
+			child.setStart_date(list_amcParent2.get(i).getStart_date().split("T")[0]);
+			
+			if(!TextUtils.isEmpty(list_amcParent2.get(i).getEnd_date()))
+				child.setStart_date(list_amcParent2.get(i).getEnd_date().split("T")[0]);
+			
+			child.setStart_km(list_amcParent2.get(i).getStart_km());
+			child.setEnd_km(list_amcParent2.get(i).getEnd_km());
+			child.setDescription(list_amcParent2.get(i).getDescription());
+
+			// Add Child class object to parent class object
+			parent.getChildren().add(child);
+			// }
+			list.add(parent);
+			
+			
+		}
+		return list;
+	}
+
+	private class AMCMyExpandableListAdapter extends BaseExpandableListAdapter {
+
+		private LayoutInflater inflater =LayoutInflater.from(getActivity());
+		ArrayList<VehicleAMC_ParentRow> lst_AMC = new ArrayList<VehicleAMC_ParentRow>();
+		// This Function used to inflate parent rows view
+
+		public AMCMyExpandableListAdapter(ArrayList<VehicleAMC_ParentRow> list) {
+			// TODO Auto-generated constructor stub
+			lst_AMC = list;
+		}
+
+		@Override
+		public View getGroupView(int groupPosition, boolean isExpanded,
+				View convertView, ViewGroup parentView) {
+			final VehicleAMC_ParentRow parent = lst_AMC.get(groupPosition);
+
+			// Inflate grouprow.xml file for parent rows
+			
+			Log.i("getGroupView", parent.getAmc_no());
+			
+			convertView = inflater.inflate(
+					R.layout.vehicledetails_amc_parent_row, parentView, false);
+
+			// Get grouprow.xml file elements and set values
+
+			((TextView) convertView.findViewById(R.id.txtamcno)).setText(parent
+					.getAmc_no());
+
+			if (isExpanded) {
+				ImageView img = (ImageView) convertView
+						.findViewById(R.id.amcimg);
+				img.setBackgroundResource(R.drawable.downarrow);
+			}
+
+			return convertView;
+		}
+
+		// This Function used to inflate child rows view
+		@Override
+		public View getChildView(int groupPosition, int childPosition,
+				boolean isLastChild, View convertView, ViewGroup parentView) {
+			final VehicleAMC_ParentRow parent = lst_AMC.get(groupPosition);
+			final VehicleAMC_ChildRow child = parent.getChildren().get(
+					childPosition);
+
+			// Inflate childrow.xml file for child rows
+			convertView = inflater.inflate(
+					R.layout.vehicledetails_amc_child_row, parentView, false);
+
+			// Get childrow.xml file elements and set values
+			((TextView) convertView.findViewById(R.id.txtdec_amctype))
+					.setText(child.getAmc_type());
+			((TextView) convertView.findViewById(R.id.txtdec_amcstartdate))
+					.setText(child.getStart_date());
+			((TextView) convertView.findViewById(R.id.txtdec_amcendstart))
+					.setText(child.getEnd_date());
+			((TextView) convertView.findViewById(R.id.txtdec_amcstartkm))
+					.setText(child.getStart_km());
+			((TextView) convertView.findViewById(R.id.txtdec_amcstartkm))
+			.setText(child.getEnd_km());
+			((TextView) convertView.findViewById(R.id.txtdec_amcdesc))
+					.setText(child.getDescription());
+			return convertView;
+		}
+
+		@Override
+		public Object getChild(int groupPosition, int childPosition) {
+			// Log.i("Childs", groupPosition+"=  getChild =="+childPosition);
+			return lst_AMC.get(groupPosition).getChildren().get(childPosition);
+		}
+
+		// Call when child row clicked
+		@Override
+		public long getChildId(int groupPosition, int childPosition) {
+			/****** When Child row clicked then this function call *******/
+
+			/*
+			 * if( ChildClickStatus!=childPosition) { ChildClickStatus =
+			 * childPosition;
+			 * 
+			 * Toast.makeText(getApplicationContext(), "Parent :"+groupPosition
+			 * + " Child :"+childPosition , Toast.LENGTH_LONG).show(); }
+			 */
+
+			return childPosition;
+		}
+
+		@Override
+		public int getChildrenCount(int groupPosition) {
+			int size = 0;
+			if (lst_AMC.get(groupPosition).getChildren() != null)
+				size = lst_AMC.get(groupPosition).getChildren().size();
+			return size;
+		}
+
+		@Override
+		public Object getGroup(int groupPosition) {
+			Log.i("Parent", groupPosition + "=  getGroup ");
+
+			return lst_AMC.get(groupPosition);
+		}
+
+		@Override
+		public int getGroupCount() {
+			return lst_AMC.size();
+		}
+
+		// Call when parent row clicked
+		@Override
+		public long getGroupId(int groupPosition) {
+			/*
+			 * if(groupPosition==2 && ParentClickStatus!=groupPosition){
+			 * 
+			 * //Alert to user Toast.makeText(getApplicationContext(),
+			 * "Parent :"+groupPosition , Toast.LENGTH_LONG).show(); }
+			 * 
+			 * ParentClickStatus=groupPosition; if(ParentClickStatus==0)
+			 * ParentClickStatus=-1;
+			 */
+
+			return groupPosition;
+
+		}
+
+		@Override
+		public void notifyDataSetChanged() {
+			// Refresh List rows
+			super.notifyDataSetChanged();
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return ((lst_AMC == null) || lst_AMC.isEmpty());
+		}
+
+		@Override
+		public boolean isChildSelectable(int groupPosition, int childPosition) {
+			return true;
+		}
+
+		@Override
+		public boolean hasStableIds() {
+			return true;
+		}
+
+		@Override
+		public boolean areAllItemsEnabled() {
+			return true;
+		}
+
+	}
+
+	private void toggle_contents(View v) {
+		if (v.isShown()) {
+			slide_up(getActivity(), v);
+			v.setVisibility(View.GONE);
+		} else {
+			v.setVisibility(View.VISIBLE);
+			slide_down(getActivity(), v);
+		}
+	}
+
+	private void slide_down(Context ctx, View v) {
+		// Toast.makeText(ctx, "SLIDING DOWN", Toast.LENGTH_SHORT).show();
+		Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_down);
+		if (a != null) {
+			a.reset();
+			if (v != null) {
+				v.clearAnimation();
+				v.startAnimation(a);
+			}
+		}
+
+		switch (v.getId()) {
+		case R.id.rltl1:
+			setArrowImage(img_arrow, R.drawable.downarrow);
+			break;
+		case R.id.rltl2:
+			setArrowImage(img_arrow1, R.drawable.downarrow);
+			break;
+		case R.id.rltl3:
+			setArrowImage(img_arrow2, R.drawable.downarrow);
+			break;
+		case R.id.rltl4:
+			setArrowImage(img_arrow3, R.drawable.downarrow);
+			break;
+		case R.id.rltl5:
+			setArrowImage(img_arrow4, R.drawable.downarrow);
+			break;
+		case R.id.rltl6:
+			setArrowImage(img_arrow5, R.drawable.downarrow);
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	private void slide_up(Context ctx, View v) {
+		// Toast.makeText(ctx, "SLIDING UP", Toast.LENGTH_SHORT).show();
+		Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_up);
+		if (a != null) {
+			a.reset();
+			if (v != null) {
+				v.clearAnimation();
+				v.startAnimation(a);
+			}
+		}
+
+		switch (v.getId()) {
+		case R.id.rltl1:
+			setArrowImage(img_arrow, R.drawable.orangerightarrow);
+			break;
+		case R.id.rltl2:
+			setArrowImage(img_arrow1, R.drawable.orangerightarrow);
+			break;
+		case R.id.rltl3:
+			setArrowImage(img_arrow2, R.drawable.orangerightarrow);
+			break;
+		case R.id.rltl4:
+			setArrowImage(img_arrow3, R.drawable.orangerightarrow);
+			break;
+		case R.id.rltl5:
+			setArrowImage(img_arrow4, R.drawable.orangerightarrow);
+			break;
+		case R.id.rltl6:
+			setArrowImage(img_arrow5, R.drawable.orangerightarrow);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void setArrowImage(ImageView arrow, int image) {
+		arrow.setMaxHeight(20);
+		arrow.setMaxWidth(20);
+		arrow.setImageDrawable(getResources().getDrawable(image));
+	}
+	private void setListViewHeight(ExpandableListView listView, int group) {
+		  MyExpandableListAdapter listAdapter = (MyExpandableListAdapter) listView
+		    .getExpandableListAdapter();
+		  int totalHeight = 0;
+		  int desiredWidth = View.MeasureSpec.makeMeasureSpec(
+		    listView.getWidth(), View.MeasureSpec.EXACTLY);
+		  for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+		   View groupItem = listAdapter.getGroupView(i, false, null, listView);
+		   groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+		   totalHeight += groupItem.getMeasuredHeight();
+
+		   if (((listView.isGroupExpanded(i)) && (i != group))
+		     || ((!listView.isGroupExpanded(i)) && (i == group))) {
+		    for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
+		     View listItem = listAdapter.getChildView(i, j, false, null,
+		       listView);
+		     listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+		     totalHeight += listItem.getMeasuredHeight();
+
+		    }
+		   }
+		  }
+
+		  ViewGroup.LayoutParams params = listView.getLayoutParams();
+		  int height = totalHeight
+		    + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+		  if (height < 10)
+		   height = 50;
+		  params.height = height;
+		  listView.setLayoutParams(params);
+		  listView.requestLayout();
+
+		 }
+
+
+		 private void setAMCListViewHeight(ExpandableListView listView, int group) {
+		  AMCMyExpandableListAdapter listAdapter = (AMCMyExpandableListAdapter) listView
+		    .getExpandableListAdapter();
+		  int totalHeight = 0;
+		  int desiredWidth = View.MeasureSpec.makeMeasureSpec(
+		    listView.getWidth(), View.MeasureSpec.EXACTLY);
+		  for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+		   View groupItem = listAdapter.getGroupView(i, false, null, listView);
+		   groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+		   totalHeight += groupItem.getMeasuredHeight();
+
+		   if (((listView.isGroupExpanded(i)) && (i != group))
+		     || ((!listView.isGroupExpanded(i)) && (i == group))) {
+		    for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
+		     View listItem = listAdapter.getChildView(i, j, false, null,
+		       listView);
+		     listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+		     totalHeight += listItem.getMeasuredHeight();
+
+		    }
+		   }
+		  }
+
+		  ViewGroup.LayoutParams params = listView.getLayoutParams();
+		  int height = totalHeight
+		    + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+		  if (height < 10)
+		   height =50;
+		  params.height = height;
+		  listView.setLayoutParams(params);
+		  listView.requestLayout();
+
+		 }
+	
+}

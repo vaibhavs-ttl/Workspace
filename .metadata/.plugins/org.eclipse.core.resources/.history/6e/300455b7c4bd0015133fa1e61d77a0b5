@@ -1,0 +1,307 @@
+<<<<<<< HEAD
+package com.ttl.helper;
+
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.communication.SamlArtifact;
+import com.ttl.customersocialapp.HomeFragment;
+import com.ttl.customersocialapp.R;
+import com.ttl.model.ServiceBookingUser;
+import com.ttl.webservice.Config;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class VehicleRegister {
+
+	Activity context;
+	Dialog proceeddialog , vehiclenodialog ,mobilenumberdialog ,contactdealerdialog , otpdialog ;
+	 EditText regnumber ,chassis;
+
+	public VehicleRegister(Activity context)
+	{
+		this.context = context;
+	}
+	
+	public void register()
+	
+	{
+		 vehiclenodialog = new Dialog(context);
+		 vehiclenodialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		 vehiclenodialog.setContentView(R.layout.vehicle_vari_regno_popup);
+		 vehiclenodialog.setCancelable(false);
+		 vehiclenodialog.show();
+		 ImageView close = (ImageView) vehiclenodialog.findViewById(R.id.imgclose);
+		 close.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				vehiclenodialog.dismiss();
+				HomeFragment.regvehicle = false;
+				checkvehiclereg(HomeFragment.regvehicle);
+			}
+		});
+		 Button submit = (Button) vehiclenodialog.findViewById(R.id.btnsubmit);
+		 regnumber = (EditText) vehiclenodialog.findViewById(R.id.txtregnum);
+		 chassis = (EditText) vehiclenodialog.findViewById(R.id.txtchassisnum);
+		submit.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(Config.getSAMLARTIFACT().equals(""))
+				{
+					new SamlArtifact(context).execute();
+				}
+				vehiclenodialog.dismiss();
+				String _url = context.getResources()
+						.getString(R.string.URL)
+						+ Config.getSAMLARTIFACT();
+						String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+								+ "<SOAP:Body>"
+								+ "<GetCustomerVehicleDetailsCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+								+ "<RegistrationNumber>"+regnumber.getText().toString()+"</RegistrationNumber>"
+								+ "<ChassisNumber>"+chassis.getText().toString()+"</ChassisNumber>" + "<MobileNo></MobileNo>"
+								+ "</GetCustomerVehicleDetailsCSB>" + "</SOAP:Body>" + "</SOAP:Envelope>";
+
+						new WebServiceCall(context, req, Constants.GetCustomerVehicleDetailsCSB, new ResponseCallback() {
+
+							@Override
+							public void onResponseReceive(Object object) {
+								
+							
+								final ServiceBookingUser user = (ServiceBookingUser) object;
+								if(!(user.getPhoneno().equals("")))
+								{
+									
+									mobilenumberdialog = new Dialog(getActivity());
+									mobilenumberdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+									mobilenumberdialog.setContentView(R.layout.vehicle_vari_mobno);
+									mobilenumberdialog.setCancelable(false);
+									mobilenumberdialog.show();
+									
+									 ImageView close = (ImageView) mobilenumberdialog.findViewById(R.id.imgclose);
+									 close.setOnClickListener(new OnClickListener() {
+										
+										@Override
+										public void onClick(View v) {
+											// TODO Auto-generated method stub
+											mobilenumberdialog.dismiss();
+											regvehicle = false;
+											checkvehiclereg(regvehicle);
+										}
+									});
+									
+									TextView reg = (TextView) mobilenumberdialog.findViewById(R.id.txtregno);
+									String regnumber = "(Reg.No: "+user.getREGISTRATIONNUMBER()+")";
+									reg.setText(regnumber);
+									String mob = "(********"+user.getPhoneno().toString().substring(user.getPhoneno().length()-3)+") to proceed";
+									TextView mobtext = (TextView) mobilenumberdialog.findViewById(R.id.txtmoilenumber);
+									mobtext.setText(mob);
+									
+									final EditText mobile = (EditText) mobilenumberdialog.findViewById(R.id.edtmobileno);
+									Button submitmob = (Button) mobilenumberdialog.findViewById(R.id.btnsubmit);
+									submitmob.setOnClickListener(new OnClickListener() {
+										
+										@Override
+										public void onClick(View v) {
+											// TODO Auto-generated method stub
+											String enteredmob = mobile.getText().toString();
+											Log.d("Here", user.getPhoneno());
+											if(enteredmob.equals(user.getPhoneno().toString()))
+											{
+												Log.d("Here", user.getPhoneno());
+												otpGeneration(user);
+												
+
+											}else
+											{
+												Toast.makeText(getActivity(), "You have entered wrong number.Please re-enter.", Toast.LENGTH_SHORT).show();
+
+											}
+										}
+									});
+								}else
+								{
+									
+								}
+							}
+
+							@Override
+							public void onErrorReceive(String string) {
+								
+								Toast.makeText(getActivity(), "Number you have enetred is not match with our record. Please verify number with nearest Tata Dealer", Toast.LENGTH_SHORT).show();
+							}
+
+						
+						},"Populating Data..").execute();  
+			}
+		}) ;
+	}
+}
+=======
+package com.ttl.helper;
+
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.communication.SamlArtifact;
+import com.ttl.customersocialapp.HomeFragment;
+import com.ttl.customersocialapp.R;
+import com.ttl.model.ServiceBookingUser;
+import com.ttl.webservice.Config;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class VehicleRegister {
+
+	Activity context;
+	Dialog proceeddialog , vehiclenodialog ,mobilenumberdialog ,contactdealerdialog , otpdialog ;
+	 EditText regnumber ,chassis;
+
+	public VehicleRegister(Activity context)
+	{
+		this.context = context;
+	}
+	
+	public void register()
+	
+	{
+		 vehiclenodialog = new Dialog(context);
+		 vehiclenodialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		 vehiclenodialog.setContentView(R.layout.vehicle_vari_regno_popup);
+		 vehiclenodialog.setCancelable(false);
+		 vehiclenodialog.show();
+		 ImageView close = (ImageView) vehiclenodialog.findViewById(R.id.imgclose);
+		 close.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				vehiclenodialog.dismiss();
+				HomeFragment.regvehicle = false;
+				checkvehiclereg(HomeFragment.regvehicle);
+			}
+		});
+		 Button submit = (Button) vehiclenodialog.findViewById(R.id.btnsubmit);
+		 regnumber = (EditText) vehiclenodialog.findViewById(R.id.txtregnum);
+		 chassis = (EditText) vehiclenodialog.findViewById(R.id.txtchassisnum);
+		submit.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(Config.getSAMLARTIFACT().equals(""))
+				{
+					new SamlArtifact(context).execute();
+				}
+				vehiclenodialog.dismiss();
+				String _url = context.getResources()
+						.getString(R.string.URL)
+						+ Config.getSAMLARTIFACT();
+						String req = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+								+ "<SOAP:Body>"
+								+ "<GetCustomerVehicleDetailsCSB xmlns=\"src.com.CSB\" preserveSpace=\"no\" qAccess=\"0\" qValues=\"\">"
+								+ "<RegistrationNumber>"+regnumber.getText().toString()+"</RegistrationNumber>"
+								+ "<ChassisNumber>"+chassis.getText().toString()+"</ChassisNumber>" + "<MobileNo></MobileNo>"
+								+ "</GetCustomerVehicleDetailsCSB>" + "</SOAP:Body>" + "</SOAP:Envelope>";
+
+						new WebServiceCall(context, req, Constants.GetCustomerVehicleDetailsCSB, new ResponseCallback() {
+
+							@Override
+							public void onResponseReceive(Object object) {
+								
+							
+								final ServiceBookingUser user = (ServiceBookingUser) object;
+								if(!(user.getPhoneno().equals("")))
+								{
+									
+									mobilenumberdialog = new Dialog(getActivity());
+									mobilenumberdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+									mobilenumberdialog.setContentView(R.layout.vehicle_vari_mobno);
+									mobilenumberdialog.setCancelable(false);
+									mobilenumberdialog.show();
+									
+									 ImageView close = (ImageView) mobilenumberdialog.findViewById(R.id.imgclose);
+									 close.setOnClickListener(new OnClickListener() {
+										
+										@Override
+										public void onClick(View v) {
+											// TODO Auto-generated method stub
+											mobilenumberdialog.dismiss();
+											regvehicle = false;
+											checkvehiclereg(regvehicle);
+										}
+									});
+									
+									TextView reg = (TextView) mobilenumberdialog.findViewById(R.id.txtregno);
+									String regnumber = "(Reg.No: "+user.getREGISTRATIONNUMBER()+")";
+									reg.setText(regnumber);
+									String mob = "(********"+user.getPhoneno().toString().substring(user.getPhoneno().length()-3)+") to proceed";
+									TextView mobtext = (TextView) mobilenumberdialog.findViewById(R.id.txtmoilenumber);
+									mobtext.setText(mob);
+									
+									final EditText mobile = (EditText) mobilenumberdialog.findViewById(R.id.edtmobileno);
+									Button submitmob = (Button) mobilenumberdialog.findViewById(R.id.btnsubmit);
+									submitmob.setOnClickListener(new OnClickListener() {
+										
+										@Override
+										public void onClick(View v) {
+											// TODO Auto-generated method stub
+											String enteredmob = mobile.getText().toString();
+											Log.d("Here", user.getPhoneno());
+											if(enteredmob.equals(user.getPhoneno().toString()))
+											{
+												Log.d("Here", user.getPhoneno());
+												otpGeneration(user);
+												
+
+											}else
+											{
+												Toast.makeText(getActivity(), "You have entered wrong number.Please re-enter.", Toast.LENGTH_SHORT).show();
+
+											}
+										}
+									});
+								}else
+								{
+									
+								}
+							}
+
+							@Override
+							public void onErrorReceive(String string) {
+								
+								Toast.makeText(getActivity(), "Number you have enetred is not match with our record. Please verify number with nearest Tata Dealer", Toast.LENGTH_SHORT).show();
+							}
+
+						
+						},"Populating Data..").execute();  
+			}
+		}) ;
+	}
+}
+>>>>>>> TMSC QA 3.4V

@@ -1,0 +1,249 @@
+package com.ttl.adapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.ttl.communication.GlobalAccessObject;
+import com.ttl.customersocialapp.R;
+import com.ttl.model.SpareModel;
+
+public class SpareAdapter extends BaseAdapter implements Filterable{
+
+	
+
+	private Context context;
+	
+	private ArrayList<SpareModel> mDataFiltered;//the filtered data
+	private ArrayList<SpareModel> spare_list=new ArrayList<>();
+	private ArrayList<SpareModel> checked_list=new ArrayList<>();
+	private ArrayList<SpareModel> selected_data=new ArrayList<>();
+	public SpareAdapter(Context context,ArrayList<SpareModel> spare_list)
+	{
+		this.spare_list=spare_list;
+		this.context=context;
+	
+		mDataFiltered=spare_list;
+		checked_list=GlobalAccessObject.getSpare_obj();
+	}
+	
+	@Override
+	public int getCount() {
+
+		return mDataFiltered.size();
+	}
+
+	@Override
+	public Object getItem(int pos) {
+
+		return mDataFiltered.get(pos);
+	}
+
+	@Override
+	public long getItemId(int position) {
+
+		return 0;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+
+		ViewHolder holder=new ViewHolder();
+		
+		if (convertView==null) {
+		
+			LayoutInflater inflater =(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			
+			convertView=inflater.inflate(R.layout.spare_part_custom_row, parent,false);
+			
+			holder.spare_desc=(TextView)convertView.findViewById(R.id.spare_desc);
+			holder.spare_qty=(TextView)convertView.findViewById(R.id.spare_qty);
+			holder.spare_uom=(TextView)convertView.findViewById(R.id.spare_uom);
+			holder.select_data=(CheckBox)convertView.findViewById(R.id.spare_select_box);
+			holder.sparePartRow=(LinearLayout)convertView.findViewById(R.id.sparePartRow);
+			convertView.setTag(holder);
+			
+		}
+		else
+		{
+			holder=(ViewHolder)convertView.getTag();
+		}
+		
+		
+		if ((position%2)==0) {
+			
+			
+			holder.sparePartRow.setBackgroundColor(Color.parseColor("#508dba"));
+		
+		}
+		else
+		{
+	
+			holder.sparePartRow.setBackgroundColor(Color.parseColor("#387caf"));
+		
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		holder.spare_desc.setText(spare_list.get(position).getPartDescription());
+		holder.spare_qty.setText(spare_list.get(position).getDefaultQty());
+		holder.spare_uom.setText(spare_list.get(position).getUOM());
+		holder.select_data.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			
+				SpareModel spareModel = null;
+				if (isChecked) {
+					
+					spareModel=new SpareModel();
+					
+					spareModel.setDefaultQty(spare_list.get(position).getDefaultQty());
+					spareModel.setPartDescription(spare_list.get(position).getPartDescription());
+					spareModel.setUOM(spare_list.get(position).getUOM());
+					spareModel.setUMRP(spare_list.get(position).getUMRP());
+					spareModel.setType("Spare");
+					spareModel.setCheckedPosition(position);
+					
+					
+					selected_data.add(spareModel);
+				
+					GlobalAccessObject.setSpare_obj(selected_data);
+					
+				}
+				else 
+				{
+				
+					
+					selected_data.remove(spareModel);
+				
+					GlobalAccessObject.NullifySpare_obj();
+				}
+				
+			}
+		});
+		
+		
+		
+		if (checked_list!=null) {
+			
+			
+			
+			if (position<checked_list.size()) {
+
+				int pos=checked_list.get(position).getCheckedPosition();
+			
+				
+				holder.select_data.setChecked(true);
+				
+				
+			}
+		}
+
+		
+		
+		
+		
+		return convertView;
+	}
+
+	
+	
+	
+	static class ViewHolder
+	{
+		
+		TextView spare_desc;
+		TextView spare_qty;
+		TextView spare_uom;
+		CheckBox select_data;
+		LinearLayout sparePartRow;
+		
+		
+		
+	}
+
+
+
+	@Override
+	public Filter getFilter() {
+	
+		return new Filter() {
+	
+			
+			
+			@Override
+			protected void publishResults(CharSequence constraint, FilterResults results) {
+			
+			
+						
+			mDataFiltered=(ArrayList<SpareModel>)results.values;
+	
+			notifyDataSetChanged();
+			}
+			
+			@Override
+			protected FilterResults performFiltering(CharSequence constraint) {
+			
+				
+				
+				String filterString=constraint.toString().toLowerCase();
+				FilterResults results=new FilterResults();
+				
+				final List<SpareModel> list=spare_list;
+				
+				int count=list.size();
+				final ArrayList<SpareModel> nList=new ArrayList<>(count);
+				
+				for(int i=0;i<count;i++)
+				{
+					
+				
+					
+					if (list.get(i).getPartDescription().toLowerCase().contains(filterString)) {
+						
+				
+						
+						Log.v("spare search", ""+list.get(i).getPartDescription()+" contains"+" "+filterString);
+						
+						nList.add(list.get(i));
+					}
+					
+					
+				
+					
+					
+				}
+				
+				results.values=nList;
+				results.count=nList.size();
+				
+				return results;
+			}
+		};
+	}
+
+
+
+
+	
+	
+}

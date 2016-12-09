@@ -1,0 +1,971 @@
+<<<<<<< HEAD
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="com.ttl.customersocialapp.RegisterUserActivity" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/small_tataservice_logo" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:text="Registration"
+        android:textColor="@color/white"
+        android:textSize="12pt" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/login_line" />
+
+	<ScrollView
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_below="@+id/imageView2" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/txtfirstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/blue_border_rectangle"
+            android:ems="10"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:hint="First name"
+            android:textColorHint="@color/hintcolor"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:padding="10dp" />
+
+      		    <requestFocus />
+        
+    
+	    <EditText
+	        android:id="@+id/txtlastname"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/txtfirstname"
+	        android:layout_alignRight="@+id/txtfirstname"
+	        android:layout_below="@+id/txtfirstname"
+	        android:layout_marginTop="10dp"
+	        android:background="@drawable/blue_border_rectangle"
+	        android:ems="10"
+	        android:hint="Last name"
+	        android:inputType="text"
+	        android:textColorHint="@color/hintcolor"
+	        android:padding="10dp" >
+
+    	</EditText>
+
+	    <LinearLayout
+	        android:id="@+id/blayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="40dp"
+	        android:layout_alignLeft="@+id/txtlastname"
+	        android:layout_alignRight="@+id/txtlastname"
+	        android:layout_below="@+id/txtlastname"
+	        android:layout_marginTop="10dp"
+	        android:orientation="horizontal"
+	         >
+
+	        
+         
+	        <Button
+	            android:id="@+id/male"
+	            style="?android:attr/borderlessButtonStyle"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_alignParentBottom="true"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentTop="true"
+	            android:selectAllOnFocus="true"
+	            android:text="Male"
+	            android:layout_weight="1"
+	            android:textColor="@color/white"
+	            android:background="@drawable/malenormal"
+	            android:textSize="12sp" />
+
+	        <Button
+	            android:id="@+id/female"
+	            style="?android:attr/borderlessButtonStyle"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_alignParentRight="true"
+	            android:layout_alignTop="@+id/male"
+	            android:layout_toRightOf="@+id/male"
+	            android:background="@drawable/femalenormal"
+	            android:text="Female"
+	            android:textColor="@color/white"
+	            android:layout_weight="1"
+	            android:textSize="12sp" />
+	       
+        </LinearLayout>
+		<EditText
+		    android:id="@+id/txtcontactnumber"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/blayout"
+		    android:layout_alignRight="@+id/blayout"
+		    android:layout_below="@+id/blayout"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:padding="10dp"
+		    android:maxLength="10"
+		    android:hint="Contact number"
+		    android:textColorHint="@color/hintcolor"
+		    android:inputType="phone" >
+
+	        </EditText>
+		<EditText
+		    android:id="@+id/txtaltcontactnumber"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/blayout"
+		    android:layout_alignRight="@+id/blayout"
+		    android:layout_below="@+id/txtcontactnumber"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:padding="10dp"
+		    android:maxLength="10"
+		    android:hint="Alternate Contact number"
+		    android:textColorHint="@color/hintcolor"
+		    android:inputType="phone" >
+
+	        </EditText>
+
+		<EditText
+		    android:id="@+id/txtaddress"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/txtemailid"
+		    android:layout_alignRight="@+id/txtemailid"
+		    android:layout_below="@+id/txtemailid"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:hint="Address"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:textColorHint="@color/hintcolor"
+		    android:padding="10dp"
+		    android:maxLines="3"
+		    android:inputType="text" 
+		    />
+
+		<EditText
+		    android:id="@+id/txtemailid"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/txtcontactnumber"
+		    android:layout_alignRight="@+id/txtcontactnumber"
+		    android:layout_below="@+id/txtaltcontactnumber"
+		    android:layout_marginTop="14dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:ems="10"
+		    android:hint="Email id"
+		    android:inputType="textEmailAddress"
+		    android:padding="10dp"
+		    android:textColorHint="@color/hintcolor" />
+<!-- 
+		<Spinner
+		    android:id="@+id/spinstate"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/txtaddress"
+		    android:layout_alignRight="@+id/txtaddress"
+		    android:layout_below="@+id/txtaddress"
+		    android:background="@drawable/spinnerback"
+		    android:padding="10dp"
+		    android:layout_marginTop="10dp" /> -->
+				<com.ttl.customersocialapp.InstantAutoComplete 
+				    android:id="@+id/spinstate"
+				       android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                     android:padding="10dp"
+                    android:background="@drawable/spinnerback"
+                    android:textColorHint="@color/hintcolor"
+                     android:layout_alignLeft="@+id/txtaddress"
+		   			 android:layout_alignRight="@+id/txtaddress"
+		   			 android:layout_below="@+id/txtaddress"
+		   			android:inputType="text"
+                    android:textSize="15sp"
+                    android:hint="Select State"
+				    />	
+				    
+				<com.ttl.customersocialapp.InstantAutoComplete 
+				    android:id="@+id/spindistrict"
+				       android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                     android:padding="10dp"
+                    android:background="@drawable/spinnerback"
+                    android:textColorHint="@color/hintcolor"
+                     android:layout_alignLeft="@+id/spinstate"
+		   			 android:layout_alignRight="@+id/spinstate"
+		   			 android:layout_below="@+id/spinstate"
+		   			android:inputType="text"
+                    android:textSize="15sp"
+                    android:hint="Select District"
+				    />		
+				    
+				<com.ttl.customersocialapp.InstantAutoComplete 
+				    android:id="@+id/spincity"
+				       android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                     android:padding="10dp"
+                    android:background="@drawable/spinnerback"
+                    android:textColorHint="@color/hintcolor"
+                     android:layout_alignLeft="@+id/spindistrict"
+		   			 android:layout_alignRight="@+id/spindistrict"
+		   			 android:layout_below="@+id/spindistrict"
+		   			android:inputType="text"
+                    android:textSize="15sp"
+                    android:hint="Select City"
+				    />		
+      <!--  <Spinner
+           android:id="@+id/spincity"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignLeft="@+id/spinstate"
+           android:layout_alignRight="@+id/spinstate"
+           android:layout_below="@+id/spinstate"
+           android:layout_marginTop="10dp"
+           android:padding="10dp"
+           android:background="@drawable/spinnerback" /> -->
+       
+       <EditText
+		    android:id="@+id/txtpincode"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/spincity"
+		    android:layout_alignRight="@+id/spincity"
+		    android:layout_below="@+id/spincity"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:padding="10dp"
+		    android:maxLength="6"
+		    android:hint="Pincode"
+		    android:textColorHint="@color/hintcolor"
+		    android:inputType="number" />
+
+	         <EditText
+		    android:id="@+id/txtuserid"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/txtpincode"
+		    android:layout_alignRight="@+id/txtpincode"
+		    android:layout_below="@+id/txtpincode"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:padding="10dp"
+		    android:hint="User Id"
+		    android:textColorHint="@color/hintcolor"
+		    android:inputType="text" />
+	        
+	        <EditText
+		    android:id="@+id/txtpassword"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/txtuserid"
+		    android:layout_alignRight="@+id/txtuserid"
+		    android:layout_below="@+id/txtuserid"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:padding="10dp"
+		    android:hint="Password"
+		    android:textColorHint="@color/hintcolor"
+		    android:inputType="textPassword" >
+
+	        </EditText>
+	        
+	        <CheckBox
+		    android:id="@+id/checkBox1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/txtpassword"
+		     android:layout_alignLeft="@+id/txtpassword"
+		    android:layout_alignRight="@+id/txtpassword"
+		    android:layout_marginTop="10dp"
+		    android:textColor="@color/white"
+		    android:text="@string/terms" />
+
+	     <!--    <Button
+	            android:id="@+id/button1"
+	            android:layout_below="@+id/checkBox1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/white_border_rectangle"
+	            android:text="CANCEL" />
+
+	        <Button
+	            android:id="@+id/button2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@+id/checkBox1"
+	            android:layout_toRightOf="@+id/button1"
+	            android:layout_alignTop="@+id/txtfirstname"
+	            android:background="@drawable/white_border_rectangle"
+	            android:text="SUBMIT" /> -->
+	            
+	                <LinearLayout
+            android:id="@+id/buttonlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_below="@+id/checkBox1"   
+            android:weightSum="4"        
+            android:padding="5dip" >
+
+             <Button
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"                
+                android:background="@drawable/white_border_rectangle"
+                android:text="CANCLE"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/white" />
+            
+            
+              <Button
+                     android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"                
+                android:background="@drawable/white_border_rectangle"
+                android:text="SUBMIT"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/white" />
+            </LinearLayout>
+         
+    <!--     </LinearLayout>
+			 <LinearLayout
+	        android:id="@+id/buttonlayout"
+	        android:layout_width="wrap_content"
+	        android:layout_height="35dp"
+	        android:layout_alignLeft="@+id/txtlastname"
+	        android:layout_alignRight="@+id/txtlastname"
+	        android:layout_below="@+id/checkBox1"
+	        android:layout_marginTop="10dp"
+	        android:orientation="horizontal"
+	        android:layout_marginBottom="20dp"
+	         >
+      
+         
+	        <Button
+	            android:id="@+id/cancel"
+	            style="?android:attr/borderlessButtonStyle"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_alignParentBottom="true"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentTop="true"
+	            android:selectAllOnFocus="true"
+	            android:text="CANCEL"
+	            android:layout_marginRight="10dp"
+	            android:layout_weight="1"
+	            android:textColor="@color/white"
+	            android:background="@drawable/white_border_rectangle"
+	            android:textSize="12sp" />
+
+	        <Button
+	            android:id="@+id/submit"
+	            style="?android:attr/borderlessButtonStyle"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_alignParentRight="true"
+	            android:layout_alignTop="@+id/male"
+	            android:layout_toRightOf="@+id/male"
+	            android:background="@drawable/white_border_rectangle"
+	            android:text="SUBMIT"
+	            android:textColor="@color/white"
+	            android:layout_weight="1"
+	            android:textSize="12sp" />
+	            </LinearLayout> -->
+	        <!--      <LinearLayout
+            android:id="@+id/buttonlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_below="@+id/checkBox1"   
+            android:weightSum="4"        
+            android:padding="5dip" >
+
+             <Button
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"                
+                android:background="@drawable/white_border_rectangle"
+                android:text="CANCEL"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/white" />
+            
+            
+              <Button
+                     android:id="@+id/reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"                
+                android:background="@drawable/white_border_rectangle"
+                android:text="RESET"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/white" />
+            
+         
+        </LinearLayout>
+        	    
+        <LinearLayout
+            android:id="@+id/buttonlayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:layout_below="@+id/buttonlayout"            
+            android:padding="5dip" >
+                 
+            <Button
+              	 android:id="@+id/submit"	 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"                
+                android:background="@drawable/white_border_rectangle"
+                android:text="SUBMIT"
+              	android:layout_weight="1"
+                android:textColor="@color/white" />
+            </LinearLayout>
+	        -->
+   
+	        
+    </RelativeLayout>
+    
+</ScrollView>
+
+	
+    
+</RelativeLayout>
+=======
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="com.ttl.customersocialapp.RegisterUserActivity" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/small_tataservice_logo" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:text="Registration"
+        android:textColor="@color/white"
+        android:textSize="12pt" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/login_line" />
+
+	<ScrollView
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_below="@+id/imageView2" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/txtfirstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/blue_border_rectangle"
+            android:ems="10"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:hint="First name"
+            android:textColorHint="@color/hintcolor"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:padding="10dp" />
+
+      		    <requestFocus />
+        
+    
+	    <EditText
+	        android:id="@+id/txtlastname"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/txtfirstname"
+	        android:layout_alignRight="@+id/txtfirstname"
+	        android:layout_below="@+id/txtfirstname"
+	        android:layout_marginTop="10dp"
+	        android:background="@drawable/blue_border_rectangle"
+	        android:ems="10"
+	        android:hint="Last name"
+	        android:inputType="text"
+	        android:textColorHint="@color/hintcolor"
+	        android:padding="10dp" >
+
+    	</EditText>
+
+	    <LinearLayout
+	        android:id="@+id/blayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="40dp"
+	        android:layout_alignLeft="@+id/txtlastname"
+	        android:layout_alignRight="@+id/txtlastname"
+	        android:layout_below="@+id/txtlastname"
+	        android:layout_marginTop="10dp"
+	        android:orientation="horizontal"
+	         >
+
+	        
+         
+	        <Button
+	            android:id="@+id/male"
+	            style="?android:attr/borderlessButtonStyle"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_alignParentBottom="true"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentTop="true"
+	            android:selectAllOnFocus="true"
+	            android:text="Male"
+	            android:layout_weight="1"
+	            android:textColor="@color/white"
+	            android:background="@drawable/malenormal"
+	            android:textSize="12sp" />
+
+	        <Button
+	            android:id="@+id/female"
+	            style="?android:attr/borderlessButtonStyle"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_alignParentRight="true"
+	            android:layout_alignTop="@+id/male"
+	            android:layout_toRightOf="@+id/male"
+	            android:background="@drawable/femalenormal"
+	            android:text="Female"
+	            android:textColor="@color/white"
+	            android:layout_weight="1"
+	            android:textSize="12sp" />
+	       
+        </LinearLayout>
+		<EditText
+		    android:id="@+id/txtcontactnumber"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/blayout"
+		    android:layout_alignRight="@+id/blayout"
+		    android:layout_below="@+id/blayout"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:padding="10dp"
+		    android:maxLength="10"
+		    android:hint="Contact number"
+		    android:textColorHint="@color/hintcolor"
+		    android:inputType="phone" >
+
+	        </EditText>
+		<EditText
+		    android:id="@+id/txtaltcontactnumber"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/blayout"
+		    android:layout_alignRight="@+id/blayout"
+		    android:layout_below="@+id/txtcontactnumber"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:padding="10dp"
+		    android:maxLength="10"
+		    android:hint="Alternate Contact number"
+		    android:textColorHint="@color/hintcolor"
+		    android:inputType="phone" >
+
+	        </EditText>
+
+		<EditText
+		    android:id="@+id/txtaddress"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/txtemailid"
+		    android:layout_alignRight="@+id/txtemailid"
+		    android:layout_below="@+id/txtemailid"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:hint="Address"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:textColorHint="@color/hintcolor"
+		    android:padding="10dp"
+		    android:maxLines="3"
+		    android:inputType="text" 
+		    />
+
+		<EditText
+		    android:id="@+id/txtemailid"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/txtcontactnumber"
+		    android:layout_alignRight="@+id/txtcontactnumber"
+		    android:layout_below="@+id/txtaltcontactnumber"
+		    android:layout_marginTop="14dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:ems="10"
+		    android:hint="Email id"
+		    android:inputType="textEmailAddress"
+		    android:padding="10dp"
+		    android:textColorHint="@color/hintcolor" />
+<!-- 
+		<Spinner
+		    android:id="@+id/spinstate"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/txtaddress"
+		    android:layout_alignRight="@+id/txtaddress"
+		    android:layout_below="@+id/txtaddress"
+		    android:background="@drawable/spinnerback"
+		    android:padding="10dp"
+		    android:layout_marginTop="10dp" /> -->
+				<com.ttl.customersocialapp.InstantAutoComplete 
+				    android:id="@+id/spinstate"
+				       android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                     android:padding="10dp"
+                    android:background="@drawable/spinnerback"
+                    android:textColorHint="@color/hintcolor"
+                     android:layout_alignLeft="@+id/txtaddress"
+		   			 android:layout_alignRight="@+id/txtaddress"
+		   			 android:layout_below="@+id/txtaddress"
+		   			android:inputType="text"
+                    android:textSize="15sp"
+                    android:hint="Select State"
+				    />	
+				    
+				<com.ttl.customersocialapp.InstantAutoComplete 
+				    android:id="@+id/spindistrict"
+				       android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                     android:padding="10dp"
+                    android:background="@drawable/spinnerback"
+                    android:textColorHint="@color/hintcolor"
+                     android:layout_alignLeft="@+id/spinstate"
+		   			 android:layout_alignRight="@+id/spinstate"
+		   			 android:layout_below="@+id/spinstate"
+		   			android:inputType="text"
+                    android:textSize="15sp"
+                    android:hint="Select District"
+				    />		
+				    
+				<com.ttl.customersocialapp.InstantAutoComplete 
+				    android:id="@+id/spincity"
+				       android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                     android:padding="10dp"
+                    android:background="@drawable/spinnerback"
+                    android:textColorHint="@color/hintcolor"
+                     android:layout_alignLeft="@+id/spindistrict"
+		   			 android:layout_alignRight="@+id/spindistrict"
+		   			 android:layout_below="@+id/spindistrict"
+		   			android:inputType="text"
+                    android:textSize="15sp"
+                    android:hint="Select City"
+				    />		
+      <!--  <Spinner
+           android:id="@+id/spincity"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignLeft="@+id/spinstate"
+           android:layout_alignRight="@+id/spinstate"
+           android:layout_below="@+id/spinstate"
+           android:layout_marginTop="10dp"
+           android:padding="10dp"
+           android:background="@drawable/spinnerback" /> -->
+       
+       <EditText
+		    android:id="@+id/txtpincode"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/spincity"
+		    android:layout_alignRight="@+id/spincity"
+		    android:layout_below="@+id/spincity"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:padding="10dp"
+		    android:maxLength="6"
+		    android:hint="Pincode"
+		    android:textColorHint="@color/hintcolor"
+		    android:inputType="number" />
+
+	         <EditText
+		    android:id="@+id/txtuserid"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/txtpincode"
+		    android:layout_alignRight="@+id/txtpincode"
+		    android:layout_below="@+id/txtpincode"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:padding="10dp"
+		    android:hint="User Id"
+		    android:textColorHint="@color/hintcolor"
+		    android:inputType="text" />
+	        
+	        <EditText
+		    android:id="@+id/txtpassword"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/txtuserid"
+		    android:layout_alignRight="@+id/txtuserid"
+		    android:layout_below="@+id/txtuserid"
+		    android:ems="10"
+		    android:layout_marginTop="10dp"
+		    android:background="@drawable/blue_border_rectangle"
+		    android:padding="10dp"
+		    android:hint="Password"
+		    android:textColorHint="@color/hintcolor"
+		    android:inputType="textPassword" >
+
+	        </EditText>
+	        
+	        <CheckBox
+		    android:id="@+id/checkBox1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/txtpassword"
+		     android:layout_alignLeft="@+id/txtpassword"
+		    android:layout_alignRight="@+id/txtpassword"
+		    android:layout_marginTop="10dp"
+		    android:textColor="@color/white"
+		    android:text="@string/terms" />
+
+	     <!--    <Button
+	            android:id="@+id/button1"
+	            android:layout_below="@+id/checkBox1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/white_border_rectangle"
+	            android:text="CANCEL" />
+
+	        <Button
+	            android:id="@+id/button2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@+id/checkBox1"
+	            android:layout_toRightOf="@+id/button1"
+	            android:layout_alignTop="@+id/txtfirstname"
+	            android:background="@drawable/white_border_rectangle"
+	            android:text="SUBMIT" /> -->
+	            
+	                <LinearLayout
+            android:id="@+id/buttonlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_below="@+id/checkBox1"   
+            android:weightSum="4"        
+            android:padding="5dip" >
+
+             <Button
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"                
+                android:background="@drawable/white_border_rectangle"
+                android:text="CANCLE"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/white" />
+            
+            
+              <Button
+                     android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"                
+                android:background="@drawable/white_border_rectangle"
+                android:text="SUBMIT"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/white" />
+            </LinearLayout>
+         
+    <!--     </LinearLayout>
+			 <LinearLayout
+	        android:id="@+id/buttonlayout"
+	        android:layout_width="wrap_content"
+	        android:layout_height="35dp"
+	        android:layout_alignLeft="@+id/txtlastname"
+	        android:layout_alignRight="@+id/txtlastname"
+	        android:layout_below="@+id/checkBox1"
+	        android:layout_marginTop="10dp"
+	        android:orientation="horizontal"
+	        android:layout_marginBottom="20dp"
+	         >
+      
+         
+	        <Button
+	            android:id="@+id/cancel"
+	            style="?android:attr/borderlessButtonStyle"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_alignParentBottom="true"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentTop="true"
+	            android:selectAllOnFocus="true"
+	            android:text="CANCEL"
+	            android:layout_marginRight="10dp"
+	            android:layout_weight="1"
+	            android:textColor="@color/white"
+	            android:background="@drawable/white_border_rectangle"
+	            android:textSize="12sp" />
+
+	        <Button
+	            android:id="@+id/submit"
+	            style="?android:attr/borderlessButtonStyle"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_alignParentRight="true"
+	            android:layout_alignTop="@+id/male"
+	            android:layout_toRightOf="@+id/male"
+	            android:background="@drawable/white_border_rectangle"
+	            android:text="SUBMIT"
+	            android:textColor="@color/white"
+	            android:layout_weight="1"
+	            android:textSize="12sp" />
+	            </LinearLayout> -->
+	        <!--      <LinearLayout
+            android:id="@+id/buttonlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_below="@+id/checkBox1"   
+            android:weightSum="4"        
+            android:padding="5dip" >
+
+             <Button
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"                
+                android:background="@drawable/white_border_rectangle"
+                android:text="CANCEL"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/white" />
+            
+            
+              <Button
+                     android:id="@+id/reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"                
+                android:background="@drawable/white_border_rectangle"
+                android:text="RESET"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/white" />
+            
+         
+        </LinearLayout>
+        	    
+        <LinearLayout
+            android:id="@+id/buttonlayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:layout_below="@+id/buttonlayout"            
+            android:padding="5dip" >
+                 
+            <Button
+              	 android:id="@+id/submit"	 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"                
+                android:background="@drawable/white_border_rectangle"
+                android:text="SUBMIT"
+              	android:layout_weight="1"
+                android:textColor="@color/white" />
+            </LinearLayout>
+	        -->
+   
+	        
+    </RelativeLayout>
+    
+</ScrollView>
+
+	
+    
+</RelativeLayout>
+>>>>>>> TMSC QA 3.4V

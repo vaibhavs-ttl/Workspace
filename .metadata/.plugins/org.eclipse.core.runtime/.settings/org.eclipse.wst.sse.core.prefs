@@ -1,0 +1,7 @@
+<<<<<<< HEAD
+eclipse.preferences.version=1
+task-tag-projects-already-scanned=CustomerServiceApplication,android-support-v7-appcompat,google-play-services_lib,com_facebook_android,AndroidMobilePushApp,QCM Client,GCMPushNotificationExample,GCMCilentDemo,appcompat_v7
+=======
+eclipse.preferences.version=1
+task-tag-projects-already-scanned=CustomerServiceApplication,android-support-v7-appcompat,google-play-services_lib,com_facebook_android,AndroidMobilePushApp,appcompat_v7,GpsDemo
+>>>>>>> TMSC QA 3.4V

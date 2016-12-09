@@ -1,0 +1,693 @@
+<<<<<<< HEAD
+package com.ttl.customersocialapp;
+
+import android.app.Dialog;
+import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class VehicalFinder_fragment extends Fragment implements
+		LocationListener {
+	View rootView;
+	MapView mapView;
+	GoogleMap googleMap;
+	private LocationManager locationManager;
+	Button park, navigate;
+	Location location;
+	Double MyLat, MyLong;
+	SharedPreferences settings;
+	String savedLat, savedLng;
+	Float savezoom;
+	Marker singleMarker;
+	double latitude, longitude;
+	boolean onlocationchange = false, savedmarker = false, markers = false,
+			loc = false, removeloction = false, parvehical = false,chkmarker=false;
+	int locationCount = 0;
+	float zoom;
+	String latString, lngString;
+	Double lat, lng;
+	Editor edit;
+	ImageView removeloc;
+	Marker savemarker, marker;
+
+	public VehicalFinder_fragment() {
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		rootView = inflater.inflate(R.layout.fragment_vehicalfinder, container,
+				false);
+		mapView = (MapView) rootView.findViewById(R.id.vehicalmap);
+		mapView.onCreate(savedInstanceState);
+
+		// Gets to GoogleMap from the MapView and does initialization stuff
+		googleMap = mapView.getMap();
+		googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+		googleMap.setMyLocationEnabled(false);
+
+		locationManager = (LocationManager) rootView.getContext()
+				.getSystemService(Context.LOCATION_SERVICE);
+
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				3000, // 3 sec
+				10, this);
+		location = locationManager
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+		settings = PreferenceManager.getDefaultSharedPreferences(rootView
+				.getContext());
+		savedLat = settings.getString("latitude", latString);
+
+		savedLng = settings.getString("longitude", lngString);
+
+		savezoom = settings.getFloat("zoom", zoom);
+		if (savedLat != null && savedLng != null && savezoom != null) {
+			lat = Double.parseDouble(savedLat);
+			lng = Double.parseDouble(savedLng);
+			savemarker = googleMap.addMarker(new MarkerOptions()
+					.position(new LatLng(lat, lng)));
+			CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(lat,
+					lng));
+			CameraUpdate zoom = CameraUpdateFactory.zoomTo(savezoom);
+
+			googleMap.moveCamera(center);
+			googleMap.animateCamera(zoom);
+			savedmarker = true;
+			chkmarker=true;
+
+		} else {
+			loc = true;
+			if (location != null) {
+
+				MyLat = location.getLatitude();
+				MyLong = location.getLongitude();
+				CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(
+						MyLat, MyLong));
+				CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+
+				googleMap.moveCamera(center);
+				googleMap.animateCamera(zoom);
+			}
+		}
+		parvehical = false;
+		removeloc = (ImageView) rootView.findViewById(R.id.removeloc);
+
+		removeloc.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (parvehical == true || savedmarker == true&&removeloction==false) {
+
+					final Dialog dialog = new Dialog(v.getContext());
+					dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					dialog.setContentView(R.layout.removelocation);
+
+					Button btnNo = (Button) dialog.findViewById(R.id.vbtnno);
+					btnNo.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							dialog.cancel();
+						}
+					});
+					Button btnYes = (Button) dialog.findViewById(R.id.vbtnyes);
+
+					btnYes.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							parvehical = false;
+							park.setEnabled(true);
+							removeloction = true;
+							chkmarker=false;
+							if (savedmarker == true) {
+								savemarker.remove();
+								settings.edit().clear().commit();
+							} else if (markers = true) {
+								
+								marker.remove();
+								settings.edit().clear().commit();
+							}
+
+							dialog.cancel();
+						}
+					});
+
+					dialog.show();
+				} else {
+					Toast.makeText(getActivity(), "Please park your vehical",
+							Toast.LENGTH_LONG).show();
+				}
+
+			}
+		});
+		park = (Button) rootView.findViewById(R.id.btnsaveloc);
+		navigate = (Button) rootView.findViewById(R.id.btnNavigate);
+
+		park.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (loc == true || removeloction == true) {
+
+					final Dialog dialog = new Dialog(v.getContext());
+					dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					dialog.setContentView(R.layout.vehicalfinderpopup);
+
+					Button btnOK = (Button) dialog.findViewById(R.id.btnok);
+
+					btnOK.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							park.setEnabled(false);
+							parvehical = true;
+							if (location != null) {
+
+								MyLat = location.getLatitude();
+								MyLong = location.getLongitude();
+								CameraUpdate center = CameraUpdateFactory
+										.newLatLng(new LatLng(MyLat, MyLong));
+								CameraUpdate zoom = CameraUpdateFactory
+										.zoomTo(15);
+
+								googleMap.moveCamera(center);
+								googleMap.animateCamera(zoom);
+							}
+							marker = googleMap.addMarker(new MarkerOptions()
+									.position(new LatLng(MyLat, MyLong)));
+							markers = true;
+							zoom = googleMap.getCameraPosition().zoom;
+
+							latString = MyLat + "";
+
+							lngString = MyLong + "";
+							edit = settings.edit();
+							// put latitude and longitude to preferences for
+							// later
+							// use
+							edit.putString("latitude", latString);
+							edit.putString("longitude", lngString);
+							edit.putFloat("zoom", zoom);
+							edit.commit();
+
+							dialog.cancel();
+						}
+					});
+
+					dialog.show();
+				} else {
+					Toast.makeText(getActivity(), "Your vehical already park",
+							Toast.LENGTH_LONG).show();
+				}
+			}
+		});
+
+		navigate.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				location = locationManager
+						.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				if (chkmarker == true || parvehical == true) {
+
+					if (onlocationchange == true) {
+
+						String uri = "http://maps.google.com/maps?saddr="
+								+ latitude + "," + longitude + "&daddr="
+								+ savedLat + "," + savedLng;
+						Intent intent = new Intent(
+								android.content.Intent.ACTION_VIEW, Uri
+										.parse(uri));
+						intent.setClassName("com.google.android.apps.maps",
+								"com.google.android.maps.MapsActivity");
+
+						startActivity(intent);
+					} else {
+						Toast.makeText(rootView.getContext(),
+								"You are at Same Location", Toast.LENGTH_LONG)
+								.show();
+					}
+				} else {
+					Toast.makeText(getActivity(),
+							"You did'n park your vehical", Toast.LENGTH_LONG)
+							.show();
+				}
+			}
+		});
+		rootView.getRootView().setFocusableInTouchMode(true);
+		rootView.getRootView().requestFocus();
+
+		rootView.getRootView().setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					if (keyCode == KeyEvent.KEYCODE_BACK) {						
+						FragmentManager fm = getFragmentManager();
+						FragmentTransaction tx = fm.beginTransaction();
+						tx.replace(R.id.frame_container, new HomeFragment())
+								.commit();
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		mapView.onResume();
+		super.onResume();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mapView.onDestroy();
+	}
+
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+		mapView.onLowMemory();
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		String str = "Latitude: " + location.getLatitude() + " \nLongitude: "
+				+ location.getLongitude();
+		// Toast.makeText(rootView.getContext(), str, Toast.LENGTH_LONG).show();
+		Log.d(str, "lat log");
+
+		latitude = location.getLatitude();
+
+		// Getting longitude of the current location
+		longitude = location.getLongitude();
+
+		// Creating a LatLng object for the current location
+		LatLng latLng = new LatLng(latitude, longitude);
+		onlocationchange = true;
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+}
+=======
+package com.ttl.customersocialapp;
+
+import android.app.Dialog;
+import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class VehicalFinder_fragment extends Fragment implements
+		LocationListener {
+	View rootView;
+	MapView mapView;
+	GoogleMap googleMap;
+	private LocationManager locationManager;
+	Button park, navigate;
+	Location location;
+	Double MyLat, MyLong;
+	SharedPreferences settings;
+	String savedLat, savedLng;
+	Float savezoom;
+	Marker singleMarker;
+	double latitude, longitude;
+	boolean onlocationchange = false, savedmarker = false, markers = false,
+			loc = false, removeloction = false, parvehical = false,chkmarker=false;
+	int locationCount = 0;
+	float zoom;
+	String latString, lngString;
+	Double lat, lng;
+	Editor edit;
+	ImageView removeloc;
+	Marker savemarker, marker;
+
+	public VehicalFinder_fragment() {
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		rootView = inflater.inflate(R.layout.fragment_vehicalfinder, container,
+				false);
+		mapView = (MapView) rootView.findViewById(R.id.vehicalmap);
+		mapView.onCreate(savedInstanceState);
+
+		// Gets to GoogleMap from the MapView and does initialization stuff
+		googleMap = mapView.getMap();
+		googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+		googleMap.setMyLocationEnabled(false);
+
+		locationManager = (LocationManager) rootView.getContext()
+				.getSystemService(Context.LOCATION_SERVICE);
+
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				3000, // 3 sec
+				10, this);
+		location = locationManager
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+		settings = PreferenceManager.getDefaultSharedPreferences(rootView
+				.getContext());
+		savedLat = settings.getString("latitude", latString);
+
+		savedLng = settings.getString("longitude", lngString);
+
+		savezoom = settings.getFloat("zoom", zoom);
+		if (savedLat != null && savedLng != null && savezoom != null) {
+			lat = Double.parseDouble(savedLat);
+			lng = Double.parseDouble(savedLng);
+			savemarker = googleMap.addMarker(new MarkerOptions()
+					.position(new LatLng(lat, lng)));
+			CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(lat,
+					lng));
+			CameraUpdate zoom = CameraUpdateFactory.zoomTo(savezoom);
+
+			googleMap.moveCamera(center);
+			googleMap.animateCamera(zoom);
+			savedmarker = true;
+			chkmarker=true;
+
+		} else {
+			loc = true;
+			if (location != null) {
+
+				MyLat = location.getLatitude();
+				MyLong = location.getLongitude();
+				CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(
+						MyLat, MyLong));
+				CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+
+				googleMap.moveCamera(center);
+				googleMap.animateCamera(zoom);
+			}
+		}
+		parvehical = false;
+		removeloc = (ImageView) rootView.findViewById(R.id.removeloc);
+
+		removeloc.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (parvehical == true || savedmarker == true&&removeloction==false) {
+
+					final Dialog dialog = new Dialog(v.getContext());
+					dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					dialog.setContentView(R.layout.removelocation);
+
+					Button btnNo = (Button) dialog.findViewById(R.id.vbtnno);
+					btnNo.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							dialog.cancel();
+						}
+					});
+					Button btnYes = (Button) dialog.findViewById(R.id.vbtnyes);
+
+					btnYes.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							parvehical = false;
+							park.setEnabled(true);
+							removeloction = true;
+							chkmarker=false;
+							if (savedmarker == true) {
+								savemarker.remove();
+								settings.edit().clear().commit();
+							} else if (markers = true) {
+								
+								marker.remove();
+								settings.edit().clear().commit();
+							}
+
+							dialog.cancel();
+						}
+					});
+
+					dialog.show();
+				} else {
+					Toast.makeText(getActivity(), "Please park your vehical",
+							Toast.LENGTH_LONG).show();
+				}
+
+			}
+		});
+		park = (Button) rootView.findViewById(R.id.btnsaveloc);
+		navigate = (Button) rootView.findViewById(R.id.btnNavigate);
+
+		park.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (loc == true || removeloction == true) {
+
+					final Dialog dialog = new Dialog(v.getContext());
+					dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					dialog.setContentView(R.layout.vehicalfinderpopup);
+
+					Button btnOK = (Button) dialog.findViewById(R.id.btnok);
+
+					btnOK.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							park.setEnabled(false);
+							parvehical = true;
+							if (location != null) {
+
+								MyLat = location.getLatitude();
+								MyLong = location.getLongitude();
+								CameraUpdate center = CameraUpdateFactory
+										.newLatLng(new LatLng(MyLat, MyLong));
+								CameraUpdate zoom = CameraUpdateFactory
+										.zoomTo(15);
+
+								googleMap.moveCamera(center);
+								googleMap.animateCamera(zoom);
+							}
+							marker = googleMap.addMarker(new MarkerOptions()
+									.position(new LatLng(MyLat, MyLong)));
+							markers = true;
+							zoom = googleMap.getCameraPosition().zoom;
+
+							latString = MyLat + "";
+
+							lngString = MyLong + "";
+							edit = settings.edit();
+							// put latitude and longitude to preferences for
+							// later
+							// use
+							edit.putString("latitude", latString);
+							edit.putString("longitude", lngString);
+							edit.putFloat("zoom", zoom);
+							edit.commit();
+
+							dialog.cancel();
+						}
+					});
+
+					dialog.show();
+				} else {
+					Toast.makeText(getActivity(), "Your vehical already park",
+							Toast.LENGTH_LONG).show();
+				}
+			}
+		});
+
+		navigate.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				location = locationManager
+						.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				if (chkmarker == true || parvehical == true) {
+
+					if (onlocationchange == true) {
+
+						String uri = "http://maps.google.com/maps?saddr="
+								+ latitude + "," + longitude + "&daddr="
+								+ savedLat + "," + savedLng;
+						Intent intent = new Intent(
+								android.content.Intent.ACTION_VIEW, Uri
+										.parse(uri));
+						intent.setClassName("com.google.android.apps.maps",
+								"com.google.android.maps.MapsActivity");
+
+						startActivity(intent);
+					} else {
+						Toast.makeText(rootView.getContext(),
+								"You are at Same Location", Toast.LENGTH_LONG)
+								.show();
+					}
+				} else {
+					Toast.makeText(getActivity(),
+							"You did'n park your vehical", Toast.LENGTH_LONG)
+							.show();
+				}
+			}
+		});
+		rootView.getRootView().setFocusableInTouchMode(true);
+		rootView.getRootView().requestFocus();
+
+		rootView.getRootView().setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					if (keyCode == KeyEvent.KEYCODE_BACK) {						
+						FragmentManager fm = getFragmentManager();
+						FragmentTransaction tx = fm.beginTransaction();
+						tx.replace(R.id.frame_container, new HomeFragment())
+								.commit();
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		mapView.onResume();
+		super.onResume();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mapView.onDestroy();
+	}
+
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+		mapView.onLowMemory();
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		String str = "Latitude: " + location.getLatitude() + " \nLongitude: "
+				+ location.getLongitude();
+		// Toast.makeText(rootView.getContext(), str, Toast.LENGTH_LONG).show();
+		Log.d(str, "lat log");
+
+		latitude = location.getLatitude();
+
+		// Getting longitude of the current location
+		longitude = location.getLongitude();
+
+		// Creating a LatLng object for the current location
+		LatLng latLng = new LatLng(latitude, longitude);
+		onlocationchange = true;
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+}
+>>>>>>> TMSC QA 3.4V

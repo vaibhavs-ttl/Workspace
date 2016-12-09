@@ -1,0 +1,16 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@android:drawable/arrow_up_float" android:state_checked="true"></item>
+    <item android:drawable="@android:drawable/arrow_down_float"></item>
+
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@android:drawable/arrow_up_float" android:state_checked="true"></item>
+    <item android:drawable="@android:drawable/arrow_down_float"></item>
+
+>>>>>>> TMSC QA 3.4V
+</selector>

@@ -1,0 +1,125 @@
+package com.ttl.communication;
+
+import java.util.ArrayList;
+
+import com.ttl.model.LabourModel;
+import com.ttl.model.LabourSpareModel;
+import com.ttl.model.SpareModel;
+
+public class GlobalAccessObject {
+
+	
+	
+	private static ArrayList<LabourModel> labour_obj;
+	private static ArrayList<SpareModel> spare_obj;
+	private static boolean isSpareModelLoaded=false;
+	private static boolean isLabourModelLoaded=false;
+	private static ArrayList<LabourSpareModel> labour_spare_obj;
+	private static boolean loaded=false;
+
+	public static ArrayList<LabourModel> getLabour_obj() {
+		return labour_obj;
+	}
+
+	public static void setLabour_obj(ArrayList<LabourModel> labour_obj) {
+		GlobalAccessObject.labour_obj = labour_obj;
+	}
+	
+	
+	public static void NullifyLabour_obj()
+	{
+		
+		
+		if (labour_obj!=null) {
+			
+			labour_obj=null;
+			
+		}
+		
+		
+	}
+	
+	
+
+	public static ArrayList<SpareModel> getSpare_obj() {
+		return spare_obj;
+	}
+
+	public static void setSpare_obj(ArrayList<SpareModel> spare_obj) {
+		GlobalAccessObject.spare_obj = spare_obj;
+	}
+	
+	
+	public static void NullifySpare_obj()
+	{
+		
+		
+		if (spare_obj!=null) {
+			
+			spare_obj=null;
+			
+		}
+		
+		
+	}
+
+	public static boolean isSpareModelLoaded() {
+		return isSpareModelLoaded;
+	}
+
+	public static void setSpareModelLoaded(boolean isSpareModelLoaded) {
+		GlobalAccessObject.isSpareModelLoaded = isSpareModelLoaded;
+	}
+
+	public static boolean isLabourModelLoaded() {
+		return isLabourModelLoaded;
+	}
+
+	public static void setLabourModelLoaded(boolean isLabourModelLoaded) {
+		GlobalAccessObject.isLabourModelLoaded = isLabourModelLoaded;
+	}
+
+	
+	
+	
+	
+	public static ArrayList<LabourSpareModel> getLabour_spare_obj() {
+		return labour_spare_obj;
+	}
+
+	public static void setLabour_spare_obj(ArrayList<LabourSpareModel> labour_spare_obj) {
+		GlobalAccessObject.labour_spare_obj = labour_spare_obj;
+	}
+
+	
+	
+	public static void Nullifylabour_spare_obj()
+	{
+		
+		
+		if (labour_spare_obj!=null) {
+			
+			labour_spare_obj=null;
+			
+		}
+		
+		
+	}
+
+	public static boolean isLoaded() {
+		return loaded;
+	}
+
+	public static void setLoaded(boolean loaded) {
+		GlobalAccessObject.loaded = loaded;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

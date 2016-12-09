@@ -1,0 +1,355 @@
+<<<<<<< HEAD
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.adapter.AwsResponseCallback;
+
+import com.ttl.communication.SamlArtifact;
+import com.ttl.model.ServiceHandler;
+import com.ttl.model.UserDetails;
+import com.ttl.webservice.AWS_WebServiceCall;
+import com.ttl.webservice.Config;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
+import android.net.MailTo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnKeyListener;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+public class LoginActivity extends Activity implements OnClickListener  {
+
+	ImageView sign_in , sign_up;
+	EditText edtuser_id , edtpassword ;
+	private final String PREFS_NAME = "CREDENTIALS"; // ### Shared pref to store username password
+	private final String name = "USERID";
+	private final String password = "PASSWORD";
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_login);
+		
+		sign_in = (ImageView) findViewById(R.id.sign_in);
+		sign_in.setOnClickListener(this);
+		
+		sign_up = (ImageView) findViewById(R.id.sign_up);
+		sign_up.setOnClickListener(this);
+		edtuser_id = (EditText) findViewById(R.id.txtuser_id);
+		edtpassword = (EditText) findViewById(R.id.txtpassword);
+		
+		HomeFragment.regvehicle = false;
+	
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.login, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		 SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	       String username = settings.getString(name, "");
+	       String pwd = settings.getString(password, "");
+	     /*  TextView uName = (TextView) findViewById(R.id.textUserId);
+			uName.setText(username);
+			TextView uPwd = (TextView) findViewById(R.id.textPassword);
+			uPwd.setText(pwd);*/
+	}
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch(v.getId())
+		{
+		case R.id.sign_in :
+		/*	Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+			startActivity(intent);*/
+			String userid = edtuser_id.getText().toString();
+			String password_ = edtpassword.getText().toString();
+			
+			if(!(userid.equals("")))
+			{
+				if(!(password_.equals("")))
+				{
+					String req = "http://tmlmobilityservices.co.in:8080/CustomerApp_Restws/customerapp/user/xml";
+					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+					nameValuePairs.add(new BasicNameValuePair("user_id",userid));
+					nameValuePairs.add(new BasicNameValuePair("password",password_));
+					new AWS_WebServiceCall(LoginActivity.this, req,ServiceHandler.POST ,Constants.user,
+							nameValuePairs,new AwsResponseCallback() {
+
+								@Override
+								public void onResponseReceive(Object object) {
+									// TODO Auto-generated method stub
+									boolean res = (boolean) object;
+									if(res)
+									{
+										SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+									      SharedPreferences.Editor editor = settings.edit();
+										      editor.putString(password, edtuser_id.getText().toString());
+										      editor.putString(name, edtpassword.getText().toString());
+										Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+										startActivity(intent);
+									}
+									else
+									{
+										Toast.makeText(getApplicationContext(), "Invalid credentials, please check username passsword you entered.", Toast.LENGTH_LONG).show();
+										edtuser_id.setFocusable(true);
+										
+									}
+								
+								}
+
+								@Override
+								public void onErrorReceive(String string) {
+									// TODO Auto-generated method stub
+									Toast.makeText(getApplicationContext(), "Invalid credentials, please check username passsword you entered.", Toast.LENGTH_LONG).show();
+									edtuser_id.setFocusable(true);
+									
+								}
+
+							
+							}).execute();
+					
+					//new AuthenticateUser(req, userid, password_).execute();
+				}
+			}
+			else
+				Toast.makeText(getApplicationContext(), "Please enter username and password", Toast.LENGTH_SHORT).show();
+			break;
+			
+		case R.id.sign_up :
+			Intent intent1 = new Intent(LoginActivity.this, RegisterUserActivity.class);
+			startActivity(intent1);
+			break;
+		}
+	}
+	
+	
+
+}
+=======
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.ttl.adapter.ResponseCallback;
+import com.ttl.adapter.AwsResponseCallback;
+
+import com.ttl.communication.SamlArtifact;
+import com.ttl.model.ServiceHandler;
+import com.ttl.model.UserDetails;
+import com.ttl.webservice.AWS_WebServiceCall;
+import com.ttl.webservice.Config;
+import com.ttl.webservice.Constants;
+import com.ttl.webservice.WebServiceCall;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
+import android.net.MailTo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnKeyListener;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+public class LoginActivity extends Activity implements OnClickListener  {
+
+	ImageView sign_in , sign_up;
+	EditText edtuser_id , edtpassword ;
+	private final String PREFS_NAME = "CREDENTIALS"; // ### Shared pref to store username password
+	private final String name = "USERID";
+	private final String password = "PASSWORD";
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_login);
+		
+		sign_in = (ImageView) findViewById(R.id.sign_in);
+		sign_in.setOnClickListener(this);
+		
+		sign_up = (ImageView) findViewById(R.id.sign_up);
+		sign_up.setOnClickListener(this);
+		edtuser_id = (EditText) findViewById(R.id.txtuser_id);
+		edtpassword = (EditText) findViewById(R.id.txtpassword);
+		
+		HomeFragment.regvehicle = false;
+	
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.login, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		 SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	       String username = settings.getString(name, "");
+	       String pwd = settings.getString(password, "");
+	     /*  TextView uName = (TextView) findViewById(R.id.textUserId);
+			uName.setText(username);
+			TextView uPwd = (TextView) findViewById(R.id.textPassword);
+			uPwd.setText(pwd);*/
+	}
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch(v.getId())
+		{
+		case R.id.sign_in :
+		/*	Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+			startActivity(intent);*/
+			String userid = edtuser_id.getText().toString();
+			String password_ = edtpassword.getText().toString();
+			
+			if(!(userid.equals("")))
+			{
+				if(!(password_.equals("")))
+				{
+					String req = "http://tmlmobilityservices.co.in:8080/CustomerApp_Restws/customerapp/user/xml";
+					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+					nameValuePairs.add(new BasicNameValuePair("user_id",userid));
+					nameValuePairs.add(new BasicNameValuePair("password",password_));
+					new AWS_WebServiceCall(LoginActivity.this, req,ServiceHandler.POST ,Constants.user,
+							nameValuePairs,new AwsResponseCallback() {
+
+								@Override
+								public void onResponseReceive(Object object) {
+									// TODO Auto-generated method stub
+									boolean res = (boolean) object;
+									if(res)
+									{
+										SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+									      SharedPreferences.Editor editor = settings.edit();
+										      editor.putString(password, edtuser_id.getText().toString());
+										      editor.putString(name, edtpassword.getText().toString());
+										Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+										startActivity(intent);
+									}
+									else
+									{
+										Toast.makeText(getApplicationContext(), "Invalid credentials, please check username passsword you entered.", Toast.LENGTH_LONG).show();
+										edtuser_id.setFocusable(true);
+										
+									}
+								
+								}
+
+								@Override
+								public void onErrorReceive(String string) {
+									// TODO Auto-generated method stub
+									Toast.makeText(getApplicationContext(), "Invalid credentials, please check username passsword you entered.", Toast.LENGTH_LONG).show();
+									edtuser_id.setFocusable(true);
+									
+								}
+
+							
+							}).execute();
+					
+					//new AuthenticateUser(req, userid, password_).execute();
+				}
+			}
+			else
+				Toast.makeText(getApplicationContext(), "Please enter username and password", Toast.LENGTH_SHORT).show();
+			break;
+			
+		case R.id.sign_up :
+			Intent intent1 = new Intent(LoginActivity.this, RegisterUserActivity.class);
+			startActivity(intent1);
+			break;
+		}
+	}
+	
+	
+
+}
+>>>>>>> TMSC QA 3.4V

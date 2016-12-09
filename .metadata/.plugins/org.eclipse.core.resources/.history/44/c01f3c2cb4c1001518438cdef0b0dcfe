@@ -1,0 +1,533 @@
+<<<<<<< HEAD
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import android.app.ActionBar.LayoutParams;
+import android.app.Fragment;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.ttl.adapter.AwsResponseCallback;
+import com.ttl.adapter.NotificationAdapter;
+import com.ttl.model.ServiceHandler;
+import com.ttl.webservice.AWS_WebServiceCall;
+import com.ttl.webservice.Constants;
+
+public class Notifiaction_fragment extends Fragment {
+
+	View rootView;
+	ListView notificationlist;
+	String title[] = { "delear", "delear1", "delear2", "delear3" };
+	String description[] = {
+			"tata motors tata motors tata motors tata motors tata motors tata motors",
+			"tata motors1", "tata motors2", "tata motors3" };
+	public int currentimageindex = 0;
+	Timer timer;
+	TimerTask task;
+	ImageView slidingimage;
+	String btnstring[] = { "delear", "delear1", "delear2", "delear3",
+			"delear4", "delear5" };
+	private int[] IMAGE_IDS = { R.drawable.car, R.drawable.car1,
+			R.drawable.car3, R.drawable.car4 };
+	NotificationAdapter notificationadp;
+	LinearLayout lineardynamic;
+	Button dynamicbtn;
+	String notificationtype;
+
+	ArrayList<HashMap<String, String>> ntflist;
+
+	public static ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+	public static ArrayList<HashMap<String, String>> addlist = new ArrayList<HashMap<String, String>>();
+
+	public Notifiaction_fragment() {
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		rootView = inflater.inflate(R.layout.fragment_notification, container,
+				false);
+		notificationlist = (ListView) rootView
+				.findViewById(R.id.notificationlist);
+
+		final Handler mHandler = new Handler();
+
+		// Create runnable for posting
+		final Runnable mUpdateResults = new Runnable() {
+			public void run() {
+
+				AnimateandSlideShow();
+
+			}
+		};
+
+		int delay = 1000; // delay for 1 sec.
+
+		int period = 3000; // repeat every 4 sec.
+
+		Timer timer = new Timer();
+
+		timer.scheduleAtFixedRate(new TimerTask() {
+
+			public void run() {
+
+				mHandler.post(mUpdateResults);
+
+			}
+
+		}, delay, period);
+
+		String req = "http://tmlmobilityservices.co.in:8080/CustomerApp_Restws/customerapp/notifications/getNotificationsForApp";
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+		final String city = "Option 1";
+		String ppl = "Option 2";
+		String pl = " Option 3";
+		final String km = "Option 3";
+		nameValuePairs.add(new BasicNameValuePair("city", city));
+		nameValuePairs.add(new BasicNameValuePair("PPL", ppl));
+		nameValuePairs.add(new BasicNameValuePair("PL", pl));
+		nameValuePairs.add(new BasicNameValuePair("kms_run", km));
+
+		new AWS_WebServiceCall(getActivity(), req, ServiceHandler.POST,
+				Constants.notification, nameValuePairs,
+				new AwsResponseCallback() {
+
+					@Override
+					public void onResponseReceive(Object object) {
+						// TODO Auto-generated method stub
+						// boolean notify = (boolean) object;
+
+						ntflist = (ArrayList<HashMap<String, String>>) object;
+
+						for (int i = 0; i < ntflist.size(); i++) {
+
+							addlist.add(ntflist.get(i));
+							
+
+						}
+
+						for (int j = 0; j < AWS_WebServiceCall.typelist.size(); j++) {
+
+							lineardynamic = (LinearLayout) rootView
+									.findViewById(R.id.linbtn);
+							Log.d(list.size() + "", "list size");
+							LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+									LayoutParams.WRAP_CONTENT,
+									LayoutParams.WRAP_CONTENT);
+							params.width = 0;
+							params.weight = 1;
+							// ------------button create---------------//
+							// Create LinearLayout
+							LinearLayout ll = new LinearLayout(getActivity());
+							ll.setOrientation(LinearLayout.HORIZONTAL);
+
+							// Create Button
+							dynamicbtn = new Button(getActivity());
+							// Give button an ID
+
+							dynamicbtn.setId(j + 1);
+
+							dynamicbtn.setText(AWS_WebServiceCall.typelist
+									.get(j));
+
+							notificationtype = AWS_WebServiceCall.typelist
+									.get(0);
+							
+
+							// set the layoutParams on the button
+							dynamicbtn.setLayoutParams(params);
+
+							dynamicbtn
+									.setBackgroundResource(R.drawable.notificationbg);
+							dynamicbtn.setTextColor(Color.parseColor("#F5F5F5"));
+
+							// Set click listener for button
+							dynamicbtn
+									.setOnClickListener(new OnClickListener() {
+										public void onClick(View v) {
+
+											for (int i = 0; i < addlist.size(); i++) {
+												list.remove(addlist.get(i));
+												if (addlist
+														.get(i)
+														.get("notification_type")
+														.equalsIgnoreCase(
+																((Button) v)
+																		.getText()
+																		.toString())) {
+													Log.d(addlist.get(i).get(
+															"id"), "get id");
+													list.add(addlist.get(i));
+
+													notificationadp
+															.notifyDataSetChanged();
+												}
+
+												/*
+												 * Log.d(list.get(i).get(
+												 * "notification_type"),
+												 * "get id1");
+												 */
+											}
+
+										}
+									});
+
+							// Add button to LinearLayout
+							ll.addView(dynamicbtn);
+							// Add button to LinearLayout defined in XML
+							lineardynamic.addView(ll);
+						}
+
+						for (int i = 0; i < ntflist.size(); i++) {
+
+							addlist.add(ntflist.get(i));
+							Log.d(notificationtype, "get type");
+							list.remove(addlist.get(i));
+							if (addlist.get(i).get("notification_type")
+									.equals(notificationtype)) {
+								Log.d(addlist.get(i).get("id"), "get id");
+								list.add(addlist.get(i));
+
+								notificationadp.notifyDataSetChanged();
+							}
+
+						}
+					}
+
+					@Override
+					public void onErrorReceive(String string) {
+						// TODO Auto-generated method stub
+						Log.d(string, "get string");
+					}
+				}).execute();
+		notificationadp = new NotificationAdapter(getActivity(),
+				R.layout.notifiation_list, list);
+		notificationlist.setAdapter(notificationadp);
+		notificationadp.notifyDataSetChanged();
+		
+		rootView.getRootView().setFocusableInTouchMode(true);
+		rootView.getRootView().requestFocus();
+
+		rootView.getRootView().setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					if (keyCode == KeyEvent.KEYCODE_BACK) {
+						FragmentManager fm = getFragmentManager();
+						FragmentTransaction tx = fm.beginTransaction();
+						tx.replace(R.id.frame_container, new HomeFragment())
+								.commit();
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		return rootView;
+	}
+
+	private void AnimateandSlideShow() {
+
+		slidingimage = (ImageView) rootView.findViewById(R.id.imgslider);
+		slidingimage.setImageResource(IMAGE_IDS[currentimageindex
+				% IMAGE_IDS.length]);
+
+		currentimageindex++;
+
+		Animation rotateimage = AnimationUtils.loadAnimation(
+				rootView.getContext(), R.anim.custom_anim);
+
+		slidingimage.startAnimation(rotateimage);
+	}
+
+}
+=======
+package com.ttl.customersocialapp;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import android.app.ActionBar.LayoutParams;
+import android.app.Fragment;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.ttl.adapter.AwsResponseCallback;
+import com.ttl.adapter.NotificationAdapter;
+import com.ttl.model.ServiceHandler;
+import com.ttl.webservice.AWS_WebServiceCall;
+import com.ttl.webservice.Constants;
+
+public class Notifiaction_fragment extends Fragment {
+
+	View rootView;
+	ListView notificationlist;
+	String title[] = { "delear", "delear1", "delear2", "delear3" };
+	String description[] = {
+			"tata motors tata motors tata motors tata motors tata motors tata motors",
+			"tata motors1", "tata motors2", "tata motors3" };
+	public int currentimageindex = 0;
+	Timer timer;
+	TimerTask task;
+	ImageView slidingimage;
+	String btnstring[] = { "delear", "delear1", "delear2", "delear3",
+			"delear4", "delear5" };
+	private int[] IMAGE_IDS = { R.drawable.car, R.drawable.car1,
+			R.drawable.car3, R.drawable.car4 };
+	NotificationAdapter notificationadp;
+	LinearLayout lineardynamic;
+	Button dynamicbtn;
+	String notificationtype;
+
+	ArrayList<HashMap<String, String>> ntflist;
+
+	public static ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+	public static ArrayList<HashMap<String, String>> addlist = new ArrayList<HashMap<String, String>>();
+
+	public Notifiaction_fragment() {
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		rootView = inflater.inflate(R.layout.fragment_notification, container,
+				false);
+		notificationlist = (ListView) rootView
+				.findViewById(R.id.notificationlist);
+
+		final Handler mHandler = new Handler();
+
+		// Create runnable for posting
+		final Runnable mUpdateResults = new Runnable() {
+			public void run() {
+
+				AnimateandSlideShow();
+
+			}
+		};
+
+		int delay = 1000; // delay for 1 sec.
+
+		int period = 3000; // repeat every 4 sec.
+
+		Timer timer = new Timer();
+
+		timer.scheduleAtFixedRate(new TimerTask() {
+
+			public void run() {
+
+				mHandler.post(mUpdateResults);
+
+			}
+
+		}, delay, period);
+
+		String req = "http://tmlmobilityservices.co.in:8080/CustomerApp_Restws/customerapp/notifications/getNotificationsForApp";
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+		final String city = "Option 1";
+		String ppl = "Option 2";
+		String pl = " Option 3";
+		final String km = "Option 3";
+		nameValuePairs.add(new BasicNameValuePair("city", city));
+		nameValuePairs.add(new BasicNameValuePair("PPL", ppl));
+		nameValuePairs.add(new BasicNameValuePair("PL", pl));
+		nameValuePairs.add(new BasicNameValuePair("kms_run", km));
+
+		new AWS_WebServiceCall(getActivity(), req, ServiceHandler.POST,
+				Constants.notification, nameValuePairs,
+				new AwsResponseCallback() {
+
+					@Override
+					public void onResponseReceive(Object object) {
+						// TODO Auto-generated method stub
+						// boolean notify = (boolean) object;
+
+						ntflist = (ArrayList<HashMap<String, String>>) object;
+
+						for (int i = 0; i < ntflist.size(); i++) {
+
+							addlist.add(ntflist.get(i));
+							
+
+						}
+
+						for (int j = 0; j < AWS_WebServiceCall.typelist.size(); j++) {
+
+							lineardynamic = (LinearLayout) rootView
+									.findViewById(R.id.linbtn);
+							Log.d(list.size() + "", "list size");
+							LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+									LayoutParams.WRAP_CONTENT,
+									LayoutParams.WRAP_CONTENT);
+							params.width = 0;
+							params.weight = 1;
+							// ------------button create---------------//
+							// Create LinearLayout
+							LinearLayout ll = new LinearLayout(getActivity());
+							ll.setOrientation(LinearLayout.HORIZONTAL);
+
+							// Create Button
+							dynamicbtn = new Button(getActivity());
+							// Give button an ID
+
+							dynamicbtn.setId(j + 1);
+
+							dynamicbtn.setText(AWS_WebServiceCall.typelist
+									.get(j));
+
+							notificationtype = AWS_WebServiceCall.typelist
+									.get(0);
+							
+
+							// set the layoutParams on the button
+							dynamicbtn.setLayoutParams(params);
+
+							dynamicbtn
+									.setBackgroundResource(R.drawable.notificationbg);
+							dynamicbtn.setTextColor(Color.parseColor("#F5F5F5"));
+
+							// Set click listener for button
+							dynamicbtn
+									.setOnClickListener(new OnClickListener() {
+										public void onClick(View v) {
+
+											for (int i = 0; i < addlist.size(); i++) {
+												list.remove(addlist.get(i));
+												if (addlist
+														.get(i)
+														.get("notification_type")
+														.equalsIgnoreCase(
+																((Button) v)
+																		.getText()
+																		.toString())) {
+													Log.d(addlist.get(i).get(
+															"id"), "get id");
+													list.add(addlist.get(i));
+
+													notificationadp
+															.notifyDataSetChanged();
+												}
+
+												/*
+												 * Log.d(list.get(i).get(
+												 * "notification_type"),
+												 * "get id1");
+												 */
+											}
+
+										}
+									});
+
+							// Add button to LinearLayout
+							ll.addView(dynamicbtn);
+							// Add button to LinearLayout defined in XML
+							lineardynamic.addView(ll);
+						}
+
+						for (int i = 0; i < ntflist.size(); i++) {
+
+							addlist.add(ntflist.get(i));
+							Log.d(notificationtype, "get type");
+							list.remove(addlist.get(i));
+							if (addlist.get(i).get("notification_type")
+									.equals(notificationtype)) {
+								Log.d(addlist.get(i).get("id"), "get id");
+								list.add(addlist.get(i));
+
+								notificationadp.notifyDataSetChanged();
+							}
+
+						}
+					}
+
+					@Override
+					public void onErrorReceive(String string) {
+						// TODO Auto-generated method stub
+						Log.d(string, "get string");
+					}
+				}).execute();
+		notificationadp = new NotificationAdapter(getActivity(),
+				R.layout.notifiation_list, list);
+		notificationlist.setAdapter(notificationadp);
+		notificationadp.notifyDataSetChanged();
+		
+		rootView.getRootView().setFocusableInTouchMode(true);
+		rootView.getRootView().requestFocus();
+
+		rootView.getRootView().setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					if (keyCode == KeyEvent.KEYCODE_BACK) {
+						FragmentManager fm = getFragmentManager();
+						FragmentTransaction tx = fm.beginTransaction();
+						tx.replace(R.id.frame_container, new HomeFragment())
+								.commit();
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		return rootView;
+	}
+
+	private void AnimateandSlideShow() {
+
+		slidingimage = (ImageView) rootView.findViewById(R.id.imgslider);
+		slidingimage.setImageResource(IMAGE_IDS[currentimageindex
+				% IMAGE_IDS.length]);
+
+		currentimageindex++;
+
+		Animation rotateimage = AnimationUtils.loadAnimation(
+				rootView.getContext(), R.anim.custom_anim);
+
+		slidingimage.startAnimation(rotateimage);
+	}
+
+}
+>>>>>>> TMSC QA 3.4V

@@ -1,0 +1,528 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="400dp" >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:padding="5dp"
+            android:background="@drawable/blue_border_rectangle" >
+
+            <ImageView
+                android:id="@+id/imagetemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:id="@+id/txttemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imagetemp"
+                android:layout_alignTop="@+id/imagetemp"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/imagetemp"
+                android:textColor="@color/white"
+                android:textSize="18pt" />
+
+            <TextView
+                android:id="@+id/textcity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/txttemp"
+                android:layout_marginLeft="18dp"
+                android:layout_toRightOf="@+id/txttemp"
+                android:textColor="@color/black"
+                android:textSize="11pt" />
+
+            <TextView
+                android:id="@+id/txtdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/txttemp"
+                android:layout_alignBottom="@+id/txttemp"
+                android:layout_alignLeft="@+id/textcity"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayout1"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/notificationlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </ListView>
+        </LinearLayout>
+    </RelativeLayout>
+ <!-- <RelativeLayout
+        android:id="@+id/layout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:background="@drawable/back" >
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="37dp"
+            android:src="@drawable/gps" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/imageView2"
+            android:layout_marginBottom="55dp"
+            android:src="@drawable/info" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/dealer" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imageView3"
+            android:layout_alignTop="@+id/imageView4"
+            android:src="@drawable/news" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/notify" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView6"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="25dp"
+            
+            android:src="@drawable/customerdetails" />
+       
+    </RelativeLayout> -->
+    <!-- <RelativeLayout
+        android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:background="@drawable/home_menu_background" >
+
+        <ImageView
+            android:id="@+id/servicebooking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/servicebooking" />
+
+        <ImageView
+            android:id="@+id/costcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/servicebooking"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/costcalculator" />
+
+        <ImageView
+            android:id="@+id/feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/feedback_menu" />
+
+        <ImageView
+            android:id="@+id/mydocument"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/costcal"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/my_doc" />
+
+        <ImageView
+            android:id="@+id/vehicledetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/mydocument"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/vehicledetails" />
+
+
+
+        
+        <RelativeLayout
+            android:id="@+id/relative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="21dp"
+            android:layout_toLeftOf="@+id/maintenncecost" >
+
+            <ImageView
+                android:id="@+id/imageLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/servicebooking_home" />
+
+            <TextView
+                android:id="@+id/textLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageLabel"
+                android:singleLine="true"
+                android:text="complaint regostration"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+       
+
+        <ImageView
+            android:id="@+id/maintenncecost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/servicebooking"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/maintenancecost" />
+
+        <ImageView
+            android:id="@+id/complaintreg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/servicebooking"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="53dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ccomplaint" />
+
+        <ImageView
+            android:id="@+id/servicehistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/feedback"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="38dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/servicehistory" />
+
+        <ImageView
+            android:id="@+id/customerdetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/vehicledetails"
+            android:layout_alignRight="@+id/servicehistory"
+            android:adjustViewBounds="true"
+            android:src="@drawable/customerdetails" />
+    </RelativeLayout> -->
+
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="400dp" >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:padding="5dp"
+            android:background="@drawable/blue_border_rectangle" >
+
+            <ImageView
+                android:id="@+id/imagetemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:id="@+id/txttemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imagetemp"
+                android:layout_alignTop="@+id/imagetemp"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/imagetemp"
+                android:textColor="@color/white"
+                android:textSize="18pt" />
+
+            <TextView
+                android:id="@+id/textcity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/txttemp"
+                android:layout_marginLeft="18dp"
+                android:layout_toRightOf="@+id/txttemp"
+                android:textColor="@color/black"
+                android:textSize="11pt" />
+
+            <TextView
+                android:id="@+id/txtdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/txttemp"
+                android:layout_alignBottom="@+id/txttemp"
+                android:layout_alignLeft="@+id/textcity"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayout1"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/notificationlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </ListView>
+        </LinearLayout>
+    </RelativeLayout>
+ <!-- <RelativeLayout
+        android:id="@+id/layout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:background="@drawable/back" >
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="37dp"
+            android:src="@drawable/gps" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/imageView2"
+            android:layout_marginBottom="55dp"
+            android:src="@drawable/info" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/dealer" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imageView3"
+            android:layout_alignTop="@+id/imageView4"
+            android:src="@drawable/news" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/notify" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView6"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="25dp"
+            
+            android:src="@drawable/customerdetails" />
+       
+    </RelativeLayout> -->
+    <!-- <RelativeLayout
+        android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/layout1"
+        android:background="@drawable/home_menu_background" >
+
+        <ImageView
+            android:id="@+id/servicebooking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/servicebooking" />
+
+        <ImageView
+            android:id="@+id/costcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/servicebooking"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/costcalculator" />
+
+        <ImageView
+            android:id="@+id/feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/feedback_menu" />
+
+        <ImageView
+            android:id="@+id/mydocument"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/costcal"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/my_doc" />
+
+        <ImageView
+            android:id="@+id/vehicledetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/mydocument"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/vehicledetails" />
+
+
+
+        
+        <RelativeLayout
+            android:id="@+id/relative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="21dp"
+            android:layout_toLeftOf="@+id/maintenncecost" >
+
+            <ImageView
+                android:id="@+id/imageLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/servicebooking_home" />
+
+            <TextView
+                android:id="@+id/textLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageLabel"
+                android:singleLine="true"
+                android:text="complaint regostration"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+       
+
+        <ImageView
+            android:id="@+id/maintenncecost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/servicebooking"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/maintenancecost" />
+
+        <ImageView
+            android:id="@+id/complaintreg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/servicebooking"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="53dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ccomplaint" />
+
+        <ImageView
+            android:id="@+id/servicehistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/feedback"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="38dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/servicehistory" />
+
+        <ImageView
+            android:id="@+id/customerdetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/vehicledetails"
+            android:layout_alignRight="@+id/servicehistory"
+            android:adjustViewBounds="true"
+            android:src="@drawable/customerdetails" />
+    </RelativeLayout> -->
+
+>>>>>>> TMSC QA 3.4V
+</RelativeLayout>
