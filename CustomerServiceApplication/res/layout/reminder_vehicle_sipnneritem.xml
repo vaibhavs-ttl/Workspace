@@ -1,14 +1,6 @@
-<<<<<<< HEAD
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     style="?android:attr/spinnerItemStyle"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"    
-=======
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?android:attr/spinnerItemStyle"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"    
->>>>>>> TMSC QA 3.4V
     android:textColor="#000000" />

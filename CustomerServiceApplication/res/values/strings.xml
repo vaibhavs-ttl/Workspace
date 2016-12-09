@@ -8,11 +8,6 @@
     <string name="maintenancetips">Maintenance Tips</string>
     <string name="forget"><u>FORGOTTEN YOUR MOBILE NO?</u></string>
     <string name="terms"><u>I agree with Terms and Services</u></string>
-<<<<<<< HEAD
-    <string name="forgotpass"><u>Forgot Password?</u></string>
-    <string name="changepass"><u>Change Password</u></string>
-     <string name="updatelater"><u>UPDATE LATER</u></string>
-=======
     <string name="warning_dialog">Since no network connection is available, So you may not be able to login for next 30 minutes.</string>
     <string name="passwordpolicy"><u>Password Policy</u></string>
     <string name="passwordpolicydialog"><u><font color="black">Password Policy</font></u></string>
@@ -63,13 +58,12 @@
   
   
   <string name="calculationNote">Note: The amount shown are indicative and may change during actual billing based on current rates.</string>
-   <string name="labourSpareNote">Please select Labour and spare items to generate estimate.</string>
+   <string name="labourSpareNote">Please select Labour and Spare items to generate estimate.</string>
   
   
   
   <string name="update">Update</string>
   
->>>>>>> TMSC QA 3.4V
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item>Home</item>
@@ -92,18 +86,12 @@
         <item>Maintenance Tips</item>
         <item>Reminder</item>
         <item>Info and Updates</item>
-<<<<<<< HEAD
-=======
         <item>Product Information</item>
->>>>>>> TMSC QA 3.4V
         <item>Emergency Contact</item>
         <item>Terms of Use</item>
         <!-- <item>Know your car</item> -->
         <item>Log Out</item>
-<<<<<<< HEAD
-=======
        
->>>>>>> TMSC QA 3.4V
     </string-array>
 
     <string name="desc_list_item_icon">Item Icon</string>
@@ -130,13 +118,6 @@
         <item>@drawable/calender</item>
         <item>@drawable/news_and_updates</item>
         <item>@drawable/emergencycontact</item>
-<<<<<<< HEAD
-        <item>@drawable/info_and_terms</item>
-        <!-- <item>@drawable/car_rally_goa</item> -->
-        <item>@drawable/logout</item>
-    </array>
-
-=======
          <item>@drawable/product_info</item>
         <item>@drawable/info_and_terms</item>
         <item>@drawable/logout</item>
@@ -144,7 +125,6 @@
     </array>
 
 
->>>>>>> TMSC QA 3.4V
     <string-array name="city">
         <item>Dealer City</item>
     </string-array>
@@ -160,10 +140,7 @@
         <item>Fifth Free Service</item>
         <item>Paid Service</item>
         <item>Running Repairs</item>
-<<<<<<< HEAD
-=======
          <item>Campaign</item>
->>>>>>> TMSC QA 3.4V
     </string-array>
     <string-array name="complaindesc">
         <item>Complaint Description</item>
@@ -183,11 +160,7 @@
         <!--
         <item>MH04CG2996</item>
         <item>MH04CG2997</item>
-<<<<<<< HEAD
-        <item >MH14BR5258</item>
-=======
         <item >MH14BR5258</item>
->>>>>>> TMSC QA 3.4V
         -->
     </string-array>
     <string-array name="chassis">
@@ -196,11 +169,7 @@
         <!--
         <item>426021AUZ702705</item>
         <item>426021AUZ702706</item>
-<<<<<<< HEAD
-        <item>MAT6122219YP16175</item>
-=======
         <item>MAT6122219YP16175</item>
->>>>>>> TMSC QA 3.4V
         -->
     </string-array>
     <string-array name="chassis_vehdet">
@@ -219,22 +188,6 @@
     </string-array>
     <!-- QA -->
 
-<<<<<<< HEAD
-  <!--   <string name="URL">http://tmcrmappsqa.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
-    <string name="URL1">http://tmcrmappsqa.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string> -->
-   <!--  <string name="URL">https://tmcrmportalqa.inservices.tatamotors.com/home/MobileApps/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
-    <string name="URL1">https://tmcrmportalqa.inservices.tatamotors.com/home/MobileApps/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
-    -->
-    <!-- PROD -->
-    <string name="URL">https://tmcrmapps.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
-    <string name="URL1">https://tmcrmapps.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
-
-    <!-- DEV -->
-    <!--
-    <string name="URL">https://tmcrmportalqa.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
-    <string name="URL1">https://tmcrmportalqa.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
-    -->
-=======
 
     <!--
     <string name="URL">http://tmcrmappsqa.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
@@ -278,7 +231,6 @@
     <string name="URL1">https://tmcrmportalqa.inservices.tatamotors.com/cordys/com.eibus.web.soap.Gateway.wcp?organization=o=MobileApps,cn=cordys,cn=cbop,o=tatamotors.com</string>
     -->
 
->>>>>>> TMSC QA 3.4V
     <string name="keypwd">asdfghjkl1234567890</string>
     <string name="key">MDED994oUET6wtZRHro5/Mum0OVmpR+l</string>
     <string name="iv">64CDB4ASso2eMKDy</string>
@@ -343,8 +295,6 @@
     <string name="text2">In these terms and conditions, "we", "our" and "us" mean TATA MOTORS LIMITED or its Authorized Dealers and "you" and "your" mean the individual who is using the Service. These terms and conditions apply to your use of the Service  TATA MOTORS SERVICE CONNECT mobile application), and any information contained therein. If you do not agree with any of the terms set out herein, you should not use the Service, and if you have already installed TATA MOTORS SERVICE CONNECT, mobile application software (the "Application"), you should uninstall the Application from your mobile device.</string>
     <string name="title_activity_version_update">VersionUpdateActivity</string>
 
-<<<<<<< HEAD
-=======
     <!-- Info and update -->
     <string name="txtCustomerCare">Customer Care</string>
     <!-- product Broucher -->
@@ -352,5 +302,4 @@
     <string name="title_activity_select_labour">SelectLabourActivity</string>
     <string name="title_activity_select_spare">SelectSpareActivity</string>
 
->>>>>>> TMSC QA 3.4V
 </resources>

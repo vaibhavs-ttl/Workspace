@@ -1,9 +1,5 @@
 package com.ttl.communication;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> TMSC QA 3.4V
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;

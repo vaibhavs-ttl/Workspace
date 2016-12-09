@@ -138,6 +138,8 @@ public class SelectSpareActivity extends Activity implements OnClickListener,OnQ
 		{
 			
 		
+		
+			
 			ArrayList<SpareModel>temp_list=SpareAdapter.selected_data;
 			ArrayList<SpareModel> oriiginal_list=GlobalAccessObject.getSpare_obj();
 			
@@ -179,6 +181,10 @@ public class SelectSpareActivity extends Activity implements OnClickListener,OnQ
 				}
 			
 			
+				
+		
+				
+				
 			
 			SpareAdapter.selected_data.clear();
 			
@@ -186,6 +192,12 @@ public class SelectSpareActivity extends Activity implements OnClickListener,OnQ
 			
 			setResult(Activity.RESULT_CANCELED);
 			finish();	
+			
+			
+			
+			
+			
+			
 			
 		}
 		

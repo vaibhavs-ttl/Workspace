@@ -181,6 +181,8 @@ public class SpareAdapter extends BaseAdapter implements Filterable{
 				@Override
 				public void onClick(View v) {
 				
+					
+					
 					CheckBox buttonView=(CheckBox)v;
 					int getPosition=(Integer)buttonView.getTag();
 					spare_list.get(getPosition).setSelected_state(buttonView.isChecked());
@@ -219,6 +221,7 @@ public class SpareAdapter extends BaseAdapter implements Filterable{
 					
 
 					
+				
 					
 					
 				}

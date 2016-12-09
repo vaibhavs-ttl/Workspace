@@ -1,26 +1,10 @@
 package com.ttl.customersocialapp;
 import java.util.ArrayList;
 import java.util.HashMap;
-<<<<<<< HEAD
-
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.ttl.adapter.ResponseCallback;
-import com.ttl.communication.CheckConnectivity;
-import com.ttl.helper.AnalyticsApplication;
-import com.ttl.model.Complaint_Registered_Child;
-import com.ttl.model.Complaint_Registered_Parent;
-import com.ttl.model.ServiceHandler;
-import com.ttl.model.UserDetails;
-import com.ttl.webservice.AWS_WebServiceCall;
-import com.ttl.webservice.Config;
-import com.ttl.webservice.Constants;
-=======
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
->>>>>>> TMSC QA 3.4V
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -34,12 +18,6 @@ import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
-<<<<<<< HEAD
-import android.widget.Toast;
-import android.widget.ExpandableListView.OnGroupExpandListener;
-import android.widget.ImageView;
-import android.widget.TextView;
-=======
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,7 +35,6 @@ import com.ttl.model.UserDetails;
 import com.ttl.webservice.AWS_WebServiceCall;
 import com.ttl.webservice.Config;
 import com.ttl.webservice.Constants;
->>>>>>> TMSC QA 3.4V
 
 
 public class ComplaintRegisteredFragment extends Fragment {
@@ -129,47 +106,6 @@ public class ComplaintRegisteredFragment extends Fragment {
 		private void buildData()
 	    {
 	        // Creating ArrayList of type parent class to store parent class objects
-<<<<<<< HEAD
-	     //  ArrayList<Service_Booking_History_Parent> list = new ArrayList<Service_Booking_History_Parent>();
-			Log.i("buildData", "called");
-			/*DatabaseHandler db = new DatabaseHandler(getActivity());
-	        ArrayList<Complaint_Registered_Parent> list_all = db.getAllComplaints();
-	        // ArrayList<Complaint_Registered_Parent> list = db.getComplaintsById(UserDetails.getUser_id());
-	        ArrayList<Complaint_Registered_Parent> list_user = new ArrayList<Complaint_Registered_Parent>() ;
-	        
-	        for (int i = 0; i <list_all.size(); i++) {
-				if(list_all.get(i).userId.equals(UserDetails.getUser_id())){
-					list_user.add(list_all.get(i));
-				}
-			}
-	         
-	        if(list_user.size()>0){
-	        
-		         for (int i = 0; i < list_user.size(); i++) {
-		        	 String log ="USERID: "+list_user.get(i).getUserId()+ " SR: " + list_user.get(i).complaint_no+ " ,REG: " + list_all.get(i).complaint_reg_no+ " ,DATE: " + list_all.get(i).complaint_date;
-			            Log.i("buildData", log);
-		        	 
-		        	 Complaint_Registered_Child child = new Complaint_Registered_Child();
-		        	 list_user.get(i).setChildren(new ArrayList<Complaint_Registered_Child>());
-			         
-			         child.setDate(list_user.get(i).getComplaint_date());
-			         child.setModel(list_user.get(i).getModel());
-			         child.setPrimary_area(list_user.get(i).getPrimary_area());
-			         child.setSub_area(list_user.get(i).getSub_area());
-			         child.setProblem_area(list_user.get(i).getProblem_area());
-		             
-			         list_user.get(i).getChildren().add(child);
-				}
-		         loadHosts(list_user);
-	        }
-	        
-	        else
-	        {*/
-			if (connect) {
-	        	 String req = Config.awsserverurl+"CustomerApp_Restws/customerapp/vehicleServices/getComplaintHistory/"+UserDetails.getUser_id();
-	        	 final ArrayList<Complaint_Registered_Parent> list_all1 = new ArrayList<Complaint_Registered_Parent>();
-                 new AWS_WebServiceCall(getActivity(), req,ServiceHandler.GET ,Constants.getComplaintHistory,
-=======
 	    
 			Log.i("buildData", "called");
 		
@@ -182,17 +118,12 @@ public class ComplaintRegisteredFragment extends Fragment {
 				
 	        	 final ArrayList<Complaint_Registered_Parent> list_all1 = new ArrayList<Complaint_Registered_Parent>();
                  new AWS_WebServiceCall(getActivity(), req,ServiceHandler.POST ,Constants.getComplaintHistory,nameValuePairs,
->>>>>>> TMSC QA 3.4V
                                new ResponseCallback(){
 
                                      @Override
                                      public void onResponseReceive(Object object) {
                                     	// DatabaseHandler db1 = new DatabaseHandler(getActivity());
-<<<<<<< HEAD
-                                            // TODO Auto-generated method stub
-=======
             
->>>>>>> TMSC QA 3.4V
                                             //Toast.makeText(getActivity(), "Service Booking Details Saved", Toast.LENGTH_LONG).show();
                                     	 @SuppressWarnings("unchecked")
 										ArrayList<HashMap<String, String>> complaintHistory = (ArrayList<HashMap<String, String>>) object;
@@ -209,11 +140,7 @@ public class ComplaintRegisteredFragment extends Fragment {
                  							complreg.setProblem_area(complaintHistory.get(i).get("problem_area"));
                  						
                  							//String log = "USERID: "+UserDetails.getUser_id() +" SR: " + complreg.getComplaint_no()+ " ,REG: " + complreg.getComplaint_reg_no()+ " ,DATE: " +complreg.getComplaint_date();
-<<<<<<< HEAD
-                 				            //Log.i("complreg", log);
-=======
             
->>>>>>> TMSC QA 3.4V
                  							
                  							//db1.addComplaint(complreg);
                  							list_all1.add(complreg);
@@ -252,11 +179,7 @@ public class ComplaintRegisteredFragment extends Fragment {
 
                                      @Override
                                      public void onErrorReceive(String string) {
-<<<<<<< HEAD
-                                            // TODO Auto-generated method stub
-=======
          
->>>>>>> TMSC QA 3.4V
                                             Toast.makeText(getActivity(), "No complaint registered through App.", Toast.LENGTH_LONG).show();
                                         	v.getRootView().setFocusable(true);
                                       		v.getRootView().requestFocus();
@@ -297,43 +220,6 @@ public class ComplaintRegisteredFragment extends Fragment {
 	
 	 
 
-<<<<<<< HEAD
-//		private ArrayList<Complaint_Registered_Parent> buildDummyData()
-//	    {
-//	        // Creating ArrayList of type parent class to store parent class objects
-//	        final ArrayList<Complaint_Registered_Parent> list = new ArrayList<Complaint_Registered_Parent>();
-//	        
-//	        for (int i = 0; i < 20; i++)
-//	        {
-//	            //Create parent class object
-//	            final Complaint_Registered_Parent parent = new Complaint_Registered_Parent();
-//	             
-//	              // Set values in parent class object
-//	                  /*if(i==1)
-//	                  {*/
-//	                      parent.setComplaint_no("ABD123");
-//	                      parent.setComplaint_reg_no("MH19AF1266");
-//	                      parent.setComplaint_date("08-01-2016");
-//	                      parent.setChildren(new ArrayList<Complaint_Registered_Child>());
-//	                       
-//	                      // Create Child class object 
-//	                      final Complaint_Registered_Child child = new Complaint_Registered_Child();
-//	                        child.setDate("08-01-2016");
-//	                        child.setModel("SAFARI");
-//	                        child.setPrimary_area("Stearing");
-//	                        child.setSub_area("Bend");
-//	                        child.setProblem_area("Please rate the time taken since you arrived till handed over the car to Service Advisor");
-//	                         
-//	                        //Add Child class object to parent class object
-//	                        parent.getChildren().add(child);
-//	                  //  }
-//	                  list.add(parent);
-//	                  loadHosts(list);
-//	        }
-//		return list;
-//	}
-=======
->>>>>>> TMSC QA 3.4V
 		
 		private class MyExpandableListAdapter extends BaseExpandableListAdapter
 	    {
@@ -438,11 +324,7 @@ public class ComplaintRegisteredFragment extends Fragment {
 	        @Override
 	        public Object getGroup(int groupPosition)
 	        {
-<<<<<<< HEAD
-	            Log.i("Parent", groupPosition+"=  getGroup ");
-=======
 	     
->>>>>>> TMSC QA 3.4V
 	             
 	            return parents.get(groupPosition);
 	        }

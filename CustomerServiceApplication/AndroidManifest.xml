@@ -2,13 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ttl.customersocialapp"
     android:versionCode="23"
-<<<<<<< HEAD
-    android:versionName="3.3" >
-
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
-=======
     android:versionName="3.4" >
 
     
@@ -23,7 +16,6 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="22" />
->>>>>>> TMSC QA 3.4V
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -31,24 +23,14 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-<<<<<<< HEAD
-=======
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
->>>>>>> TMSC QA 3.4V
 
     <permission
         android:name="com.ttl.customersocialapp.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
-<<<<<<< HEAD
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" >
-    </uses-permission>
-=======
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REMOVED" />
     <uses-permission android:name="android.permission.DELETE_PACKAGES" />
->>>>>>> TMSC QA 3.4V
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -85,12 +67,8 @@
 
     <application
         android:name="com.ttl.helper.AnalyticsApplication"
-<<<<<<< HEAD
-        android:allowBackup="true"
-=======
         android:allowBackup="false"
         android:debuggable="false"
->>>>>>> TMSC QA 3.4V
         android:icon="@drawable/applogo"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -109,8 +87,6 @@
             </intent-filter>
         </activity>
 
-<<<<<<< HEAD
-=======
         <!--
             <receiver android:name="com.ttl.communication.AppRemover">
                     
@@ -142,7 +118,6 @@
                 </receiver>
         -->
 
->>>>>>> TMSC QA 3.4V
         <receiver
             android:name="com.ttl.helper.AlarmReceiver"
             android:process=":remote" />
@@ -150,8 +125,6 @@
             android:name=".ReminderNotificationIntentService"
             android:process=":remote" />
 
-<<<<<<< HEAD
-=======
         <!--
              <service android:name="com.ttl.communication.DirectoryService" 
             android:enabled="true"
@@ -160,7 +133,6 @@
             />
         -->
 
->>>>>>> TMSC QA 3.4V
         <activity
             android:name=".ReminderNotificationIntentService"
             android:theme="@android:style/Theme.DeviceDefault.InputMethod" >
@@ -176,24 +148,16 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-<<<<<<< HEAD
-            android:value="AIzaSyDr7wqQ8dWG_tRKQ5cOy8RW60ubNjuE_BM" />
-=======
             android:value="AIzaSyA_6NekQcBMBQbomprOAcpGif6GvfpR4DM" />
->>>>>>> TMSC QA 3.4V
         <!-- Play store API key -->
         <!-- android:value="AIzaSyA_6NekQcBMBQbomprOAcpGif6GvfpR4DM" /> -->
         <!--
           local key               android:value="AIzaSyDCRyLnY3X6Egzz-K9hnizkP-FrRrynpEg" />
-<<<<<<< HEAD
-    sonal key               android:value="AIzaSyDr7wqQ8dWG_tRKQ5cOy8RW60ubNjuE_BM" />
-=======
     sonal key               android:value="AIzaSyDr7wqQ8dWG_tRKQ5cOy8RW60ubNjuE_BM" />
 vaibhav key - android:value="AIzaSyCpU7LPwD9N9pAchdGhE6SA16fzqe7z_eI"
 
 current key  android:value="AIzaSyDr7wqQ8dWG_tRKQ5cOy8RW60ubNjuE_BM"
 akash key: android:value="AIzaSyD2jKk-t9z1nKXCo-5x-dqjZpzEfV1wQT4"
->>>>>>> TMSC QA 3.4V
         -->
 
         <activity
@@ -251,11 +215,7 @@ akash key: android:value="AIzaSyD2jKk-t9z1nKXCo-5x-dqjZpzEfV1wQT4"
 
         <!--
       Optionally, register AnalyticsReceiver and AnalyticsService to support background
-<<<<<<< HEAD
-      dispatching on non-Google Play devices
-=======
       dispatching on non-Google Play devices
->>>>>>> TMSC QA 3.4V
         -->
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
@@ -272,11 +232,7 @@ akash key: android:value="AIzaSyD2jKk-t9z1nKXCo-5x-dqjZpzEfV1wQT4"
 
         <!--
           Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
-<<<<<<< HEAD
-	      installation campaign reporting
-=======
 	      installation campaign reporting
->>>>>>> TMSC QA 3.4V
         -->
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
@@ -292,8 +248,6 @@ akash key: android:value="AIzaSyD2jKk-t9z1nKXCo-5x-dqjZpzEfV1wQT4"
             android:name=".VersionUpdateActivity"
             android:label="@string/title_activity_version_update" >
         </activity>
-<<<<<<< HEAD
-=======
         <activity
             android:name=".SelectLabourActivity"
             android:windowSoftInputMode="adjustPan"
@@ -304,7 +258,6 @@ akash key: android:value="AIzaSyD2jKk-t9z1nKXCo-5x-dqjZpzEfV1wQT4"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_select_spare" >
         </activity>
->>>>>>> TMSC QA 3.4V
     </application>
 
 </manifest>

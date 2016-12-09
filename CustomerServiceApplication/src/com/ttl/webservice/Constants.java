@@ -2,14 +2,11 @@ package com.ttl.webservice;
 
 import java.util.ArrayList;
 
-<<<<<<< HEAD
-=======
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import android.os.Environment;
 
->>>>>>> TMSC QA 3.4V
 import com.ttl.model.Reminder_Data;
 
 public class Constants {
@@ -47,10 +44,7 @@ public class Constants {
 	
 	public static final String user = "user";
 	public static final String registeruser = "registeruser";
-<<<<<<< HEAD
-=======
 	public static final String afterregisteruser = "afterregisteruser";
->>>>>>> TMSC QA 3.4V
 	public static final String getServiceTypes = "getServiceTypes";
 	public static final String getCityFromState = "getCityFromState";
 	public static final String getFreeServiceCostEstimate = "getFreeServiceCostEstimate";
@@ -82,9 +76,6 @@ public class Constants {
       public static final String setReadFlag = "setReadFlag";
       public static final String getPSFNotifications = "getPSFNotifications";
       public static final String gcmuser = "gcmuser";
-<<<<<<< HEAD
- 
-=======
       public static final String logout = "logout";
       public static final String resetPassword = "resetPassword";
       public static final String forgotUserId = "forgotUserId";
@@ -113,5 +104,4 @@ public class Constants {
 	public static final String sendMailForManualCostEstimate="sendMailForManualCostEstimate";
 	
 	
->>>>>>> TMSC QA 3.4V
 }

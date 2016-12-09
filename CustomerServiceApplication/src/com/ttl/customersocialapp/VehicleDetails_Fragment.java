@@ -1,50 +1,19 @@
 package com.ttl.customersocialapp;
 
-<<<<<<< HEAD
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-=======
->>>>>>> TMSC QA 3.4V
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-<<<<<<< HEAD
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.ttl.adapter.ResponseCallback;
-import com.ttl.adapter.ResponseCallback;
-import com.ttl.communication.CheckConnectivity;
-import com.ttl.helper.AnalyticsApplication;
-
-import com.ttl.helper.VehicleRegister;
-import com.ttl.model.UserDetails;
-import com.ttl.model.VehcontactScheduler;
-import com.ttl.model.VehicleAMC_ChildRow;
-import com.ttl.model.VehicleAMC_ParentRow;
-import com.ttl.model.VehicleAgreement_ChildRow;
-import com.ttl.model.VehicleAgreement_ParentRow;
-import com.ttl.webservice.AWS_WebServiceCall;
-import com.ttl.webservice.Config;
-import com.ttl.webservice.Constants;
-import com.ttl.webservice.WebServiceCall;
-=======
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
->>>>>>> TMSC QA 3.4V
 
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-<<<<<<< HEAD
-import android.database.Cursor;
-=======
->>>>>>> TMSC QA 3.4V
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -53,20 +22,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-<<<<<<< HEAD
-import android.view.Window;
-import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnGroupExpandListener;
-import android.widget.Button;
-=======
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
@@ -77,7 +32,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupExpandListener;
->>>>>>> TMSC QA 3.4V
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -85,8 +39,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-<<<<<<< HEAD
-=======
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.ttl.adapter.ResponseCallback;
@@ -104,7 +56,6 @@ import com.ttl.webservice.AWS_WebServiceCall;
 import com.ttl.webservice.Config;
 import com.ttl.webservice.Constants;
 
->>>>>>> TMSC QA 3.4V
 public class VehicleDetails_Fragment extends Fragment {
 
 	private LinearLayout ll1, ll2, ll3, ll4, ll5, ll6;
@@ -804,10 +755,6 @@ public class VehicleDetails_Fragment extends Fragment {
 		if (connect) {
 		String urlString = pPL;
 		urlString = urlString.replaceAll(" ", "%20");
-<<<<<<< HEAD
-		String url = Config.awsserverurl+"CustomerApp_Restws/customerapp/vehicleServices/getVehicleImageByPPL/"
-				+ urlString;
-=======
 		String url = Config.awsserverurl+"tmsc_ch/customerapp/vehicleServices/getVehicleImageByPPL"
 				;
 		
@@ -819,19 +766,13 @@ public class VehicleDetails_Fragment extends Fragment {
 				UserDetails.getSeeionId()));
 		nameValuePairs.add(new BasicNameValuePair("user_id",
 				UserDetails.getUser_id()));
->>>>>>> TMSC QA 3.4V
 		// String url =
 		// Config.awsserverurl+"CustomerApp_Restws/customerapp/vehicleServices/getVehicleImageByPPL/Indica%20Vista";
 		Log.i("getVehicleImage_url", url);
 		// new DownloadImage().execute(url);
 		//img_vehicle.setImageResource(android.R.color.transparent);
-<<<<<<< HEAD
-		new AWS_WebServiceCall(getActivity(), url, 1,
-				Constants.getVehicleImageByPPL, new ResponseCallback() {
-=======
 		new AWS_WebServiceCall(getActivity(), url, ServiceHandler.POST,
 				Constants.getVehicleImageByPPL,nameValuePairs, new ResponseCallback() {
->>>>>>> TMSC QA 3.4V
 
 					@Override
 					public void onResponseReceive(Object object) {

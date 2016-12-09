@@ -75,11 +75,7 @@
                     android:editable="false"
                     android:hint="Vehicle Variant"
                     android:focusable="false"
-<<<<<<< HEAD
-                    android:paddingLeft="10dp"
-=======
                    
->>>>>>> TMSC QA 3.4V
                     android:textColor="@color/white"
                     android:paddingRight="10dp"
                     android:textColorHint="@color/hintcolor" />
@@ -126,15 +122,9 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_layout"
                     android:hint="Complaint Background"
-<<<<<<< HEAD
-                    android:paddingLeft="10dip"
-                    android:paddingRight="10dp"
-                    android:maxLength="1000"
-=======
                     android:paddingRight="10dp"
                     android:maxLength="1000"
                     android:digits="abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ "
->>>>>>> TMSC QA 3.4V
                     android:focusableInTouchMode="true"
                     android:textColor="@color/textcolor"
                     android:textColorHint="@color/hintcolor" />
@@ -154,11 +144,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_layout"
                     android:hint="Resolution Required"
-<<<<<<< HEAD
-                    android:paddingLeft="10dip"
-=======
                   android:digits="abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ "
->>>>>>> TMSC QA 3.4V
                     android:maxLength="500"
                     android:paddingRight="10dp"
                     android:focusableInTouchMode="true"
@@ -180,11 +166,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_layout"
                     android:hint="Mobile Number"
-<<<<<<< HEAD
-                    android:paddingLeft="10dip"
-=======
                    
->>>>>>> TMSC QA 3.4V
                     android:maxLength="10"
                     android:paddingRight="10dp"
                     android:inputType="number"
@@ -208,11 +190,7 @@
                     android:background="@drawable/edittext_layout"
                     android:hint="Email ID"
                     android:inputType="textEmailAddress"
-<<<<<<< HEAD
-                    android:paddingLeft="10dip"
-=======
                     
->>>>>>> TMSC QA 3.4V
                     android:paddingRight="10dp"
                     android:focusableInTouchMode="true"
                     android:textColor="@color/textcolor"
@@ -235,11 +213,7 @@
                     android:background="@drawable/edittext_layout"
                     android:hint="Dealer City"
                     android:inputType="text"
-<<<<<<< HEAD
-                    android:paddingLeft="10dp"
-=======
                    
->>>>>>> TMSC QA 3.4V
                     android:paddingRight="10dp"
                     android:focusableInTouchMode="true"
                     android:textColor="@color/textcolor"
@@ -270,11 +244,7 @@
                     android:background="@drawable/edittext_layout"
                     android:editable="false"
                     android:hint="Dealer Contact Number"
-<<<<<<< HEAD
-                    android:paddingLeft="10dip"
-=======
                  
->>>>>>> TMSC QA 3.4V
                     android:focusable="true"
                     android:textColor="@color/white"
                     android:layout_marginBottom="5dp"

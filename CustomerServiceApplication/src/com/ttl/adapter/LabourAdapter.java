@@ -176,6 +176,7 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 				public void onClick(View v) {
 				
 					
+					
 					CheckBox buttonView=(CheckBox)v;
 					int getPosition=(Integer)buttonView.getTag();
 					labour_list.get(getPosition).setSelected_state(buttonView.isChecked());
@@ -201,9 +202,12 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 					else 
 					{
 						
-							
+						
+						
 						selected_data.remove(labourModel);
-					//	GlobalAccessObject.NullifyLabour_obj();
+					
+						
+						//	GlobalAccessObject.NullifyLabour_obj();
 						GlobalAccessObject.removeLabour_obj(GlobalAccessObject.getLabour_obj().get(getPosition));
 						
 						Log.v("item removed", "item removed");
@@ -211,6 +215,10 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 					}
 					
 					
+						
+						
+						
+						
 				}
 			});
 			

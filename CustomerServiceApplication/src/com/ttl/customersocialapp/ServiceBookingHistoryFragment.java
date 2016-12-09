@@ -1,15 +1,5 @@
 package com.ttl.customersocialapp;
 
-<<<<<<< HEAD
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-
-=======
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +10,6 @@ import java.util.Locale;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
->>>>>>> TMSC QA 3.4V
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -42,10 +31,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.ttl.adapter.ResponseCallback;
-<<<<<<< HEAD
-=======
 import com.ttl.communication.CheckConnectivity;
->>>>>>> TMSC QA 3.4V
 import com.ttl.helper.AnalyticsApplication;
 import com.ttl.model.ServiceHandler;
 import com.ttl.model.Service_Booking_History_Child;
@@ -223,11 +209,6 @@ public class ServiceBookingHistoryFragment extends Fragment {
         }
         else
         {*/
-<<<<<<< HEAD
-        	String req = Config.awsserverurl+"CustomerApp_Restws/customerapp/vehicleServices/getServiceBookingHistory/"+UserDetails.getUser_id();
-        	// final DatabaseHandler db1 = new DatabaseHandler(getActivity());
-            new AWS_WebServiceCall(getActivity(), req,ServiceHandler.GET ,Constants.getServiceBookingHistory,
-=======
 		if (new CheckConnectivity().checkNow(getActivity())) {
 			
 		
@@ -237,7 +218,6 @@ public class ServiceBookingHistoryFragment extends Fragment {
      	    nameValuePairs.add(new BasicNameValuePair("user_id",UserDetails.getUser_id()));
      	    nameValuePairs.add(new BasicNameValuePair("sessionId",UserDetails.getSeeionId()));
             new AWS_WebServiceCall(getActivity(), req,ServiceHandler.POST ,Constants.getServiceBookingHistory,nameValuePairs,
->>>>>>> TMSC QA 3.4V
                           new ResponseCallback(){
             	
                                 @Override
@@ -246,10 +226,7 @@ public class ServiceBookingHistoryFragment extends Fragment {
                                        // TODO Auto-generated method stub
                                        //Toast.makeText(getActivity(), "Service Booking Details Saved", Toast.LENGTH_LONG).show();
                                	 @SuppressWarnings("unchecked")
-<<<<<<< HEAD
-=======
                                	 
->>>>>>> TMSC QA 3.4V
                                	ArrayList<Service_Booking_History_Parent> list_all1 = new ArrayList<Service_Booking_History_Parent>();
 								ArrayList<HashMap<String, String>> serviceBookingHistory = (ArrayList<HashMap<String, String>>) object;
                                	 for(int i = 0; i < serviceBookingHistory.size(); i++)
@@ -340,12 +317,9 @@ public class ServiceBookingHistoryFragment extends Fragment {
            
             
      //   }
-<<<<<<< HEAD
-=======
 	}else {
 	Toast.makeText(getActivity(), getString(R.string.no_network_msg), Toast.LENGTH_SHORT).show();
 }
->>>>>>> TMSC QA 3.4V
        
 }
 

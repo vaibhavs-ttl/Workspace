@@ -103,9 +103,6 @@ public class WeatherWebservice extends
 			}
 
 			if (weatherData != null) {
-<<<<<<< HEAD
-				dayWeather.place = weatherData.getString("name");
-=======
 				
 				if (weatherData.has("name")) {
 					dayWeather.place = weatherData.getString("name");	
@@ -116,7 +113,6 @@ public class WeatherWebservice extends
 				}
 				
 				
->>>>>>> TMSC QA 3.4V
 				dayWeather.temperature = kelvinToCelsius(weatherData
 						.getJSONObject("main").getDouble("temp"));
 				dayWeather.humidity = weatherData.getJSONObject("main")

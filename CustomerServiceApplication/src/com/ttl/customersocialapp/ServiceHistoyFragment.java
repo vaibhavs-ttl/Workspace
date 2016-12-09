@@ -3,36 +3,14 @@ package com.ttl.customersocialapp;
 import java.util.ArrayList;
 import java.util.List;
 
-<<<<<<< HEAD
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.ttl.adapter.ResponseCallback;
-import com.ttl.adapter.CustomAdapter;
-import com.ttl.adapter.ResponseCallback;
-import com.ttl.helper.AnalyticsApplication;
-import com.ttl.model.ComplaintAndJCDescripti;
-import com.ttl.model.ServiceHandler;
-import com.ttl.model.ServiceHistory;
-import com.ttl.model.UserDetails;
-import com.ttl.webservice.AWS_WebServiceCall;
-import com.ttl.webservice.Config;
-import com.ttl.webservice.Constants;
-import com.ttl.webservice.WebServiceCall;
-=======
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
->>>>>>> TMSC QA 3.4V
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.os.Bundle;
-<<<<<<< HEAD
-import android.text.TextUtils;
-import android.util.Log;
-=======
->>>>>>> TMSC QA 3.4V
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-<<<<<<< HEAD
-=======
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.ttl.adapter.CustomAdapter;
@@ -60,7 +36,6 @@ import com.ttl.webservice.AWS_WebServiceCall;
 import com.ttl.webservice.Config;
 import com.ttl.webservice.Constants;
 
->>>>>>> TMSC QA 3.4V
 public class ServiceHistoyFragment extends ListFragment {
 
 	private ArrayList<ServiceHistory> lst_history ;//= new ArrayList<ServiceHistory>();
@@ -125,10 +100,7 @@ public class ServiceHistoyFragment extends ListFragment {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
-<<<<<<< HEAD
-=======
 				if(new CheckConnectivity().checkNow(getActivity())){
->>>>>>> TMSC QA 3.4V
 				
 				if(position!=0){
 				/*String[] regchassis = spinner_chassis.getSelectedItem().toString().split("-");	
@@ -145,11 +117,6 @@ public class ServiceHistoyFragment extends ListFragment {
 				{
 					environment = "Production";
 				}	
-<<<<<<< HEAD
-				String req1 = Config.awsserverurl+"CustomerApp_Restws/customerapp/vehicleServices/GetServiceHistoryByChassis_CSB/"+chassis+"/"+environment;
-				
-				new AWS_WebServiceCall(getActivity(), req1, ServiceHandler.GET, Constants.GetServiceHistoryByChassis_CSB, new ResponseCallback() {
-=======
 				/*String req1 = Config.awsserverurl+"tmsc_ch/customerapp/vehicleServices/GetServiceHistoryByChassis_CSB";
 				 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
 				    
@@ -198,7 +165,6 @@ public class ServiceHistoyFragment extends ListFragment {
 							UserDetails.getUser_id()));
 				
 				new AWS_WebServiceCall(getActivity(), req1, ServiceHandler.POST, Constants.GetServiceHistoryByChassis_CSB,nameValuePairs, new ResponseCallback() {
->>>>>>> TMSC QA 3.4V
 					
 					@Override
 					public void onResponseReceive(Object object) {
@@ -317,9 +283,6 @@ public class ServiceHistoyFragment extends ListFragment {
 							}
 						},"Getting Service History.").execute();*/
 						
-<<<<<<< HEAD
-			}
-=======
 				
 				
 				
@@ -329,7 +292,6 @@ public class ServiceHistoyFragment extends ListFragment {
 				}	else {
 					Toast.makeText(getActivity(), getString(R.string.no_network_msg), Toast.LENGTH_SHORT).show();
 				}
->>>>>>> TMSC QA 3.4V
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
