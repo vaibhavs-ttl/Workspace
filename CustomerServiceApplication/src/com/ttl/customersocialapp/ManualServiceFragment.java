@@ -1,6 +1,7 @@
 package com.ttl.customersocialapp;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -83,11 +86,11 @@ public class ManualServiceFragment extends Fragment implements OnClickListener,O
 	
 	private String selected_reg_no;
 	public static ManualEstimateAdapter manualEstimateAdapter;
-	private ArrayList<LabourModel> selected_labour_data;
-	private ArrayList<SpareModel> selected_spare_data;
+	public static ArrayList<LabourModel> selected_labour_data;
+	public static ArrayList<SpareModel> selected_spare_data;
 	private double ratePerHour;
 	
-	private ArrayList<LabourSpareModel> labourSpareList=new ArrayList<>();
+	public static ArrayList<LabourSpareModel> labourSpareList=new ArrayList<>();
 	
 	private String selected_chassis;
 	private String selected_registration;
@@ -100,6 +103,7 @@ public class ManualServiceFragment extends Fragment implements OnClickListener,O
 	public static LinearLayout manual_est_selected_items_header;
 	private ArrayList<LabourModel> labour_list;
 	private ArrayList<SpareModel> spare_list;
+	NumberFormat nf = NumberFormat.getInstance();
 	
 	
 	@Override
@@ -126,7 +130,8 @@ public class ManualServiceFragment extends Fragment implements OnClickListener,O
 		manual_est_vehicle_spinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, getVehicles()));
 		
 		
-		
+		nf.setGroupingUsed(false);
+		nf.setMinimumFractionDigits(2);
 		
 		view.getRootView().setFocusableInTouchMode(true);
 		view.getRootView().requestFocus();
@@ -200,6 +205,78 @@ public class ManualServiceFragment extends Fragment implements OnClickListener,O
 		manual_est_select_labour.setOnClickListener(this);
 		manual_est_select_spares.setOnClickListener(this);
 	
+		
+		
+		
+		manual_est_state_spinner.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			
+				
+				if (s.length()==0) {
+					
+					selected_state=null;
+					
+				}
+				
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			
+				
+			
+				
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			
+				
+			}
+		});
+		
+		manual_est_city_spinner.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			
+				
+				if (s.length()==0) {
+					
+					selected_city=null;
+					
+				}
+				
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			
+				
+			
+				
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			
+				
+			}
+		});
+		
+		
+		
+		
+		
+		
 		manual_est_state_spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
@@ -266,17 +343,15 @@ public class ManualServiceFragment extends Fragment implements OnClickListener,O
 							
 							selected_city=parent.getItemAtPosition(pos).toString();
 							
-							selected_registration =new UserDetails().getRegNumberList().get(pos)
-									.get("registration_num");
 							
-							
-							selected_chassis=new UserDetails().getRegNumberList().get(pos)
-									.get("chassis_num");
 							Log.v("selected city", selected_city);
 							getLabourRates();		
 							
 						} catch (Exception e) {
 						
+							
+							Log.v("city execepion", e.toString());
+							
 						}
 					
 					
@@ -343,29 +418,41 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
 				
 		selected_labour_data=(ArrayList<LabourModel>) data.getSerializableExtra("labour_list_data");
-	
 		LabourSpareModel labourSpareModel=null;
 		
-		
 	
+		
 		for (int i = 0; i < selected_labour_data.size(); i++) {
 			
 			
 
+			if (labourSpareList.size()==0) {
+				
+			
 			labourSpareModel=new LabourSpareModel();
-			
-			
 			labourSpareModel.setDesc(selected_labour_data.get(i).getLabourDescription());
-		
 			labourSpareModel.setQty(selected_labour_data.get(i).getDefaultQty());
-			
 			labourSpareModel.setType(selected_labour_data.get(i).getType());
-			
 			labourSpareModel.setServiceType(selected_labour_data.get(i).getLabourType());
-			
 			labourSpareModel.setBillingHours(selected_labour_data.get(i).getBillingHours());
 			labourSpareList.add(labourSpareModel);
+			Log.v("labourSpareList", "called first time");
 			
+			}
+			else if(searchListItems(selected_labour_data.get(i).getLabourDescription())==false)
+			{
+		
+				labourSpareModel=new LabourSpareModel();
+				labourSpareModel.setDesc(selected_labour_data.get(i).getLabourDescription());
+				labourSpareModel.setQty(selected_labour_data.get(i).getDefaultQty());
+				labourSpareModel.setType(selected_labour_data.get(i).getType());
+				labourSpareModel.setServiceType(selected_labour_data.get(i).getLabourType());
+				labourSpareModel.setBillingHours(selected_labour_data.get(i).getBillingHours());
+				labourSpareList.add(labourSpareModel);
+			
+				
+			}
+	
 		}	
 
 		if (labourSpareList.size()>0) {
@@ -375,6 +462,20 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 			selected_labour_spare_data.setAdapter(manualEstimateAdapter);
 			unhide();			
 		}
+		
+		
+		
+	}
+	
+	else if(resultCode==Activity.RESULT_CANCELED && requestCode==Constants.LABOUR_REQUEST_CODE)
+	{
+		
+		
+		/*Log.v("called cancelled", "LABOUR_REQUEST_CODE");
+		if (selected_labour_data==null) {
+			
+			txtLabourSpareNote.setVisibility(View.VISIBLE);
+		}*/
 		
 		
 		
@@ -395,21 +496,14 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	{
 		
 			
-		
-			
-
 		selected_spare_data=(ArrayList<SpareModel>) data.getSerializableExtra("spare_list_data");		
 			
-//		selected_spare_data=GlobalAccessObject.getSpare_obj();
-
 		LabourSpareModel labourSpareModel=null;
 		for (int i = 0; i < selected_spare_data.size(); i++) {
 			
-			
+			if (labourSpareList.size()==0) {
 
 			labourSpareModel=new LabourSpareModel();
-			
-			
 			labourSpareModel.setDesc(selected_spare_data.get(i).getPartDescription());
 		
 			labourSpareModel.setQty(selected_spare_data.get(i).getDefaultQty());
@@ -422,7 +516,30 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 			
 			labourSpareList.add(labourSpareModel);
 			
-		
+			}
+			else if(searchListItems(selected_spare_data.get(i).getPartDescription())==false)
+			{
+				
+				labourSpareModel=new LabourSpareModel();
+				labourSpareModel.setDesc(selected_spare_data.get(i).getPartDescription());
+			
+				labourSpareModel.setQty(selected_spare_data.get(i).getDefaultQty());
+				
+				labourSpareModel.setType(selected_spare_data.get(i).getType());
+				
+				labourSpareModel.setUmrp(selected_spare_data.get(i).getUMRP());	
+				
+				labourSpareModel.setUom(selected_spare_data.get(i).getUOM());
+				
+				labourSpareList.add(labourSpareModel);
+			
+				
+				
+			}
+			
+			
+			
+			
 		}
 		
 
@@ -430,7 +547,6 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (labourSpareList.size()>0) {
 			manualEstimateAdapter=new ManualEstimateAdapter(getActivity(), labourSpareList,ratePerHour);
 			manualEstimateAdapter.notifyDataSetChanged();
-		
 			selected_labour_spare_data.setAdapter(manualEstimateAdapter);
 			unhide();			
 		}
@@ -442,6 +558,34 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	
 
 }
+
+
+	private boolean searchListItems(String temp)
+	{
+		
+		boolean check = false;
+		
+		for (int i = 0; i < labourSpareList.size(); i++) {
+			
+			
+			Log.v("both values", "temp: "+temp+" origianl: "+labourSpareList.get(i).getDesc());
+			
+			if (labourSpareList.get(i).getDesc().equals(temp)) {
+					
+				check= true;
+				break;
+				}
+								
+				
+		}
+		
+		
+		
+		
+		return check;
+		
+	}
+
 
 	
 	private void setCities(String state)
@@ -500,7 +644,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		params.add(new BasicNameValuePair("city", selected_city));
 		params.add(new BasicNameValuePair("state", selected_state));
 	
-	aws_WebServiceCall=new AWS_WebServiceCall(getActivity(), Config.awsserverurl+"tmsc_nw/customerapp/costEstimateServices/getLabourRateByCity", ServiceHandler.POST, Constants.getLabourRateByCity,params,new ResponseCallback() {
+	aws_WebServiceCall=new AWS_WebServiceCall(getActivity(), Config.awsserverurl+"tmsc_ch/customerapp/costEstimateServices/getLabourRateByCity", ServiceHandler.POST, Constants.getLabourRateByCity,params,new ResponseCallback() {
 			
 			@Override
 			public void onResponseReceive(Object response) {
@@ -532,6 +676,10 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 			@Override
 			public void onErrorReceive(String response) {
 			
+				
+				
+				Log.v("labour rates", response);
+				
 				Toast.makeText(getActivity(), "Sorry, data not available for selected model.", Toast.LENGTH_LONG).show();
 				
 			}
@@ -700,11 +848,21 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 			if (GlobalAccessObject.isLabourModelLoaded()) {
 			
 				
-				Bundle bundle=new Bundle();
-				bundle.putSerializable("labour_list", labour_list);
+				if (selected_PPL!=null) {
 				
-				startActivityForResult(new Intent(getActivity(), SelectLabourActivity.class).putExtras(bundle), Constants.LABOUR_REQUEST_CODE);
+					Bundle bundle=new Bundle();
+					bundle.putSerializable("labour_list", labour_list);
+					
+					startActivityForResult(new Intent(getActivity(), SelectLabourActivity.class).putExtras(bundle), Constants.LABOUR_REQUEST_CODE);
+
+				}
+				else
+				{
+					Toast.makeText(getActivity(), "Please select vehicle.", Toast.LENGTH_LONG).show();
+				}
 				
+								
+			
 			}
 			else if (check.checkNow(getActivity())) {
 			
@@ -743,12 +901,23 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 			if (GlobalAccessObject.isSpareModelLoaded()) {
 			
 				
+				if (selected_PPL!=null) {
+					
+				
+				
+				
 				Bundle bundle=new Bundle();
 				bundle.putSerializable("spare_list", spare_list);
 				
 				startActivityForResult(new Intent(getActivity(), SelectSpareActivity.class).putExtras(bundle), Constants.SPARE_REQUEST_CODE);
 				
-			}
+				}
+				else
+				{
+					Toast.makeText(getActivity(), "Please select vehicle.", Toast.LENGTH_LONG).show();
+				}
+				
+				}
 			else if (check.checkNow(getActivity())) {
 				
 
@@ -823,7 +992,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	
 	params.add(new BasicNameValuePair("PPL",selected_PPL));
 			
-	aws_WebServiceCall=new AWS_WebServiceCall(getActivity(), Config.awsserverurl+"tmsc_nw/customerapp/costEstimateServices/getLabourDataByPPL", ServiceHandler.POST, Constants.getLabourDataByPPL, params, new ResponseCallback() {
+	aws_WebServiceCall=new AWS_WebServiceCall(getActivity(), Config.awsserverurl+"tmsc_ch/customerapp/costEstimateServices/getLabourDataByPPL", ServiceHandler.POST, Constants.getLabourDataByPPL, params, new ResponseCallback() {
 			
 			@Override
 			public void onResponseReceive(Object response) {
@@ -875,7 +1044,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	
 	params.add(new BasicNameValuePair("PPL",selected_PPL));
 			
-	aws_WebServiceCall=new AWS_WebServiceCall(getActivity(), Config.awsserverurl+"tmsc_nw/customerapp/costEstimateServices/getPartsDataByPPL", ServiceHandler.POST, Constants.getPartsDataByPPL, params, new ResponseCallback() {
+	aws_WebServiceCall=new AWS_WebServiceCall(getActivity(), Config.awsserverurl+"tmsc_ch/customerapp/costEstimateServices/getPartsDataByPPL", ServiceHandler.POST, Constants.getPartsDataByPPL, params, new ResponseCallback() {
 			
 			@Override
 			public void onResponseReceive(Object response) {
@@ -911,7 +1080,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
 	}
 		
-	private void resetView()
+	public void resetView()
 	{
 	
 		/*manual_est_city_spinner.setText("");
@@ -936,6 +1105,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (manualEstimateAdapter!=null) {
 			
 			manualEstimateAdapter=null;
+		
 		}
 
 		selected_labour_data=null;
@@ -953,6 +1123,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		selected_labour_spare_data.invalidate();
 		GlobalAccessObject.NullifyLabour_obj();
 		GlobalAccessObject.NullifySpare_obj();
+		
 		GlobalAccessObject.setSpareModelLoaded(false);
 		GlobalAccessObject.setLabourModelLoaded(false);
 		GlobalAccessObject.Nullifylabour_spare_obj();
@@ -1050,6 +1221,18 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 					if (check.checkNow(getActivity())) {
 				
 						selected_PPL=new UserDetails().getRegNumberList().get(pos-1).get("PPL");
+					
+						selected_registration =new UserDetails().getRegNumberList().get(pos-1)
+								.get("registration_num");
+						
+						
+						selected_chassis=new UserDetails().getRegNumberList().get(pos-1)
+								.get("chassis_num");
+					
+						
+						Log.v("selected Reg",selected_registration);
+						Log.v("selected Chassis",selected_chassis);
+						
 						Log.v("selected PPL", selected_PPL);
 					//	clearView();	
 						resetView();
@@ -1065,7 +1248,10 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 				
 			}		
 			}
-			 
+			 else
+			 {
+					selected_PPL=null;
+			 }
 		
 	
 	
@@ -1116,7 +1302,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	public void onResume() {
 		super.onResume();
 	
-		if (labour_list!=null) {
+		/*if (manualEstimateAdapter!=null) {
 			
 			txtLabourSpareNote.setVisibility(View.INVISIBLE);
 			
@@ -1124,6 +1310,27 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		else if(spare_list!=null)
 		{
 			txtLabourSpareNote.setVisibility(View.INVISIBLE);
+		}
+		else
+		{
+			txtLabourSpareNote.setVisibility(View.VISIBLE);
+		}
+	*/
+	
+		Log.v("onResume ", "Called");
+	
+		if (manualEstimateAdapter!=null) {
+			
+			txtLabourSpareNote.setVisibility(View.INVISIBLE);
+			
+			Log.v("selected_labour_data", "called");
+		
+		}
+		else if(manualEstimateAdapter!=null)
+		{
+			txtLabourSpareNote.setVisibility(View.INVISIBLE);
+		
+			Log.v("selected_spare_data", "called");
 		}
 		else
 		{
@@ -1210,7 +1417,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		
 		
-		new SendEstimateReport(getActivity(), Config.awsserverurl+"tmsc_nw/customerapp/costEstimateServices/sendMailForManualCostEstimate", response).execute();
+		new SendEstimateReport(getActivity(), Config.awsserverurl+"tmsc_ch/customerapp/costEstimateServices/sendMailForManualCostEstimate", response).execute();
 		
 		
 	}
@@ -1227,12 +1434,22 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	ArrayList<LabourSpareModel> labourSpareModels=	GlobalAccessObject.getLabour_spare_obj();
 		
 		
+	
 		for (int i = 0; i < labourSpareModels.size(); i++) {
 		
 		
 			if (labourSpareModels.get(i).getType().equalsIgnoreCase(Constants.TYPE_LABOUR)) {
 				
 			labourCost=	labourCost+Double.valueOf(labourSpareModels.get(i).getValue());
+				
+			
+			
+	//			long data=Double.longBitsToDouble(Long.parseLong(Double.valueOf(labourSpareModels.get(i).getValue())));
+				
+			//	Log.v("labour cost", ""+labourSpareModels.get(i).getValue());
+				
+		//		labourCost=labourCost+Double.valueOf(String.format("%.2f", labourSpareModels.get(i).getValue()));
+				
 				
 				
 			}
@@ -1242,17 +1459,25 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 			spareCost=spareCost+Double.valueOf(labourSpareModels.get(i).getValue());
 				
 				
-			}
+		}
 		
 		
 		
 	}
 	
+		
+		
+		
+		
+		Log.v("labour cost", ""+nf.format(labourCost));
+		
+		
 	approx_labour_amt.setVisibility(View.VISIBLE);
 	approx_spare_amt.setVisibility(View.VISIBLE);
 	txtCalcalationNote.setVisibility(View.VISIBLE);
-	approx_labour_amt.setText("Labour Amount (Approx) ="+labourCost+" INR*");
-	approx_spare_amt.setText("Spares Amount (Approx) ="+spareCost+" INR*");	
+	approx_labour_amt.setText("Labour Amount (Approx) ="+nf.format(labourCost)+" INR*");
+
+	approx_spare_amt.setText("Spares Amount (Approx) ="+nf.format(spareCost)+" INR*");	
 		
 		
 		
@@ -1273,7 +1498,7 @@ private String GeneratePDFResponse(String email)
 	
 	JSONObject inner_object=new JSONObject();
 	
-	DecimalFormat format=new DecimalFormat("#.00");
+	
 	
 	
 	
@@ -1289,8 +1514,8 @@ private String GeneratePDFResponse(String email)
 		outer_object.put("selCity", selected_city);
 		outer_object.put("resgistrationNum", selected_registration);
 		outer_object.put("chassisNum", selected_chassis);
-		outer_object.put("labourAmount", labourCost);
-		outer_object.put("sparesAmount", spareCost);
+		outer_object.put("labourAmount", nf.format(labourCost));
+		outer_object.put("sparesAmount", nf.format(spareCost));
 		
 	
 		

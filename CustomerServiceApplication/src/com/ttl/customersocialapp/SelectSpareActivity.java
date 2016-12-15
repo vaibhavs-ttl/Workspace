@@ -2,6 +2,10 @@ package com.ttl.customersocialapp;
 
 import java.util.ArrayList;
 
+import com.ttl.adapter.SpareAdapter;
+import com.ttl.communication.GlobalAccessObject;
+import com.ttl.model.SpareModel;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,17 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
-
-import com.ttl.adapter.SpareAdapter;
-import com.ttl.communication.GlobalAccessObject;
-import com.ttl.model.SpareModel;
-import com.ttl.webservice.AWS_WebServiceCall;
 
 public class SelectSpareActivity extends Activity implements OnClickListener,OnQueryTextListener{
 
@@ -27,15 +24,11 @@ public class SelectSpareActivity extends Activity implements OnClickListener,OnQ
 	private Bundle bundle;
 	private Button spare_parts_done_btn;
 	private Button spare_parts_cancel_btn;
-	private AWS_WebServiceCall aws_WebServiceCall;
 	private TextView show_empty_text;
-	private TextView spare_text;
-	private EditText qty_text;
-	private CheckBox check_data;
 	private ArrayList<SpareModel> spare_list=new ArrayList<>();
 	private ListView spare_data_list;
 	private SpareAdapter adapter;
-	private int TARGET_REQUEST_CODE=101;
+	
 	private SearchView searchView;
 	
 	@Override
@@ -46,9 +39,9 @@ public class SelectSpareActivity extends Activity implements OnClickListener,OnQ
 	
 		
 	
-		getReferences();
-		setHandlers();
-		getData();
+		getReferences(); // To get references ex: calling findViewById()
+		setHandlers(); // To set listeners
+		getData(); // To get fetched data.
 	
 	
 	
@@ -110,29 +103,29 @@ public class SelectSpareActivity extends Activity implements OnClickListener,OnQ
 		
 		if (v.getId()==R.id.spare_parts_done_btn) {
 		
-			Intent intent=new Intent();
-			/*	intent.putExtra("spare_list_data", GlobalAccessObject.getSpare_obj());
-			setResult(Activity.RESULT_OK, intent);
-			finish();
-			*/
-		
 			
-			if (GlobalAccessObject.spareChanged) {
-				SpareAdapter.selected_data.clear();
-				intent.putExtra("spare_list_data", GlobalAccessObject.getSpare_obj());	
-				GlobalAccessObject.spareChanged=false;
-				setResult(Activity.RESULT_OK, intent);
-				finish();
+			if (GlobalAccessObject.getSpare_obj()!=null) {
+			
+				
+				Intent intent=new Intent();
+				
+				if (GlobalAccessObject.spareChanged) {
+					SpareAdapter.selected_data.clear();
+					intent.putExtra("spare_list_data", GlobalAccessObject.getSpare_obj());	
+					GlobalAccessObject.spareChanged=false;
+					setResult(Activity.RESULT_OK, intent);
+					finish();
+				}
+				else
+				{
+					setResult(Activity.RESULT_CANCELED);
+					finish();		
+				}
+				
+				
+				
 			}
-			else
-			{
-				setResult(Activity.RESULT_OK);
-				finish();		
-			}
 			
-			
-			
-		
 		}
 		else if(v.getId()==R.id.spare_parts_cancel_btn)
 		{
@@ -181,21 +174,10 @@ public class SelectSpareActivity extends Activity implements OnClickListener,OnQ
 				}
 			
 			
-				
-		
-				
-				
-			
-			SpareAdapter.selected_data.clear();
-			
-			
+				SpareAdapter.selected_data.clear();
 			
 			setResult(Activity.RESULT_CANCELED);
 			finish();	
-			
-			
-			
-			
 			
 			
 			
@@ -203,10 +185,6 @@ public class SelectSpareActivity extends Activity implements OnClickListener,OnQ
 		
 		
 	}
-
-
-
-
 
 	@Override
 	public boolean onQueryTextChange(String text) {

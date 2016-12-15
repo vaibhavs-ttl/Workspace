@@ -1,22 +1,28 @@
 package com.ttl.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ttl.communication.GlobalAccessObject;
+import com.ttl.customersocialapp.ManualServiceFragment;
 import com.ttl.customersocialapp.R;
 import com.ttl.model.LabourModel;
 
@@ -29,8 +35,13 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 	private ArrayList<LabourModel> labour_list=new ArrayList<>();
 	private ArrayList<LabourModel> checked_list=new ArrayList<>();
 	public static  ArrayList<LabourModel> selected_data=new ArrayList<>();
+	private boolean loadedFirstTime;
 	private TextView show_empty_text;
-	public LabourAdapter(Context context,ArrayList<LabourModel> labour_list,TextView show_empty_text)
+	
+	private HashMap<Integer, LabourModel> map=new HashMap<>();
+	
+	
+	public LabourAdapter(Context context,ArrayList<LabourModel> labour_list,TextView show_empty_text,boolean loadedFirstTime)
 	{
 		
 	//	super(context, R.layout.labour_parts_custom_row, labour_list);
@@ -39,6 +50,7 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 		mDataFiltered=labour_list;
 		this.show_empty_text=show_empty_text;
 		checked_list=GlobalAccessObject.getLabour_obj();
+		this.loadedFirstTime=loadedFirstTime;
 		
 		
 	}
@@ -48,8 +60,8 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 
 		
 	
-		return mDataFiltered.size();
-	//	return labour_list.size();
+	//	return mDataFiltered.size();
+	return labour_list.size();
 	
 	}
 
@@ -64,96 +76,6 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 
-/*		ViewHolder holder=new ViewHolder();
-		
-		if (convertView==null) {
-		
-			LayoutInflater inflater =(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			
-			convertView=inflater.inflate(R.layout.labour_parts_custom_row, parent,false);
-			
-			holder.labour_desc=(TextView)convertView.findViewById(R.id.labour_desc);
-			holder.labour_qty=(TextView)convertView.findViewById(R.id.labour_qty);
-			holder.select_data=(CheckBox)convertView.findViewById(R.id.labour_select_box);
-			holder.labourPartRow=(LinearLayout)convertView.findViewById(R.id.labourPartRow);
-			
-			convertView.setTag(holder);
-			
-			
-		}
-		else
-		{
-			
-			holder=(ViewHolder)convertView.getTag();
-			
-		}
-		
-		if ((position%2)==0) {
-			
-	
-			holder.labourPartRow.setBackgroundColor(Color.parseColor("#508dba"));
-		
-		}
-		else
-		{
-	
-			holder.labourPartRow.setBackgroundColor(Color.parseColor("#387caf"));
-		
-		}
-		
-		
-		
-		
-		holder.labour_desc.setText(labour_list.get(position).getLabourDescription());
-		holder.labour_qty.setText(labour_list.get(position).getDefaultQty());
-		
-		holder.select_data.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			
-				LabourModel labourModel = null;
-				if (isChecked) {
-					
-					labourModel=new LabourModel();
-					
-					labourModel.setDefaultQty(labour_list.get(position).getDefaultQty());
-					labourModel.setLabourDescription(labour_list.get(position).getLabourDescription());
-					labourModel.setType("Labour");
-					labourModel.setLabourType(labour_list.get(position).getLabourType());
-					labourModel.setBillingHours(labour_list.get(position).getBillingHours());
-					labourModel.setCheckedPosition(position);
-					labourModel.setChecked_state(true);
-					selected_data.add(labourModel);
-					GlobalAccessObject.setLabour_obj(selected_data);
-					isChanged=true;
-					
-				}
-				else 
-				{
-					isChanged=false;
-					selected_data.remove(labourModel);
-					GlobalAccessObject.NullifyLabour_obj();
-				}
-				
-			}
-		});
-
-		
-		if (checked_list!=null) {
-			
-			
-			
-				if (position<checked_list.size()) {
-				
-				int pos=checked_list.get(position).getCheckedPosition();
-				holder.select_data.setChecked(true);
-			
-		}
-		}
-*/
-		
-		
 		ViewHolder holder=null;
 		
 		
@@ -176,12 +98,15 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 				public void onClick(View v) {
 				
 					
+					try
+					{
+					
 					
 					CheckBox buttonView=(CheckBox)v;
 					int getPosition=(Integer)buttonView.getTag();
 					labour_list.get(getPosition).setSelected_state(buttonView.isChecked());
 					
-					LabourModel labourModel=null;
+						LabourModel labourModel=null;
 						
 						if (buttonView.isChecked()) {
 						
@@ -191,36 +116,94 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 						labourModel.setType("Labour");
 						labourModel.setLabourType(labour_list.get(position).getLabourType());
 						labourModel.setBillingHours(labour_list.get(position).getBillingHours());
-						labourModel.setCheckedPosition(getPosition);
+						labourModel.setChecked_state(true);
+						labourModel.setCheckedPosition(getPosition);	
+						/*	labourModel=new LabourModel();
+							labourModel.setDefaultQty(labour_list.get(getPosition).getDefaultQty());
+							labourModel.setLabourDescription(labour_list.get(getPosition).getLabourDescription());
+							labourModel.setType("Labour");
+							labourModel.setLabourType(labour_list.get(getPosition).getLabourType());
+							labourModel.setBillingHours(labour_list.get(getPosition).getBillingHours());	
+							labourModel.setChecked_state(true);	*/
+							
+						/*	Log.v("position value", labour_list.get(position).getLabourDescription());
+							Log.v("Get position value", labour_list.get(getPosition).getLabourDescription());*/
+							
+							
+					
+						map.put(getPosition, labourModel);
 						selected_data.add(labourModel);
-					//	GlobalAccessObject.setLabour_obj(selected_data);
-						
-						GlobalAccessObject.setLabour_obj(labourModel);
-						
-						Log.v("item added", "item added");
-					}
+						GlobalAccessObject.setLabour_obj(map.get(getPosition));
+						Log.v("item added", ""+getPosition);
+				
+						}
 					else 
 					{
 						
 						
 						
-						selected_data.remove(labourModel);
+				//		removeItems(labour_list.get((position)).getLabourDescription());
+						
+						
+						if (map.size()>0) {
+						
+							
+							if (selected_data!=null) {
+								selected_data.remove(map.get(getPosition));	
 					
+								GlobalAccessObject.removeLabour_obj(map.get(getPosition));
+								map.remove(getPosition);
+							
+							}
+							
+							
+						}
 						
-						//	GlobalAccessObject.NullifyLabour_obj();
-						GlobalAccessObject.removeLabour_obj(GlobalAccessObject.getLabour_obj().get(getPosition));
 						
-						Log.v("item removed", "item removed");
-						labourModel=null;
+						
+						Log.v("item removed", ""+getPosition);
+						
+						
 					}
 					
 					
 						
-						
+				}
+				catch(Exception e)
+				{
+					
+					
+					Log.v("labour error", e.toString());
+					
+				}
 						
 						
 				}
 			});
+			
+			
+			
+			
+			/*holder.labour_desc.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+			
+					
+					
+					
+					showLabourDescription(labour_list.get(position).getLabourDescription());
+					
+					
+					
+					
+				}
+			});
+			*/
+			
+			
+			
+			
 			
 			
 			
@@ -257,33 +240,158 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 		}
 		
 		
-		holder.select_data.setTag(position);
+		
+		
+			holder.select_data.setTag(position);	
+		
+		
 		
 		holder.labour_desc.setText(labour_list.get(position).getLabourDescription());
 		holder.labour_qty.setText(labour_list.get(position).getDefaultQty());
 		
-		holder.select_data.setChecked(labour_list.get(position).isSelected_state());
+		
+		
+		
+		
+		
+		
+		
+		
+		/*holder.select_data.setChecked(labour_list.get(position).isSelected_state());*/
 			
+		
+			
+		
+	/*	
 		if (checked_list!=null) {
 			
 			
 			
 			if (position<checked_list.size()) {
 
-				int pos=checked_list.get(position).getCheckedPosition();
 			
-				holder.select_data.setChecked(true);
+				
+				if (checked_list.get(position).isChecked_state()) {
+					holder.select_data.setChecked(true);	
+				}
+				
+				//holder.select_data.setTag(checked_list.get(position).getCheckedPosition());
+			//		Log.v("checked list", "position: "+position+" checked position"+ checked_list.get(position).getCheckedPosition());
+
+					if (checked_list.get(position).isChecked_state()) {
+						holder.select_data.setChecked(true);	
+					}
+					
+					
+					for (LabourModel labourModel : checked_list) {
+						
+				
+						Log.v("loop iteration", ""+position);
+						
+						if (position==labourModel.getCheckedPosition()) {
+							
+							
+							holder.select_data.setChecked(true);
+							
+							
+						}
+						
+						
+					}
+					
+					
+					
+					
+				
+			//	int pos=checked_list.get(position).getCheckedPosition();
+			
+			
 				
 				
 			}
+		}*/
+			
+		
+		if (checked_list!=null) {
+			
+			
+		for (LabourModel labourModel : checked_list) {
+			
+			
+			if (labourModel.getCheckedPosition()==position) {
+				holder.select_data.setChecked(true);
+			}
+			
 		}
 		
+		
+		}
 		
 		
 		
 		return convertView;
 	}
 
+	@Override
+
+	public int getViewTypeCount() {                 
+
+	    return getCount();
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+
+	    return position;
+	}
+	
+	
+	private boolean removeItems(String name)
+	{
+		
+		boolean check=false;
+		
+		if (ManualServiceFragment.labourSpareList.size()>0) {
+		
+			
+			Log.v("labourspare list ", "not empty");
+			
+			for (int i = 0; i < ManualServiceFragment.labourSpareList.size(); i++) {
+				
+				
+				
+				
+				if (ManualServiceFragment.labourSpareList.get(i).getDesc().equalsIgnoreCase(name)) {
+					
+					
+					ManualServiceFragment.labourSpareList.remove(i);
+					check=true;
+					break;
+					
+					
+					
+					
+				}
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+		}
+		else
+		{
+			Log.v("labourspare list ", "empty");
+		}
+		
+		
+		
+		return check;
+		
+	}
 	
 	
 	
@@ -301,6 +409,9 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 	@Override
 	public Filter getFilter() {
 	
+		
+	//	return new FilterItems();
+		
 		return new Filter() {
 	
 			
@@ -328,12 +439,12 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 			
 			//	labour_list=mDataFiltered=(ArrayList<LabourModel>)results.values;
 				
-		/*	for (int j = 0; j < mDataFiltered.size(); j++) {
+			for (int j = 0; j < mDataFiltered.size(); j++) {
 				
 				
 				Log.v("mDataFiltered", mDataFiltered.get(j).getLabourDescription().toLowerCase());
 				
-			}*/
+			}
 				
 			notifyDataSetChanged();
 			
@@ -383,14 +494,15 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 				
 				
 				//}
+			
 				/*else
 				{
 					
 					results.values=labour_list;
 					results.count=labour_list.size();
 					
-				}*/
-				
+				}
+				*/
 				
 				
 			//	notifyDataSetChanged();
@@ -404,11 +516,132 @@ public class LabourAdapter extends BaseAdapter implements Filterable{
 	@Override
 	public Object getItem(int position) {
 		
-		return mDataFiltered.get(position);
-	//	return labour_list.get(position);
+	//	return mDataFiltered.get(position);
+		return labour_list.get(position);
 	
 	}
 
 
+	
+	
+/*	
+	class FilterItems extends Filter
+	{
+
+		@Override
+		protected FilterResults performFiltering(CharSequence constraint) {
+			
+			FilterResults results=new FilterResults();
+			
+			if (constraint==null || constraint.length()==0) {
+			
+				
+				Log.v("inside filter results if", constraint.toString());
+				labour_list=mDataFiltered;
+				results.values=labour_list;
+				results.count=labour_list.size();
+				results.values=mDataFiltered;
+				results.count=mDataFiltered.size();
+			}
+			else
+			{
+				
+				
+				
+				Log.v("inside filter else results", constraint.toString());
+				
+				
+				Log.v("labour list size", ""+labour_list.size());
+				
+				ArrayList<LabourModel> newList=new ArrayList<>();
+				
+				
+					for (LabourModel labourModel : labour_list) {
+						
+						
+						if (labourModel.getLabourDescription().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
+							
+							newList.add(labourModel);
+						}
+						
+						
+						results.values=newList;
+						results.count=newList.size();
+						
+					}
+				}
+				
+			
+			
+			
+			return results;
+		}
+
+		@Override
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			
+			
+			if (results.count==0) {
+				
+			//	mDataFiltered=labour_list;
+				labour_list.clear();
+				notifyDataSetChanged();
+				Log.v("inside publish if results", constraint.toString());
+			}
+			else
+			{
+				
+				
+				labour_list=(ArrayList<LabourModel>)results.values;
+				notifyDataSetChanged();
+				Log.v("inside publish else results", constraint.toString());
+			}
+			
+			
+			
+		}
+		
+	}*/
+	
+	
+	private void showLabourDescription(String name)
+	{
+		
+		final Dialog dialog=new Dialog(context);
+		
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.desc_dialog);
+		TextView labour_dialog_desc=(TextView)dialog.findViewById(R.id.dialog_labour_spare_desc);
+		
+		
+		labour_dialog_desc.setText(name);
+		
+		
+		ImageView cancel_dialog=(ImageView)dialog.findViewById(R.id.cancel_dialog_btn);
+		
+		cancel_dialog.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+			
+				dialog.dismiss();
+				
+				
+			}
+		});
+		
+		
+		
+		dialog.create();
+		dialog.show();	
+		
+		
+		
+		
+	}
+	
+	
+	
+	
 	
 }

@@ -43378,16 +43378,21 @@ com.ttl.adapter.LabourAdapter -> com.ttl.a.w:
     java.util.ArrayList labour_list -> e
     java.util.ArrayList checked_list -> f
     java.util.ArrayList selected_data -> a
-    android.widget.TextView show_empty_text -> g
+    boolean loadedFirstTime -> g
+    android.widget.TextView show_empty_text -> h
+    java.util.HashMap map -> i
     int getCount() -> getCount
     long getItemId(int) -> getItemId
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+    int getViewTypeCount() -> getViewTypeCount
+    int getItemViewType(int) -> getItemViewType
     android.widget.Filter getFilter() -> getFilter
     java.lang.Object getItem(int) -> getItem
     java.util.ArrayList access$0(com.ttl.adapter.LabourAdapter) -> a
-    void access$1(com.ttl.adapter.LabourAdapter,java.util.ArrayList) -> a
-    java.util.ArrayList access$2(com.ttl.adapter.LabourAdapter) -> b
-    android.widget.TextView access$3(com.ttl.adapter.LabourAdapter) -> c
+    java.util.HashMap access$1(com.ttl.adapter.LabourAdapter) -> b
+    void access$2(com.ttl.adapter.LabourAdapter,java.util.ArrayList) -> a
+    java.util.ArrayList access$3(com.ttl.adapter.LabourAdapter) -> c
+    android.widget.TextView access$4(com.ttl.adapter.LabourAdapter) -> d
 com.ttl.adapter.LabourAdapter$1 -> com.ttl.a.x:
     com.ttl.adapter.LabourAdapter this$0 -> a
     int val$position -> b
@@ -43489,15 +43494,19 @@ com.ttl.adapter.SpareAdapter -> com.ttl.a.an:
     java.util.ArrayList checked_list -> e
     java.util.ArrayList selected_data -> a
     android.widget.TextView show_empty_text -> f
+    java.util.HashMap map -> g
     int getCount() -> getCount
     java.lang.Object getItem(int) -> getItem
     long getItemId(int) -> getItemId
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+    int getViewTypeCount() -> getViewTypeCount
+    int getItemViewType(int) -> getItemViewType
     android.widget.Filter getFilter() -> getFilter
     java.util.ArrayList access$0(com.ttl.adapter.SpareAdapter) -> a
-    void access$1(com.ttl.adapter.SpareAdapter,java.util.ArrayList) -> a
-    java.util.ArrayList access$2(com.ttl.adapter.SpareAdapter) -> b
-    android.widget.TextView access$3(com.ttl.adapter.SpareAdapter) -> c
+    java.util.HashMap access$1(com.ttl.adapter.SpareAdapter) -> b
+    void access$2(com.ttl.adapter.SpareAdapter,java.util.ArrayList) -> a
+    java.util.ArrayList access$3(com.ttl.adapter.SpareAdapter) -> c
+    android.widget.TextView access$4(com.ttl.adapter.SpareAdapter) -> d
 com.ttl.adapter.SpareAdapter$1 -> com.ttl.a.ao:
     com.ttl.adapter.SpareAdapter this$0 -> a
     int val$position -> b
@@ -45129,6 +45138,7 @@ com.ttl.customersocialapp.HomeActivity -> com.ttl.customersocialapp.HomeActivity
     void setTitle(java.lang.CharSequence) -> setTitle
     void onPostCreate(android.os.Bundle) -> onPostCreate
     void onConfigurationChanged(android.content.res.Configuration) -> onConfigurationChanged
+    void onRestart() -> onRestart
     void onResume() -> onResume
     void onBackPressed() -> onBackPressed
     boolean dispatchTouchEvent(android.view.MotionEvent) -> dispatchTouchEvent
@@ -45808,57 +45818,58 @@ com.ttl.customersocialapp.MaintenanceTipsFragment$9 -> com.ttl.customersocialapp
     com.ttl.customersocialapp.MaintenanceTipsFragment this$0 -> a
     void onClick(android.view.View) -> onClick
 com.ttl.customersocialapp.ManualServiceFragment -> com.ttl.customersocialapp.jj:
-    android.view.View view -> n
-    java.util.ArrayList vehicles -> o
+    android.view.View view -> o
+    java.util.ArrayList vehicles -> p
     double labourCost -> a
     double spareCost -> b
-    android.widget.Spinner manual_est_vehicle_spinner -> p
+    android.widget.Spinner manual_est_vehicle_spinner -> q
     android.widget.TextView txtLabourSpareNote -> c
     android.widget.TextView txtCalcalationNote -> d
     android.view.View header_view1 -> e
     android.view.View header_view2 -> f
-    com.ttl.customersocialapp.InstantAutoComplete manual_est_state_spinner -> q
-    com.ttl.customersocialapp.InstantAutoComplete manual_est_city_spinner -> r
-    android.widget.Button manual_est_select_labour -> s
-    android.widget.Button manual_est_select_spares -> t
+    com.ttl.customersocialapp.InstantAutoComplete manual_est_state_spinner -> r
+    com.ttl.customersocialapp.InstantAutoComplete manual_est_city_spinner -> s
+    android.widget.Button manual_est_select_labour -> t
+    android.widget.Button manual_est_select_spares -> u
     android.widget.Button manual_est_calculate_btn -> g
     android.widget.Button manual_est_reset_btn -> h
     android.widget.Button manual_est_email_btn -> i
-    com.ttl.webservice.AWS_WebServiceCall aws_WebServiceCall -> u
-    java.util.List states -> v
-    java.util.List cities -> w
-    android.widget.ArrayAdapter state_adapter -> x
-    android.widget.ArrayAdapter city_adapter -> y
-    com.ttl.communication.CheckConnectivity check -> z
+    com.ttl.webservice.AWS_WebServiceCall aws_WebServiceCall -> v
+    java.util.List states -> w
+    java.util.List cities -> x
+    android.widget.ArrayAdapter state_adapter -> y
+    android.widget.ArrayAdapter city_adapter -> z
+    com.ttl.communication.CheckConnectivity check -> A
     com.ttl.adapter.ManualEstimateAdapter manualEstimateAdapter -> j
-    java.util.ArrayList selected_labour_data -> A
-    java.util.ArrayList selected_spare_data -> B
-    double ratePerHour -> C
-    java.util.ArrayList labourSpareList -> D
+    java.util.ArrayList selected_labour_data -> B
+    java.util.ArrayList selected_spare_data -> C
+    double ratePerHour -> D
+    java.util.ArrayList labourSpareList -> k
     java.lang.String selected_chassis -> E
     java.lang.String selected_registration -> F
     java.lang.String selected_state -> G
     java.lang.String selected_city -> H
     java.lang.String selected_PPL -> I
     android.widget.ListView selected_labour_spare_data -> J
-    android.widget.TextView approx_labour_amt -> k
-    android.widget.TextView approx_spare_amt -> l
-    android.widget.LinearLayout manual_est_selected_items_header -> m
+    android.widget.TextView approx_labour_amt -> l
+    android.widget.TextView approx_spare_amt -> m
+    android.widget.LinearLayout manual_est_selected_items_header -> n
     java.util.ArrayList labour_list -> K
     java.util.ArrayList spare_list -> L
     void onStart() -> onStart
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
     void getReferences(android.view.View) -> a
-    void setHandlers() -> a
-    java.util.ArrayList getVehicles() -> b
+    void setHandlers() -> b
+    java.util.ArrayList getVehicles() -> c
     void onActivityResult(int,int,android.content.Intent) -> onActivityResult
-    void setCities(java.lang.String) -> a
-    void getLabourRates() -> c
-    void getStates() -> d
+    boolean searchListItems(java.lang.String) -> a
+    void setCities(java.lang.String) -> b
+    void getLabourRates() -> d
+    void getStates() -> e
     void onClick(android.view.View) -> onClick
-    void getLabourData() -> e
-    void getSpareData() -> f
-    void resetView() -> g
+    void getLabourData() -> f
+    void getSpareData() -> g
+    void resetView() -> a
     void onDestroyView() -> onDestroyView
     void onDestroy() -> onDestroy
     void hide() -> h
@@ -45867,37 +45878,34 @@ com.ttl.customersocialapp.ManualServiceFragment -> com.ttl.customersocialapp.jj:
     void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
     void onResume() -> onResume
     void sendInvoiceEmail(android.view.View) -> b
-    void sendMail(java.lang.String) -> b
+    void sendMail(java.lang.String) -> c
     void caluclateCost() -> j
-    java.lang.String GeneratePDFResponse(java.lang.String) -> c
+    java.lang.String GeneratePDFResponse(java.lang.String) -> d
     com.ttl.communication.CheckConnectivity access$0(com.ttl.customersocialapp.ManualServiceFragment) -> a
-    void access$1(com.ttl.customersocialapp.ManualServiceFragment) -> b
-    com.ttl.customersocialapp.InstantAutoComplete access$2(com.ttl.customersocialapp.ManualServiceFragment) -> c
-    void access$3(com.ttl.customersocialapp.ManualServiceFragment,android.widget.ArrayAdapter) -> a
-    void access$4(com.ttl.customersocialapp.ManualServiceFragment,java.lang.String) -> a
-    java.lang.String access$5(com.ttl.customersocialapp.ManualServiceFragment) -> d
-    void access$6(com.ttl.customersocialapp.ManualServiceFragment,java.lang.String) -> b
-    void access$7(com.ttl.customersocialapp.ManualServiceFragment,java.lang.String) -> c
-    void access$8(com.ttl.customersocialapp.ManualServiceFragment,java.lang.String) -> d
-    void access$9(com.ttl.customersocialapp.ManualServiceFragment,java.lang.String) -> e
-    java.lang.String access$10(com.ttl.customersocialapp.ManualServiceFragment) -> e
-    void access$11(com.ttl.customersocialapp.ManualServiceFragment) -> f
-    void access$12(com.ttl.customersocialapp.ManualServiceFragment,java.util.List) -> a
-    java.util.List access$13(com.ttl.customersocialapp.ManualServiceFragment) -> g
-    android.widget.ArrayAdapter access$14(com.ttl.customersocialapp.ManualServiceFragment) -> h
-    void access$15(com.ttl.customersocialapp.ManualServiceFragment,double) -> a
-    android.widget.Button access$16(com.ttl.customersocialapp.ManualServiceFragment) -> i
-    android.widget.Button access$17(com.ttl.customersocialapp.ManualServiceFragment) -> j
-    void access$18(com.ttl.customersocialapp.ManualServiceFragment,java.util.List) -> b
-    java.util.List access$19(com.ttl.customersocialapp.ManualServiceFragment) -> k
-    void access$20(com.ttl.customersocialapp.ManualServiceFragment,android.widget.ArrayAdapter) -> b
-    android.widget.ArrayAdapter access$21(com.ttl.customersocialapp.ManualServiceFragment) -> l
-    com.ttl.customersocialapp.InstantAutoComplete access$22(com.ttl.customersocialapp.ManualServiceFragment) -> m
-    void access$23(com.ttl.customersocialapp.ManualServiceFragment,java.util.ArrayList) -> a
-    java.util.ArrayList access$24(com.ttl.customersocialapp.ManualServiceFragment) -> n
-    void access$25(com.ttl.customersocialapp.ManualServiceFragment,java.util.ArrayList) -> b
-    java.util.ArrayList access$26(com.ttl.customersocialapp.ManualServiceFragment) -> o
-    void access$27(com.ttl.customersocialapp.ManualServiceFragment,java.lang.String) -> f
+    com.ttl.customersocialapp.InstantAutoComplete access$1(com.ttl.customersocialapp.ManualServiceFragment) -> b
+    void access$2(com.ttl.customersocialapp.ManualServiceFragment,android.widget.ArrayAdapter) -> a
+    void access$3(com.ttl.customersocialapp.ManualServiceFragment,java.lang.String) -> a
+    java.lang.String access$4(com.ttl.customersocialapp.ManualServiceFragment) -> c
+    void access$5(com.ttl.customersocialapp.ManualServiceFragment,java.lang.String) -> b
+    void access$6(com.ttl.customersocialapp.ManualServiceFragment,java.lang.String) -> c
+    java.lang.String access$7(com.ttl.customersocialapp.ManualServiceFragment) -> d
+    void access$8(com.ttl.customersocialapp.ManualServiceFragment) -> e
+    void access$9(com.ttl.customersocialapp.ManualServiceFragment,java.util.List) -> a
+    java.util.List access$10(com.ttl.customersocialapp.ManualServiceFragment) -> f
+    android.widget.ArrayAdapter access$11(com.ttl.customersocialapp.ManualServiceFragment) -> g
+    void access$12(com.ttl.customersocialapp.ManualServiceFragment,double) -> a
+    android.widget.Button access$13(com.ttl.customersocialapp.ManualServiceFragment) -> h
+    android.widget.Button access$14(com.ttl.customersocialapp.ManualServiceFragment) -> i
+    void access$15(com.ttl.customersocialapp.ManualServiceFragment,java.util.List) -> b
+    java.util.List access$16(com.ttl.customersocialapp.ManualServiceFragment) -> j
+    void access$17(com.ttl.customersocialapp.ManualServiceFragment,android.widget.ArrayAdapter) -> b
+    android.widget.ArrayAdapter access$18(com.ttl.customersocialapp.ManualServiceFragment) -> k
+    com.ttl.customersocialapp.InstantAutoComplete access$19(com.ttl.customersocialapp.ManualServiceFragment) -> l
+    void access$20(com.ttl.customersocialapp.ManualServiceFragment,java.util.ArrayList) -> a
+    java.util.ArrayList access$21(com.ttl.customersocialapp.ManualServiceFragment) -> m
+    void access$22(com.ttl.customersocialapp.ManualServiceFragment,java.util.ArrayList) -> b
+    java.util.ArrayList access$23(com.ttl.customersocialapp.ManualServiceFragment) -> n
+    void access$24(com.ttl.customersocialapp.ManualServiceFragment,java.lang.String) -> d
 com.ttl.customersocialapp.ManualServiceFragment$1 -> com.ttl.customersocialapp.jk:
     com.ttl.customersocialapp.ManualServiceFragment this$0 -> a
     boolean onKey(android.view.View,int,android.view.KeyEvent) -> onKey
@@ -46336,11 +46344,12 @@ com.ttl.customersocialapp.ProductBrochureFragment -> com.ttl.customersocialapp.l
     com.google.android.gms.analytics.Tracker mTracker -> b
     android.widget.ListView products_list -> c
     com.ttl.customersocialapp.ProductBrochureFragment$DownloadNotification notification -> a
+    com.ttl.communication.CheckConnectivity check -> d
     void onStart() -> onStart
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
     android.view.View getBrochures() -> a
-    void onDestroy() -> onDestroy
-    void onDestroyView() -> onDestroyView
+    void onResume() -> onResume
+    void onStop() -> onStop
     void setupAppTracker() -> b
     android.widget.ListView access$0(com.ttl.customersocialapp.ProductBrochureFragment) -> a
 com.ttl.customersocialapp.ProductBrochureFragment$1 -> com.ttl.customersocialapp.lp:
@@ -47007,8 +47016,7 @@ com.ttl.customersocialapp.SelectSpareActivity -> com.ttl.customersocialapp.Selec
     java.util.ArrayList spare_list -> e
     android.widget.ListView spare_data_list -> f
     com.ttl.adapter.SpareAdapter adapter -> g
-    int TARGET_REQUEST_CODE -> h
-    android.widget.SearchView searchView -> i
+    android.widget.SearchView searchView -> h
     void onCreate(android.os.Bundle) -> onCreate
     void getData() -> a
     void setHandlers() -> b
@@ -47957,8 +47965,8 @@ com.ttl.model.LabourModel -> com.ttl.b.i:
     void setType(java.lang.String) -> g
     int getCheckedPosition() -> f
     void setCheckedPosition(int) -> a
-    boolean isSelected_state() -> g
-    void setSelected_state(boolean) -> a
+    void setChecked_state(boolean) -> a
+    void setSelected_state(boolean) -> b
 com.ttl.model.LabourRateModel -> com.ttl.b.j:
     java.lang.String city -> a
     java.lang.String cityClass -> b
@@ -48251,7 +48259,6 @@ com.ttl.model.SpareModel -> com.ttl.b.y:
     void setType(java.lang.String) -> g
     int getCheckedPosition() -> f
     void setCheckedPosition(int) -> a
-    boolean isSelected_state() -> g
     void setSelected_state(boolean) -> a
 com.ttl.model.UserDetails -> com.ttl.b.z:
     java.lang.String first_name -> a

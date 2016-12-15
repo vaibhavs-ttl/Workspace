@@ -1,6 +1,7 @@
 package com.ttl.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.ttl.communication.GlobalAccessObject;
 import com.ttl.customersocialapp.R;
+import com.ttl.model.LabourModel;
 import com.ttl.model.SpareModel;
 
 public class SpareAdapter extends BaseAdapter implements Filterable{
@@ -31,6 +33,7 @@ public class SpareAdapter extends BaseAdapter implements Filterable{
 	private ArrayList<SpareModel> checked_list=new ArrayList<>();
 	public static ArrayList<SpareModel> selected_data=new ArrayList<>();
 	private TextView show_empty_text;
+	private HashMap<Integer, SpareModel> map=new HashMap<>();
 	public SpareAdapter(Context context,ArrayList<SpareModel> spare_list,TextView show_empty_text)
 	{
 		this.spare_list=spare_list;
@@ -181,6 +184,8 @@ public class SpareAdapter extends BaseAdapter implements Filterable{
 				@Override
 				public void onClick(View v) {
 				
+					try
+					{
 					
 					
 					CheckBox buttonView=(CheckBox)v;
@@ -193,34 +198,49 @@ public class SpareAdapter extends BaseAdapter implements Filterable{
 						
 						spareModel=new SpareModel();
 						
+					
+						
 						spareModel.setDefaultQty(spare_list.get(position).getDefaultQty());
 						spareModel.setPartDescription(spare_list.get(position).getPartDescription());
 						spareModel.setUOM(spare_list.get(position).getUOM());
 						spareModel.setUMRP(spare_list.get(position).getUMRP());
 						spareModel.setType("Spare");
-						spareModel.setCheckedPosition(position);
-						selected_data.add(spareModel);
 						
-					//	selected_data.add(spareModel);
+						spareModel.setCheckedPosition(getPosition);
+						
+						selected_data.add(spareModel);
+						map.put(getPosition, spareModel);
+						
 					
 					//	GlobalAccessObject.setSpare_obj(selected_data);
 						
-						GlobalAccessObject.setSpare_obj(spareModel);
+						GlobalAccessObject.setSpare_obj(map.get(getPosition));
 						Log.v("item added", "item added");
 					}
 					else 
 					{
-						selected_data.add(spareModel);
+					//	selected_data.add(spareModel);
 					
-						GlobalAccessObject.removeSpare_obj(GlobalAccessObject.getSpare_obj().get(getPosition));	
+						selected_data.remove(map.get(getPosition));
+						
+						GlobalAccessObject.removeSpare_obj(map.get(getPosition));	
 					//	selected_data.remove(spareModel);
-					spareModel=null;
+				//	spareModel=null;
 					Log.v("item removed", "item removed");
+					map.remove(getPosition);
+					
 				//		GlobalAccessObject.NullifySpare_obj();
 					}
 					
 
 					
+				}
+				catch(Exception ex)
+				{
+					
+				Log.v("error log", ex.toString());
+					
+				}
 				
 					
 					
@@ -261,10 +281,11 @@ public class SpareAdapter extends BaseAdapter implements Filterable{
 		holder.spare_desc.setText(spare_list.get(position).getPartDescription());
 		holder.spare_qty.setText(spare_list.get(position).getDefaultQty());
 		holder.spare_uom.setText(spare_list.get(position).getUOM());
-		holder.select_data.setChecked(spare_list.get(position).isSelected_state());
+		
+	//	holder.select_data.setChecked(spare_list.get(position).isSelected_state());
 		
 		
-		if (checked_list!=null) {
+	/*	if (checked_list!=null) {
 			
 			
 			
@@ -276,13 +297,50 @@ public class SpareAdapter extends BaseAdapter implements Filterable{
 				
 				
 			}
-		}
+		}*/
+		
+		
+		if (checked_list!=null) {
+			
+			
+			for (SpareModel spareModel : checked_list) {
+				
+				
+				if (spareModel.getCheckedPosition()==position) {
+					holder.select_data.setChecked(true);
+				}
+				
+			}
+			
+			
+			}
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		return convertView;
 	}
 
 	
-	
+	@Override
+
+	public int getViewTypeCount() {                 
+
+	    return getCount();
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+
+	    return position;
+	}
+
 	
 	static class ViewHolder
 	{

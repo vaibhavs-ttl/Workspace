@@ -167,12 +167,70 @@ public class ManualEstimateAdapter extends BaseAdapter{
 		
 		holder.selected_labour_spare_deletebox.setOnClickListener(new View.OnClickListener() {
 			
+			
+			
+			
 			@Override
 			public void onClick(View v) {
 			
+			
+				
+			if (labourSpareModel.size()>0) {
+				Log.v("remove type", labourSpareModel.get(position).getType());
+				
+				if (labourSpareModel.get(position).getType().equalsIgnoreCase("Labour")) {
+					
+					
+				
+					if (GlobalAccessObject.removeLabourByName(labourSpareModel.get(position).getDesc())) {
+						
+						
+						Log.v("labour model deleted", "labour model deleted");
+						
+					}
+					
+					
+					
+					
+				}
+		
+			
+				else if (labourSpareModel.get(position).getType().equalsIgnoreCase("Spare")) {
+					
+					
+					
+					if (GlobalAccessObject.removeSpareByName(labourSpareModel.get(position).getDesc())) {
+						
+						
+						Log.v("labour model deleted", "labour model deleted");
+						
+					}
+					
+					
+					
+					
+				}
+		
+			}
+			
+		
+			
 				
 				labourSpareModel.remove(position);
-		
+				
+				/*else if(labourSpareModel.get(position).getType().equalsIgnoreCase("Spare"))
+				{
+					
+				
+					if (GlobalAccessObject.removeLabourByName(labourSpareModel.get(position).getDesc())) {
+						
+						
+						Log.v("", "");
+						
+					}
+					
+				}*/
+				
 				if (labourSpareModel.size()==0) {
 					
 				ManualServiceFragment.manual_est_selected_items_header.setVisibility(View.INVISIBLE);
@@ -192,6 +250,32 @@ public class ManualEstimateAdapter extends BaseAdapter{
 				ManualServiceFragment.spareCost=0.0;
 				ManualServiceFragment.txtLabourSpareNote.setVisibility(View.VISIBLE);
 				ManualServiceFragment.txtCalcalationNote.setVisibility(View.INVISIBLE);
+				ManualServiceFragment.labourSpareList.clear();
+				if (ManualServiceFragment.selected_labour_data!=null) {
+				
+					ManualServiceFragment.selected_labour_data.clear();
+				}
+				
+				
+				if (ManualServiceFragment.selected_spare_data!=null) {
+					
+					ManualServiceFragment.selected_spare_data.clear();	
+				}
+				
+			
+				//	ManualServiceFragment.selected_spare_data.clear();
+				}
+				
+				else
+				{
+					
+					ManualServiceFragment.txtCalcalationNote.setVisibility(View.INVISIBLE);
+					ManualServiceFragment.approx_labour_amt.setVisibility(View.INVISIBLE);
+					ManualServiceFragment.approx_spare_amt.setVisibility(View.INVISIBLE);
+					ManualServiceFragment.approx_spare_amt.setText("");
+					ManualServiceFragment.approx_labour_amt.setText("");
+					ManualServiceFragment.labourCost=0.0;
+					ManualServiceFragment.spareCost=0.0;
 				}
 				
 				notifyDataSetChanged();

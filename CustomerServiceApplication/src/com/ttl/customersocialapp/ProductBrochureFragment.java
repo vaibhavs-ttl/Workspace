@@ -59,6 +59,7 @@ public class ProductBrochureFragment extends Fragment {
 	BroucherHolder holder;
 	View container_layout;
 	DownloadNotification notification;
+	private CheckConnectivity check;
 	@Override
 	public void onStart() {
 
@@ -67,6 +68,17 @@ public class ProductBrochureFragment extends Fragment {
 		mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 	}
 
+	
+/*	@Override
+	public void onCreate(Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+
+		 Log.v("Oncreate called", "On create called");
+		   this.setRetainInstance(true);
+	
+	}*/
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -76,6 +88,8 @@ public class ProductBrochureFragment extends Fragment {
 
 		
 		notification=new DownloadNotification();
+		
+		
 		
 		setupAppTracker();
 		
@@ -104,10 +118,10 @@ public class ProductBrochureFragment extends Fragment {
 		
 
 		
-	
+		Log.v("onCreateView", "onCreateView called");
 		
 		
-		CheckConnectivity check=new CheckConnectivity();
+		check=new CheckConnectivity();
 		if (check.checkNow(getActivity())) {
 			getBrochures();	
 		}
@@ -117,8 +131,7 @@ public class ProductBrochureFragment extends Fragment {
 			
 		}
 		
-		getActivity().registerReceiver(notification, new IntentFilter(
-                DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+		
 
 
 		return v;
@@ -134,7 +147,7 @@ public class ProductBrochureFragment extends Fragment {
 		boolean connect = checknow.checkNow(getActivity());
 		if (connect) {
 			String req = Config.awsserverurl
-					+ "tmsc_nw/customerapp/brochureServices/getAllBrochures";
+					+ "tmsc_ch/customerapp/brochureServices/getAllBrochures";
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 
 			nameValuePairs.add(new BasicNameValuePair("sessionId", UserDetails
@@ -174,24 +187,80 @@ public class ProductBrochureFragment extends Fragment {
 
 	}
 
-
+/*
 	@Override
 	public void onDestroy() {
 	
 		super.onDestroy();
 	
-	getActivity().unregisterReceiver(notification);
-	
+	if (notification!=null) {
+		getActivity().unregisterReceiver(notification);	
 	}
+	
+
+	
+	
+	}*/
 
 	
 	@Override
+	public void onResume() {
+		
+		if (notification!=null) {
+			getActivity().registerReceiver(notification, new IntentFilter(
+	                DownloadManager.ACTION_DOWNLOAD_COMPLETE));	
+				
+			Log.v("Onresume if", "notification is not null");
+		}
+		
+		try {
+			
+		
+		if (check.checkNow(getActivity())) {
+			getBrochures();	
+			Log.v("Onresume called", "Onresume called");
+		}
+		else
+		{
+			Toast.makeText(getActivity(), getString(R.string.no_network_msg), Toast.LENGTH_LONG).show();
+			
+		}
+		
+		} catch (Exception e) {
+		
+		
+			Log.v("product exception", e.toString());
+			
+		}
+		
+		
+		
+		super.onResume();
+	}
+	
+	
+	@Override
+	public void onStop() {
+	
+		if (notification!=null) {
+			getActivity().unregisterReceiver(notification);	
+		}
+		
+		
+		
+		
+		
+		super.onStop();
+	}
+	
+	
+/*	@Override
 	public void onDestroyView() {
 		// TODO Auto-generated method stub
 		super.onDestroyView();
 		getActivity().unregisterReceiver(notification);
 	}
-
+*/
 
 
 	private void setupAppTracker()
@@ -236,6 +305,7 @@ public void onReceive(Context context, Intent intent) {
       //  		BroucherHolder h=(BroucherHolder)downloadModels.get(i).getObject();
          	   
         	//	h.dwnload.setText("View Brochure");
+        		
         		
         		FragmentTransaction ft = getFragmentManager().beginTransaction();
         		ft.detach(ProductBrochureFragment.this).attach(ProductBrochureFragment.this).commit();

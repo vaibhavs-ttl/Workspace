@@ -24,6 +24,7 @@ public class GlobalAccessObject {
 	public static boolean spareChanged=false;
 	private static ArrayList<DownloadModel> downloadModels;
 
+
 	public static ArrayList<LabourModel> getLabour_obj() {
 		return labour_obj;
 	}
@@ -215,6 +216,73 @@ public class GlobalAccessObject {
 	
 	
 	
+	public static boolean removeLabourByName(String name)
+	{
+		
+		boolean check=false;
+		
+		if (name!=null && labour_obj!=null) {
+			
+			
+			
+			
+			
+			for (int i = 0; i < labour_obj.size(); i++) {
+				
+				
+				
+				if (name.equalsIgnoreCase(labour_obj.get(i).getLabourDescription())) {
+			
+					
+					Log.v("value", ""+labour_obj.get(i).getLabourDescription());
+					
+					labour_obj.remove(i);
+					check=true;
+					break;
+					
+				}
+				
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			return check;
+			
+		}
+		else
+		{
+		
+			return check;
+			
+		}
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	//// Spare 
@@ -304,6 +372,79 @@ public class GlobalAccessObject {
 		
 	
 	}
+	
+	
+	
+	
+	public static boolean removeSpareByName(String name)
+	{
+		
+		boolean check=false;
+		
+		if (name!=null && spare_obj!=null) {
+			
+			
+			
+			
+			
+			for (int i = 0; i < spare_obj.size(); i++) {
+				
+				
+				
+				if (name.equalsIgnoreCase(spare_obj.get(i).getPartDescription())) {
+			
+					
+					Log.v("value", ""+spare_obj.get(i).getPartDescription());
+					
+					spare_obj.remove(i);
+					check=true;
+					break;
+					
+				}
+				
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			return check;
+			
+		}
+		else
+		{
+		
+			return check;
+			
+		}
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

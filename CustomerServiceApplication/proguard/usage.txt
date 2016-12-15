@@ -5914,11 +5914,11 @@ com.ttl.communication.EncryptDecrypt
 com.ttl.communication.FragmentResponseCallback
 com.ttl.communication.GlobalAccessObject:
     12:12:public GlobalAccessObject()
-    32:33:public static void setLabour_obj(java.util.ArrayList)
-    56:57:public static void setSpare_obj(java.util.ArrayList)
-    117:117:public static boolean isLoaded()
-    121:122:public static void setLoaded(boolean)
-    338:344:public static void removeFile(com.ttl.model.DownloadModel)
+    33:34:public static void setLabour_obj(java.util.ArrayList)
+    57:58:public static void setSpare_obj(java.util.ArrayList)
+    118:118:public static boolean isLoaded()
+    122:123:public static void setLoaded(boolean)
+    339:345:public static void removeFile(com.ttl.model.DownloadModel)
 com.ttl.communication.SecurePreferences:
     private static final java.lang.String TRANSFORMATION
     private static final java.lang.String KEY_TRANSFORMATION
@@ -5966,7 +5966,7 @@ com.ttl.customersocialapp.GuideActivity:
 com.ttl.customersocialapp.HomeActivity:
     public static java.util.ArrayList labour_data
     688:696:private boolean appInstalledOrNot(java.lang.String)
-    845:923:private void appLogout()
+    863:941:private void appLogout()
 com.ttl.customersocialapp.HomeActivity$3
 com.ttl.customersocialapp.HomeFragment:
     private android.widget.LinearLayout notification
@@ -5992,9 +5992,9 @@ com.ttl.customersocialapp.Manifest
 com.ttl.customersocialapp.Manifest$permission
 com.ttl.customersocialapp.ManualServiceFragment:
     private java.lang.String selected_reg_no
-    1089:1108:public void backpress(android.view.View)
-    1344:1416:private void clearView()
-    1425:1456:private void generateCostReport()
+    1200:1219:public void backpress(android.view.View)
+    1455:1527:private void clearView()
+    1536:1567:private void generateCostReport()
 com.ttl.customersocialapp.ManualServiceFragment$12
 com.ttl.customersocialapp.Notifiaction_fragment:
     java.lang.Runnable mUpdateResults
@@ -6028,14 +6028,7 @@ com.ttl.customersocialapp.RegisterUserActivity:
 com.ttl.customersocialapp.RegisterUserActivity$DialogAdapter
 com.ttl.customersocialapp.Reminder_Fragment:
     static final int DATE_DIALOG_ID
-com.ttl.customersocialapp.SelectLabourActivity:
-    233:233:private void removeItems()
 com.ttl.customersocialapp.SelectLabourFragment
-com.ttl.customersocialapp.SelectSpareActivity:
-    private com.ttl.webservice.AWS_WebServiceCall aws_WebServiceCall
-    private android.widget.TextView spare_text
-    private android.widget.EditText qty_text
-    private android.widget.CheckBox check_data
 com.ttl.customersocialapp.SelectSpareFragment
 com.ttl.customersocialapp.ServiceBookingHistoryFragment:
     java.lang.String dateForAlarm
@@ -6101,7 +6094,7 @@ com.ttl.model.LabourModel:
     25:25:public java.lang.String getModelName()
     31:31:public java.lang.String getLabourCode()
     73:73:public boolean isChecked_state()
-    76:77:public void setChecked_state(boolean)
+    79:79:public boolean isSelected_state()
 com.ttl.model.LabourRateModel:
     13:13:public java.lang.String getCity()
     19:19:public java.lang.String getCityClass()
@@ -6162,6 +6155,7 @@ com.ttl.model.SpareModel:
     private static final long serialVersionUID
     23:23:public java.lang.String getModelName()
     29:29:public java.lang.String getPartNumber()
+    71:71:public boolean isSelected_state()
 com.ttl.model.UserDetails:
     11:11:public static java.lang.String getMessage()
     15:16:public static void setMessage(java.lang.String)

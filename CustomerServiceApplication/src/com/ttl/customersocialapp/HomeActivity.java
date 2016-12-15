@@ -777,6 +777,24 @@ public class HomeActivity extends ActionBarActivity {
 	 * } } }
 	 */
 
+	
+	
+	@Override
+	protected void onRestart() {
+
+		super.onRestart();
+
+
+		
+		
+	//Toast.makeText(HomeActivity.this, "session ID: "+UserDetails.getSeeionId(), Toast.LENGTH_LONG).show();
+	
+	}
+	
+	
+	
+	
+	
 	@Override
 	protected void onResume() {
 

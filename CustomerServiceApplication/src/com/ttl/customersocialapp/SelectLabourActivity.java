@@ -25,6 +25,7 @@ public class SelectLabourActivity extends Activity implements OnClickListener,On
 	private ListView labour_data_list;
 	private LabourAdapter adapter;
 	private SearchView searchView;
+	
 	public static TextView empty;
 	
 	@Override
@@ -48,7 +49,7 @@ public class SelectLabourActivity extends Activity implements OnClickListener,On
 	
 	 Bundle bundle=getIntent().getExtras();
      labour_list=(ArrayList<LabourModel>)bundle.getSerializable("labour_list");
-	 adapter=new LabourAdapter(SelectLabourActivity.this, labour_list,empty);
+	 adapter=new LabourAdapter(SelectLabourActivity.this, labour_list,empty,true);
 	 labour_data_list.setAdapter(adapter);
 	 labour_data_list.setTextFilterEnabled(true);
 	 labour_data_list.setEmptyView(empty);
@@ -129,12 +130,6 @@ public class SelectLabourActivity extends Activity implements OnClickListener,On
 			}
 		}
 			
-			
-			
-			
-			
-			
-		
 		}
 		else if(v.getId()==R.id.labour_parts_cancel_btn)
 		{
@@ -162,7 +157,7 @@ public class SelectLabourActivity extends Activity implements OnClickListener,On
 				
 					
 					GlobalAccessObject.removeLabour_obj(temp_list.get(i));
-					
+					//GlobalAccessObject.removeLabour_obj(i,temp_list.get(i));
 					Log.v("inside inner if", temp_list.get(i).getLabourDescription());
 					
 				}
@@ -205,9 +200,11 @@ public class SelectLabourActivity extends Activity implements OnClickListener,On
 	public boolean onQueryTextChange(String newText) {
 
 	
+		
+		
 		adapter.getFilter().filter(newText.toString().trim());
-		labour_data_list.invalidate();
-		adapter.notifyDataSetChanged();
+	//	labour_data_list.invalidate();
+	//	adapter.notifyDataSetChanged();
 		
 		return false;
 	}
@@ -225,12 +222,7 @@ public class SelectLabourActivity extends Activity implements OnClickListener,On
 	
 	
 	
-	private void removeItems()
-	{
-		
-		
-		
-	}
+	
 	
 	
 	
